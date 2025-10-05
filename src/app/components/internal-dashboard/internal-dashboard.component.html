@@ -1,0 +1,194 @@
+<!-- Navigation Header -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">
+      <i class="bi bi-building me-2"></i>
+      {{ i18n.t('internal.nav.title') }}
+    </a>
+    
+    <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+      <app-language-switcher></app-language-switcher>
+      
+      <!-- User Menu -->
+      <div class="dropdown ms-3">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" 
+                data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person-circle me-1"></i>
+          <span *ngIf="currentUser">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+          <span *ngIf="!currentUser">{{ i18n.t('internal.nav.user') }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li class="dropdown-header" *ngIf="currentUser">{{ currentUser.email }}</li>
+          <li class="dropdown-header" *ngIf="!currentUser">{{ i18n.t('internal.nav.loading') }}</li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>{{ i18n.t('internal.nav.profile') }}</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>{{ i18n.t('internal.nav.settings') }}</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>{{ i18n.t('internal.nav.logout') }}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="mb-1">
+            <i class="bi bi-speedometer2 me-2 text-primary"></i>
+            {{ i18n.t('internal.dashboard.title') }}
+          </h2>
+          <p class="text-muted mb-0">
+            {{ i18n.t('internal.dashboard.welcome') }} <span *ngIf="currentUser">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+          </p>
+        </div>
+        <div class="badge bg-success fs-6">
+          <i class="bi bi-shield-check me-1"></i>
+          {{ i18n.t('internal.dashboard.internal_access') }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques rapides -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-person-plus text-warning mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('internal.stats.access_requests') }}</h5>
+          <h3 class="text-warning mb-2">{{ internalStats.accessRequests }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('internal.stats.access_requests_desc') }}</p>
+          <button class="btn btn-outline-warning" (click)="manageAccessRequests()">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.manage') }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-exclamation-triangle text-danger mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('internal.stats.claims') }}</h5>
+          <h3 class="text-danger mb-2">{{ internalStats.pendingClaims }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('internal.stats.claims_desc') }}</p>
+          <button class="btn btn-outline-danger" (click)="manageClaims()">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.manage') }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-cash-coin text-success mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('internal.stats.disbursements') }}</h5>
+          <h3 class="text-success mb-2">{{ internalStats.pendingDisbursements }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('internal.stats.disbursements_desc') }}</p>
+          <button class="btn btn-outline-success" (click)="manageDisbursements()">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.manage') }}
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-people text-info mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('internal.stats.users') }}</h5>
+          <h3 class="text-info mb-2">{{ internalStats.totalUsers }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('internal.stats.users_desc') }}</p>
+          <button class="btn btn-outline-info" (click)="manageUsers()">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.manage') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions rapides -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-lightning me-2"></i>
+            {{ i18n.t('internal.actions.title') }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <button class="btn btn-outline-warning w-100" (click)="manageAccessRequests()">
+                <i class="bi bi-person-plus me-2"></i>
+                {{ i18n.t('internal.actions.access_requests') }}
+              </button>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-outline-danger w-100" (click)="manageClaims()">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ i18n.t('internal.actions.claims') }}
+              </button>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-outline-success w-100" (click)="manageDisbursements()">
+                <i class="bi bi-cash-coin me-2"></i>
+                {{ i18n.t('internal.actions.disbursements') }}
+              </button>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-outline-info w-100" (click)="manageUsers()">
+                <i class="bi bi-people me-2"></i>
+                {{ i18n.t('internal.actions.users') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section d'informations système -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            {{ i18n.t('internal.info.title') }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="border-end">
+                <h6 class="text-primary">{{ i18n.t('internal.info.system_status') }}</h6>
+                <p class="text-muted mb-0 small">{{ i18n.t('internal.info.system_status_desc') }}</p>
+                <span class="badge bg-success mt-2">{{ i18n.t('internal.info.operational') }}</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="border-end">
+                <h6 class="text-warning">{{ i18n.t('internal.info.pending_tasks') }}</h6>
+                <p class="text-muted mb-0 small">{{ i18n.t('internal.info.pending_tasks_desc') }}</p>
+                <strong class="text-warning">{{ internalStats.accessRequests + internalStats.pendingClaims + internalStats.pendingDisbursements }}</strong>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div>
+                <h6 class="text-info">{{ i18n.t('internal.info.documentation') }}</h6>
+                <p class="text-muted mb-0 small">{{ i18n.t('internal.info.documentation_desc') }}</p>
+                <a href="#" class="btn btn-outline-info btn-sm mt-2">{{ i18n.t('internal.info.access') }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

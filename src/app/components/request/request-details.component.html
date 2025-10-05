@@ -1,0 +1,48 @@
+<div class="card bg-light border-0 mb-4">
+  <div class="card-header bg-transparent">
+    <h6 class="mb-0">
+      <i class="bi bi-file-text me-2"></i>
+      {{ i18n.t('request_details.title') }}
+    </h6>
+  </div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <strong class="text-muted">{{ i18n.t('request_details.name') }}:</strong>
+          <div>{{ registration?.firstName }} {{ registration?.lastName }}</div>
+        </div>
+        <div class="mb-3">
+          <strong class="text-muted">{{ i18n.t('request_details.email') }}:</strong>
+          <div>{{ registration?.email }}</div>
+        </div>
+        <div class="mb-3">
+          <strong class="text-muted">{{ i18n.t('request_details.function') }}:</strong>
+          <div>{{ registration?.functionName }}</div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="mb-3">
+          <strong class="text-muted">{{ i18n.t('request_details.country') }}:</strong>
+          <div>{{ registration?.countryName }}</div>
+        </div>
+        <div class="mb-3">
+          <strong class="text-muted">{{ i18n.t('request_details.business_profile') }}:</strong>
+          <div>{{ registration?.businessProfileName }}</div>
+        </div>
+        <div class="mb-3">
+          <strong class="text-muted">{{ i18n.t('request_details.financing_type') }}:</strong>
+          <div>{{ registration?.financingTypeName }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3" *ngIf="registration?.selectedProjectCodes">
+      <strong class="text-muted">{{ i18n.t('request_details.selected_projects') }}:</strong>
+      <div class="mt-2">
+        <span class="badge bg-primary me-1 mb-1" *ngFor="let project of registration.selectedProjectCodes">
+          {{ project.sapCode }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,248 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-lg border-0 fade-in">
+        <div class="card-header text-white text-center py-4" 
+             style="background: linear-gradient(135deg, var(--primary-color), var(--info-color));">
+          <h3 class="mb-0">
+            <i class="bi bi-pencil-square me-2"></i>
+            {{ i18n.t('amend.edit.title') }}
+          </h3>
+          <p class="mb-0 mt-2 opacity-75">{{ i18n.t('amend.edit.subtitle') }}</p>
+        </div>
+        
+        <div class="card-body p-5">
+          <!-- Indicateur de progression -->
+          <div class="progress mb-4" style="height: 6px;">
+            <div class="progress-bar bg-primary" role="progressbar" style="width: 100%"></div>
+          </div>
+          <div class="text-center mb-4">
+            <small class="text-muted">{{ i18n.t('amend.edit.step') }}</small>
+          </div>
+
+          <form [formGroup]="amendForm" (ngSubmit)="onSubmit()">
+            <!-- Email (disabled) -->
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold">
+                <i class="bi bi-envelope me-1 text-primary"></i>
+                {{ i18n.t('amend.edit.email') }}
+              </label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg" 
+                id="email"
+                formControlName="email"
+                readonly
+              >
+              <div class="form-text">
+                <i class="bi bi-lock me-1"></i>
+                {{ i18n.t('amend.edit.email_locked') }}
+              </div>
+            </div>
+
+            <!-- Nom et Prénom -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="firstName" class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.first_name') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="firstName"
+                  formControlName="firstName"
+                  [class.is-invalid]="(amendForm.get('firstName')?.invalid && amendForm.get('firstName')?.touched) || hasFieldError('firstName')"
+                >
+                <div class="invalid-feedback" *ngIf="(amendForm.get('firstName')?.invalid && amendForm.get('firstName')?.touched) || hasFieldError('firstName')">
+                  <span *ngIf="hasFieldError('firstName')">{{ getFieldError('firstName') }}</span>
+                  <span *ngIf="!hasFieldError('firstName')">{{ i18n.t('amend.edit.validation.first_name') }}</span>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label for="lastName" class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.last_name') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <input 
+                  type="text" 
+                  class="form-control form-control-lg" 
+                  id="lastName"
+                  formControlName="lastName"
+                  [class.is-invalid]="(amendForm.get('lastName')?.invalid && amendForm.get('lastName')?.touched) || hasFieldError('lastName')"
+                >
+                <div class="invalid-feedback" *ngIf="(amendForm.get('lastName')?.invalid && amendForm.get('lastName')?.touched) || hasFieldError('lastName')">
+                  <span *ngIf="hasFieldError('lastName')">{{ getFieldError('lastName') }}</span>
+                  <span *ngIf="!hasFieldError('lastName')">{{ i18n.t('amend.edit.validation.last_name') }}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Fonction et Type de financement -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="functionId" class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.function') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select 
+                  class="form-select form-select-lg" 
+                  id="functionId"
+                  formControlName="functionId"
+                  [class.is-invalid]="(amendForm.get('functionId')?.invalid && amendForm.get('functionId')?.touched) || hasFieldError('functionId')"
+                  [disabled]="isLoadingFunctions"
+                >
+                  <option value="">{{ i18n.t('amend.edit.function_placeholder') }}</option>
+                  <option *ngFor="let func of functions" [value]="func.id">
+                    {{ func.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label for="financingTypeId" class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.financing_type') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select 
+                  class="form-select form-select-lg" 
+                  id="financingTypeId"
+                  formControlName="financingTypeId"
+                  [class.is-invalid]="(amendForm.get('financingTypeId')?.invalid && amendForm.get('financingTypeId')?.touched) || hasFieldError('financingTypeId')"
+                  [disabled]="isLoadingFinancingTypes"
+                >
+                  <option value="">{{ i18n.t('amend.edit.financing_type_placeholder') }}</option>
+                  <option *ngFor="let type of financingTypes" [value]="type.id">
+                    {{ type.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Pays et Profil d'entreprise -->
+            <div class="row">
+              <div class="col-md-6 mb-4">
+                <label for="countryId" class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.country') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select 
+                  class="form-select form-select-lg" 
+                  id="countryId"
+                  formControlName="countryId"
+                  [class.is-invalid]="(amendForm.get('countryId')?.invalid && amendForm.get('countryId')?.touched) || hasFieldError('countryId')"
+                  [disabled]="isLoadingCountries"
+                >
+                  <option value="">{{ i18n.t('amend.edit.country_placeholder') }}</option>
+                  <option *ngFor="let country of countries" [value]="country.id">
+                    {{ country.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-4">
+                <label for="businessProfileId" class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.business_profile') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select 
+                  class="form-select form-select-lg" 
+                  id="businessProfileId"
+                  formControlName="businessProfileId"
+                  [class.is-invalid]="(amendForm.get('businessProfileId')?.invalid && amendForm.get('businessProfileId')?.touched) || hasFieldError('businessProfileId')"
+                  [disabled]="isLoadingBusinessProfiles"
+                >
+                  <option value="">{{ i18n.t('amend.edit.business_profile_placeholder') }}</option>
+                  <option *ngFor="let profile of businessProfiles" [value]="profile.id">
+                    {{ profile.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Section Projets -->
+            <div class="row" *ngIf="amendForm.get('countryId')?.value">
+              <div class="col-12 mb-4">
+                <label class="form-label fw-semibold">
+                  {{ i18n.t('amend.edit.projects') }}
+                  <span class="text-danger">*</span>
+                </label>
+                
+                <div class="text-center mb-3" *ngIf="isLoadingProjects">
+                  <div class="loading-spinner me-2"></div>
+                  <small class="text-muted">{{ i18n.t('amend.edit.loading_projects') }}</small>
+                </div>
+                
+                <div class="border rounded p-3" *ngIf="!isLoadingProjects && projects.length > 0" 
+                     style="max-height: 300px; overflow-y: auto;">
+                  <div class="row g-2">
+                    <div class="col-12" *ngFor="let project of projects">
+                      <div class="form-check">
+                        <input 
+                          class="form-check-input" 
+                          type="checkbox" 
+                          [id]="'project-' + project.sapCode"
+                          [checked]="isProjectSelected(project.sapCode)"
+                          (change)="onProjectSelectionChange(project.sapCode, $event.target.checked)"
+                        >
+                        <label class="form-check-label" [for]="'project-' + project.sapCode">
+                          <strong>{{ project.sapCode }}</strong> - {{ project.projectName }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="alert alert-info border-0" *ngIf="!isLoadingProjects && projects.length === 0 && amendForm.get('countryId')?.value">
+                  <i class="bi bi-info-circle me-2"></i>
+                  {{ i18n.t('amend.edit.no_projects') }}
+                </div>
+                
+                <div class="mt-2" *ngIf="selectedProjectCodes.length > 0">
+                  <small class="text-muted">
+                    <i class="bi bi-check-circle text-success me-1"></i>
+                    {{ selectedProjectCodes.length }} {{ i18n.t('amend.edit.projects_selected') }}
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex gap-3 justify-content-between">
+              <button 
+                type="button"
+                class="btn btn-outline-secondary btn-lg px-4"
+                (click)="goBack()"
+              >
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.t('amend.edit.back') }}
+              </button>
+              <button 
+                type="submit" 
+                class="btn btn-primary btn-lg px-4"
+                [disabled]="amendForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="loading-spinner me-2"></span>
+                <i class="bi bi-send me-2" *ngIf="!isSubmitting"></i>
+                {{ isSubmitting ? i18n.t('amend.edit.submitting') : i18n.t('amend.edit.submit') }}
+              </button>
+            </div>
+          </form>
+
+          <!-- Messages d'erreur -->
+          <div class="alert alert-danger mt-4 fade-in" *ngIf="submitError">
+            <div class="d-flex align-items-center">
+              <i class="bi bi-exclamation-triangle me-3"></i>
+              <div>
+                <strong>{{ submitError }}</strong>
+                <div *ngIf="hasAnyFieldErrors()" class="mt-2">
+                  <small class="text-muted">{{ i18n.t('common.form_error') }}</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

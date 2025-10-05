@@ -1,0 +1,78 @@
+<!-- Header -->
+<header class="afdb-header">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <div class="d-flex align-items-center">
+          <div class="afdb-logos me-4">
+            <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop" 
+                 alt="AfDB Logo 1" class="logo-circle">
+            <img src="https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=60&h=60&fit=crop" 
+                 alt="AfDB Logo 2" class="logo-circle">
+          </div>
+          <h1 class="afdb-title">AfDB Client Connection</h1>
+        </div>
+      </div>
+      <div class="col-md-6 text-end">
+        <div class="language-switcher">
+          <a href="#" (click)="switchLanguage('en', $event)" 
+             [class.active]="currentLanguage === 'en'">English</a>
+          <span class="separator">|</span>
+          <a href="#" (click)="switchLanguage('fr', $event)" 
+             [class.active]="currentLanguage === 'fr'">Français</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="afdb-main">
+  <div class="afdb-curve-top"></div>
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="afdb-curve-bottom"></div>
+</main>
+
+<!-- Footer -->
+<footer class="afdb-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        <h5>Menu</h5>
+        <ul class="footer-links">
+          <li><a href="#">User manual</a></li>
+          <li><a href="#">Frequently Asked Questions</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Resources</h5>
+        <ul class="footer-links">
+          <li><a href="#">Disbursement handbook</a></li>
+          <li><a href="#">Debt servicing handbook</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contacts</h5>
+        <ul class="footer-links">
+          <li>e-Mail : <a href="mailto:clientconnection@afdb.org">clientconnection@afdb.org</a></li>
+          <li>Helpdesk : (00 225) 20 26 50 22</li>
+        </ul>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12 text-center">
+        <p class="copyright">© 2018 - African Development Bank</p>
+        <p class="powered-by">Powered by <strong>the IT Department (CHIS)</strong></p>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Help Button -->
+  <div class="help-button">
+    <button class="btn btn-primary rounded-circle">
+      <i class="bi bi-question-lg"></i>
+    </button>
+  </div>
+</footer>

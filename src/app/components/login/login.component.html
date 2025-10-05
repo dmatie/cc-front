@@ -1,0 +1,103 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-5">
+      <div class="card shadow-lg border-0 fade-in">
+        <div class="card-header bg-success text-white text-center py-4">
+          <h3 class="mb-0">
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+            {{ i18n.t('login.title') }}
+          </h3>
+          <p class="mb-0 mt-2 opacity-75">{{ i18n.t('login.subtitle') }}</p>
+        </div>
+        
+        <div class="card-body p-4">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="mb-3">
+              <label for="email" class="form-label fw-semibold">
+                <i class="bi bi-envelope me-1"></i>{{ i18n.t('login.email') }}
+              </label>
+              <input 
+                type="email" 
+                class="form-control form-control-lg" 
+                id="email"
+                formControlName="email"
+                placeholder="votre@email.com"
+                [class.is-invalid]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+              >
+              <div class="invalid-feedback" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+                {{ i18n.t('login.email') }} {{ i18n.t('common.required') }}
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label fw-semibold">
+                <i class="bi bi-lock me-1"></i>{{ i18n.t('login.password') }}
+              </label>
+              <input 
+                type="password" 
+                class="form-control form-control-lg" 
+                id="password"
+                formControlName="password"
+                placeholder="••••••••"
+                [class.is-invalid]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+              >
+              <div class="invalid-feedback" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+                {{ i18n.t('login.password') }} {{ i18n.t('common.required') }}
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-3">
+              <button 
+                type="submit" 
+                class="btn btn-success btn-lg"
+                [disabled]="loginForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="loading-spinner me-2"></span>
+                <i class="bi bi-box-arrow-in-right me-2" *ngIf="!isSubmitting"></i>
+                {{ isSubmitting ? i18n.t('login.submitting') : i18n.t('login.submit') }}
+              </button>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="d-grid">
+              <button 
+                type="button" 
+                class="btn btn-outline-primary"
+                (click)="loginWithAzureAD()"
+              >
+                <i class="bi bi-microsoft me-2"></i>
+                {{ i18n.t('login.azure_ad') }}
+              </button>
+            </div>
+          </form>
+
+          <div class="alert alert-danger mt-3" *ngIf="errorMessage">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+          </div>
+
+          <div class="text-center mt-4">
+            <p class="text-muted">
+              {{ i18n.t('login.no_account') }}
+              <a routerLink="/register/confidentiality" class="text-decoration-none">{{ i18n.t('nav.register') }}</a>
+            </p>
+            <p class="text-muted">
+              <a routerLink="/home" class="text-decoration-none">
+                <i class="bi bi-arrow-left me-1"></i>
+                Retour à l'accueil
+              </a>
+            </p>
+          </div>
+
+          <div class="mt-4 p-3 bg-light rounded">
+            <h6 class="text-muted mb-2">{{ i18n.t('login.test_accounts') }}</h6>
+            <small class="text-muted d-block">{{ i18n.t('login.admin_account') }}</small>
+            <small class="text-muted d-block">{{ i18n.t('login.user_account') }}</small>
+            <small class="text-muted">{{ i18n.t('login.test_password') }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

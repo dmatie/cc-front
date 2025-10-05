@@ -1,0 +1,110 @@
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.progress-bar {
+  transition: width 0.6s ease;
+}
+
+.form-control:focus {
+  border-color: var(--success-color);
+  box-shadow: 0 0 0 0.2rem rgba(42, 157, 143, 0.25);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.captcha-container {
+  text-align: center;
+}
+
+.captcha-image {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
+  border: 2px solid #007bff !important;
+  position: relative;
+  overflow: hidden;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.captcha-text {
+  position: relative;
+  z-index: 2;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.captcha-noise {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 20%, rgba(0,123,255,0.1) 2px, transparent 2px),
+    radial-gradient(circle at 80% 40%, rgba(40,167,69,0.1) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(255,193,7,0.1) 1.5px, transparent 1.5px),
+    radial-gradient(circle at 60% 60%, rgba(220,53,69,0.1) 1px, transparent 1px);
+  background-size: 50px 50px, 30px 30px, 40px 40px, 35px 35px;
+  z-index: 1;
+  opacity: 0.6;
+}
+
+.captcha-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.05) 2px,
+    rgba(0,0,0,0.05) 4px
+  );
+  z-index: 1;
+}
+
+.form-check-input:checked {
+  background-color: var(--success-color);
+  border-color: var(--success-color);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, rgba(42, 157, 143, 0.1), rgba(32, 178, 170, 0.1));
+  border-left: 4px solid var(--success-color);
+}
+
+/* Animation pour les champs conditionnels */
+.conditional-fields {
+  animation: slideIn 0.3s ease-in-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

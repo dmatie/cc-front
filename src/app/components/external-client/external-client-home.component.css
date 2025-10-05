@@ -1,0 +1,98 @@
+.stats-card {
+  background: white;
+  border-left: 4px solid var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.card {
+  border: none;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+}
+
+.btn {
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  transition: var(--transition);
+  border: none;
+  padding: 0.5rem 1.5rem;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.navbar {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--info-color) 100%) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.dropdown-menu {
+  min-width: 150px;
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+}
+
+.dropdown-item.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.dropdown-item:hover {
+  background-color: var(--light-color);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .stats-overview .row {
+    gap: 0.5rem;
+  }
+  
+  .border-end {
+    border-right: none !important;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .col-md-4:last-child .border-end {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
+}

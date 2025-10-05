@@ -1,0 +1,95 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 fade-in">
+        <div class="card-header text-white text-center py-4" 
+             style="background: linear-gradient(135deg, var(--success-color), var(--forest-green));">
+          <div class="mb-3">
+            <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center" 
+                 style="width: 80px; height: 80px;">
+              <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
+            </div>
+          </div>
+          <h3 class="mb-0">{{ i18n.t('registration_success.title') }}</h3>
+          <p class="mb-0 mt-2 opacity-75">{{ i18n.t('registration_success.subtitle') }}</p>
+        </div>
+        
+        <div class="card-body p-5 text-center">
+          <!-- Indicateur de progression -->
+          <div class="progress mb-4" style="height: 6px;">
+            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+          </div>
+          <div class="mb-4">
+            <small class="text-muted">{{ i18n.t('registration_success.step') }}</small>
+          </div>
+
+          <div class="alert alert-success border-0 mb-4">
+            <div class="d-flex align-items-start">
+              <i class="bi bi-envelope-check text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
+              <div class="text-start">
+                <h5 class="alert-heading mb-2">{{ i18n.t('registration_success.success_title') }}</h5>
+                <div class="mb-2" *ngIf="requestId">
+                  <strong>Numéro de demande :</strong> 
+                  <code class="bg-light px-2 py-1 rounded">{{ requestId }}</code>
+                </div>
+                <p class="mb-2" *ngIf="customMessage">
+                  {{ customMessage }}
+                </p>
+                <p class="mb-2">
+                  {{ i18n.t('registration_success.message1') }}
+                </p>
+                <p class="mb-2">
+                  {{ i18n.t('registration_success.message2') }}
+                </p>
+                <p class="mb-0">
+                  <strong>{{ i18n.t('registration_success.signature') }}</strong><br>
+                  <em>{{ i18n.t('registration_success.admin') }}</em>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3">
+                <i class="bi bi-clock text-primary mb-2" style="font-size: 1.5rem;"></i>
+                <h6 class="mb-1">{{ i18n.t('registration_success.processing') }}</h6>
+                <small class="text-muted">{{ i18n.t('registration_success.processing_time') }}</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3">
+                <i class="bi bi-envelope text-warning mb-2" style="font-size: 1.5rem;"></i>
+                <h6 class="mb-1">{{ i18n.t('registration_success.notification') }}</h6>
+                <small class="text-muted">{{ i18n.t('registration_success.notification_method') }}</small>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3">
+                <i class="bi bi-key text-success mb-2" style="font-size: 1.5rem;"></i>
+                <h6 class="mb-1">{{ i18n.t('registration_success.access') }}</h6>
+                <small class="text-muted">{{ i18n.t('registration_success.access_method') }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="alert alert-info border-0 mb-4">
+            <i class="bi bi-info-circle me-2"></i>
+            <strong>{{ i18n.t('registration_success.next_steps') }}</strong> {{ i18n.t('registration_success.next_steps_desc') }}
+          </div>
+
+          <div class="d-flex justify-content-center">
+            <button 
+              type="button"
+              class="btn btn-primary btn-lg px-4"
+              (click)="goHome()"
+            >
+              <i class="bi bi-house me-2"></i>
+              {{ i18n.t('registration_success.home_button') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

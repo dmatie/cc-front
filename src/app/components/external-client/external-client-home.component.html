@@ -1,0 +1,193 @@
+<!-- Navigation Header simplifiée -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">
+      <i class="bi bi-building me-2"></i>
+      {{ i18n.t('nav.home') }}
+    </a>
+    
+    <div class="navbar-nav ms-auto d-flex flex-row align-items-center">
+      <app-language-switcher></app-language-switcher>
+      
+      <!-- User Menu -->
+      <div class="dropdown ms-3">
+        <button class="btn btn-outline-light dropdown-toggle" type="button" 
+                data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person-circle me-1"></i>
+          <span *ngIf="currentUser">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+          <span *ngIf="!currentUser">Utilisateur</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li class="dropdown-header" *ngIf="currentUser">{{ currentUser.email }}</li>
+          <li class="dropdown-header" *ngIf="!currentUser">Chargement...</li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>{{ i18n.t('client.my_profile') }}</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>{{ i18n.t('client.settings') }}</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item" href="#" (click)="logout()"><i class="bi bi-box-arrow-right me-2"></i>{{ i18n.t('client.logout') }}</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h2 class="mb-1">
+            <i class="bi bi-speedometer2 me-2 text-primary"></i>
+            {{ i18n.t('external.dashboard.title') }}
+          </h2>
+          <p class="text-muted mb-0">
+            {{ i18n.t('external.dashboard.welcome') }} <span *ngIf="currentUser">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+          </p>
+        </div>
+        <div class="badge bg-success fs-6">
+          <i class="bi bi-check-circle me-1"></i>
+          {{ i18n.t('external.dashboard.account_active') }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistiques rapides -->
+  <div class="row g-4 mb-5">
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-folder text-primary mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('external.stats.active_projects') }}</h5>
+          <h3 class="text-primary mb-2">{{ clientStats.activeProjects }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('external.stats.active_projects_desc') }}</p>
+          <a href="#" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-cash-coin text-success mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('external.stats.disbursements') }}</h5>
+          <h3 class="text-success mb-2">{{ clientStats.activeDisbursementRequests }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('external.stats.disbursements_desc') }}</p>
+          <a href="#" class="btn btn-outline-success">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-exclamation-triangle text-warning mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('external.stats.claims') }}</h5>
+          <h3 class="text-warning mb-2">{{ clientStats.pendingClaims }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('external.stats.claims_desc') }}</p>
+          <a href="#" class="btn btn-outline-warning">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
+          </a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-3">
+      <div class="card stats-card h-100">
+        <div class="card-body text-center">
+          <i class="bi bi-file-earmark-text text-info mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('external.stats.reports') }}</h5>
+          <h3 class="text-info mb-2">{{ clientStats.availableReports }}</h3>
+          <p class="text-muted mb-3">{{ i18n.t('external.stats.reports_desc') }}</p>
+          <a href="#" class="btn btn-outline-info">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions rapides -->
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-lightning me-2"></i>
+            {{ i18n.t('external.actions.title') }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <a href="#" class="btn btn-outline-success w-100" (click)="requestDisbursement()">
+                <i class="bi bi-cash-coin me-2"></i>
+                {{ i18n.t('external.actions.request_disbursement') }}
+              </a>
+            </div>
+            <div class="col-md-3">
+              <a href="#" class="btn btn-outline-warning w-100" (click)="createClaim()">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ i18n.t('external.actions.create_claim') }}
+              </a>
+            </div>
+            <div class="col-md-3">
+              <a href="#" class="btn btn-outline-info w-100" (click)="downloadLatestReport()">
+                <i class="bi bi-download me-2"></i>
+                {{ i18n.t('external.actions.download_report') }}
+              </a>
+            </div>
+            <div class="col-md-3">
+              <a href="#" class="btn btn-outline-secondary w-100" (click)="contactSupport()">
+                <i class="bi bi-headset me-2"></i>
+                {{ i18n.t('external.actions.contact_support') }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section d'informations utiles -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">
+            <i class="bi bi-info-circle me-2"></i>
+            {{ i18n.t('external.info.title') }}
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="row text-center">
+            <div class="col-md-4">
+              <div class="border-end">
+                <h6 class="text-primary">{{ i18n.t('external.info.client_support') }}</h6>
+                <p class="text-muted mb-0 small">{{ i18n.t('external.info.support_hours') }}</p>
+                <p class="text-muted mb-0"><strong>+225 20 26 50 22</strong></p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="border-end">
+                <h6 class="text-success">{{ i18n.t('external.info.security') }}</h6>
+                <p class="text-muted mb-0 small">{{ i18n.t('external.info.security_desc') }} {{ clientStats.lastLoginDate | date:'dd/MM/yyyy' }}</p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div>
+                <h6 class="text-info">{{ i18n.t('external.info.documentation') }}</h6>
+                <p class="text-muted mb-0 small">{{ i18n.t('external.info.documentation_desc') }}</p>
+                <a href="#" class="btn btn-outline-info btn-sm mt-2">{{ i18n.t('external.info.access') }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

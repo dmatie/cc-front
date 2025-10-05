@@ -1,0 +1,22 @@
+<div class="dropdown">
+  <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" 
+          data-bs-toggle="dropdown" aria-expanded="false" 
+          id="languageDropdown">
+    <i class="bi bi-translate me-1"></i>
+    {{ getCurrentLanguageLabel() }}
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+    <li>
+      <a class="dropdown-item" href="#" (click)="switchLanguage('fr', $event)" 
+         [class.active]="currentLocale === 'fr'">
+        <i class="bi bi-circle-fill me-2 text-primary"></i>Français
+      </a>
+    </li>
+    <li>
+      <a class="dropdown-item" href="#" (click)="switchLanguage('en', $event)"
+         [class.active]="currentLocale === 'en'">
+        <i class="bi bi-circle-fill me-2 text-success"></i>English
+      </a>
+    </li>
+  </ul>
+</div>

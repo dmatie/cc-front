@@ -1,0 +1,19 @@
+.fade-in {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.alert-success {
+  background: linear-gradient(135deg, rgba(42, 157, 143, 0.1), rgba(32, 178, 170, 0.1));
+  border-left: 4px solid var(--success-color);
+}

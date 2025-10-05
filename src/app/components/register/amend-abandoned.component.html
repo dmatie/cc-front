@@ -1,0 +1,68 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card shadow-lg border-0 fade-in">
+        <div class="card-header text-white text-center py-4" 
+             style="background: linear-gradient(135deg, var(--danger-color), #c82333);">
+          <div class="mb-3">
+            <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center" 
+                 style="width: 80px; height: 80px;">
+              <i class="bi bi-trash" style="font-size: 3rem;"></i>
+            </div>
+          </div>
+          <h3 class="mb-0">{{ i18n.t('amend.abandoned.title') }}</h3>
+          <p class="mb-0 mt-2 opacity-75">{{ i18n.t('amend.abandoned.subtitle') }}</p>
+        </div>
+        
+        <div class="card-body p-5 text-center">
+          <div class="alert alert-success border-0 mb-4">
+            <div class="d-flex align-items-start">
+              <i class="bi bi-check-circle text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
+              <div class="text-start">
+                <h5 class="alert-heading mb-2">{{ i18n.t('amend.abandoned.success_title') }}</h5>
+                <p class="mb-2" *ngIf="abandonMessage">{{ abandonMessage }}</p>
+                <p class="mb-0">{{ i18n.t('amend.abandoned.success_message') }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="bg-light rounded p-3">
+                <i class="bi bi-plus-circle text-primary mb-2" style="font-size: 1.5rem;"></i>
+                <h6 class="mb-1">{{ i18n.t('amend.abandoned.new_request') }}</h6>
+                <small class="text-muted">{{ i18n.t('amend.abandoned.new_request_desc') }}</small>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="bg-light rounded p-3">
+                <i class="bi bi-headset text-warning mb-2" style="font-size: 1.5rem;"></i>
+                <h6 class="mb-1">{{ i18n.t('amend.abandoned.support') }}</h6>
+                <small class="text-muted">{{ i18n.t('amend.abandoned.support_desc') }}</small>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-3 justify-content-center">
+            <button 
+              type="button"
+              class="btn btn-primary btn-lg px-4"
+              (click)="createNewRequest()"
+            >
+              <i class="bi bi-plus-circle me-2"></i>
+              {{ i18n.t('amend.abandoned.new_request_button') }}
+            </button>
+            <button 
+              type="button"
+              class="btn btn-outline-secondary btn-lg px-4"
+              (click)="goHome()"
+            >
+              <i class="bi bi-house me-2"></i>
+              {{ i18n.t('amend.abandoned.home_button') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

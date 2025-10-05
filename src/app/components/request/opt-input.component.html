@@ -1,0 +1,24 @@
+<div class="mb-4">
+  <label [for]="inputId" class="form-label fw-semibold text-center d-block">
+    <i class="bi bi-key me-1 text-info"></i>
+    {{ label }}
+    <span class="text-danger" *ngIf="required">*</span>
+  </label>
+  <input 
+    type="text" 
+    class="form-control form-control-lg text-center" 
+    [id]="inputId"
+    [formControl]="control"
+    [placeholder]="placeholder"
+    [maxlength]="maxlength"
+    style="font-size: 1.5rem; letter-spacing: 0.5rem;"
+    [class.is-invalid]="control?.invalid && control?.touched"
+  >
+  <div class="form-text text-center">
+    <i class="bi bi-info-circle me-1"></i>
+    {{ helpText }}
+  </div>
+  <div class="invalid-feedback text-center" *ngIf="control?.invalid && control?.touched">
+    {{ validationMessage }}
+  </div>
+</div>

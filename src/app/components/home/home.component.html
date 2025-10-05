@@ -1,0 +1,182 @@
+<!-- Navigation -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="#">
+      <i class="bi bi-building me-2"></i>
+      {{ i18n.t('nav.home') }}
+    </a>
+    
+    <div class="navbar-nav ms-auto">
+      <app-language-switcher></app-language-switcher>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section avec disposition slider gauche / actions droite -->
+<section class="hero-section py-5">
+  <div class="container">
+    <div class="row align-items-center min-vh-75">
+      <!-- Contenu principal -->
+      <div class="col-12 text-center">
+        <div class="hero-content">
+          <!-- Titre et sous-titre -->
+          <div class="mb-5">
+            <h1 class="display-4 fw-bold text-primary mb-4">
+              {{ i18n.t('home.title') }}
+            </h1>
+            <p class="lead text-muted mb-4">
+              {{ i18n.t('home.subtitle') }}
+            </p>
+          </div>
+
+          <!-- Blocs Nouvel utilisateur et Déjà membre -->
+          <div class="row g-4 mb-5 justify-content-center" *ngIf="!isAuthenticated">
+            <div class="col-md-4">
+              <div class="user-action-card card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                  <div class="bg-primary bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                       style="width: 80px; height: 80px;">
+                    <i class="bi bi-person-plus text-primary" style="font-size: 2.5rem;"></i>
+                  </div>
+                  <h5 class="text-primary mb-3">{{ i18n.t('home.new_user') }}</h5>
+                  <p class="text-muted mb-4 small">
+                    {{ i18n.t('home.new_user_desc') }}
+                  </p>
+                  <a routerLink="/register/confidentiality" class="btn btn-primary btn-lg w-100">
+                    {{ i18n.t('home.register') }}
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="col-md-4">
+              <div class="user-action-card card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                  <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                       style="width: 80px; height: 80px;">
+                    <i class="bi bi-box-arrow-in-right text-success" style="font-size: 2.5rem;"></i>
+                  </div>
+                  <h5 class="text-success mb-3">{{ i18n.t('home.existing_user') }}</h5>
+                  <p class="text-muted mb-4 small">
+                    {{ i18n.t('home.existing_user_desc') }}
+                  </p>
+                  <button 
+                    class="btn btn-success btn-lg w-100"
+                    (click)="loginWithAzureAD()"
+                    [disabled]="isLoggingIn"
+                  >
+                    <span *ngIf="isLoggingIn" class="loading-spinner me-2"></span>
+                    <i class="bi bi-microsoft me-2" *ngIf="!isLoggingIn"></i>
+                    {{ isLoggingIn ? 'Connexion...' : i18n.t('home.login') }}
+                  </button>
+                  <small class="text-muted d-block mt-2 text-center">
+                    <i class="bi bi-shield-check me-1"></i>
+                    Connexion sécurisée via Microsoft
+                  </small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Message d'information pour Azure AD -->
+          <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+              <div class="alert alert-info border-0 text-center">
+                <i class="bi bi-info-circle me-2"></i>
+                <strong>Connexion Microsoft :</strong> Utilisez vos identifiants Microsoft pour accéder à votre portail client AfDB
+              </div>
+              
+              <!-- Lien pour les démos -->
+              <div class="text-center mt-3">
+                <small class="text-muted">
+                  Pour les démos : 
+                  <a routerLink="/login" class="text-decoration-none">
+                    <i class="bi bi-gear me-1"></i>
+                    Connexion de test
+                  </a>
+                  <span class="mx-2">|</span>
+                  <a routerLink="/register/amend" class="text-decoration-none">
+                    <i class="bi bi-pencil-square me-1"></i>
+                    {{ i18n.t('home.amend_request') }}
+                  </a>
+                </small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section des fonctionnalités -->
+<section class="features-section py-5 bg-light">
+  <div class="container">
+    <div class="row text-center mb-5">
+      <div class="col-12">
+        <h2 class="display-6 fw-bold text-primary mb-3">Nos Services</h2>
+        <p class="lead text-muted">Découvrez les outils mis à votre disposition</p>
+      </div>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      <div class="col-md-4">
+        <div class="card text-center h-100 border-0 shadow-sm feature-service-card">
+          <div class="card-body p-4">
+            <div class="bg-info bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                 style="width: 80px; height: 80px;">
+              <i class="bi bi-file-earmark-text text-info" style="font-size: 2rem;"></i>
+            </div>
+            <h5 class="text-info mb-3">{{ i18n.t('home.features.reports') }}</h5>
+            <p class="text-muted">{{ i18n.t('home.features.reports_desc') }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card text-center h-100 border-0 shadow-sm feature-service-card">
+          <div class="card-body p-4">
+            <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                 style="width: 80px; height: 80px;">
+              <i class="bi bi-exclamation-triangle text-warning" style="font-size: 2rem;"></i>
+            </div>
+            <h5 class="text-warning mb-3">{{ i18n.t('home.features.claims') }}</h5>
+            <p class="text-muted">{{ i18n.t('home.features.claims_desc') }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-4">
+        <div class="card text-center h-100 border-0 shadow-sm feature-service-card">
+          <div class="card-body p-4">
+            <div class="bg-success bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
+                 style="width: 80px; height: 80px;">
+              <i class="bi bi-cash-coin text-success" style="font-size: 2rem;"></i>
+            </div>
+            <h5 class="text-success mb-3">{{ i18n.t('home.features.withdrawals') }}</h5>
+            <p class="text-muted">{{ i18n.t('home.features.withdrawals_desc') }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section d'information -->
+<section class="info-section py-5" *ngIf="!isAuthenticated">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="alert alert-info text-center border-0 shadow-sm">
+          <div class="d-flex align-items-center justify-content-center mb-3">
+            <div class="bg-info bg-opacity-20 rounded-circle p-3 me-3">
+              <i class="bi bi-info-circle text-info" style="font-size: 1.5rem;"></i>
+            </div>
+            <h5 class="mb-0 text-info">Processus d'Approbation</h5>
+          </div>
+          <p class="mb-0 text-muted">{{ i18n.t('home.info') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
