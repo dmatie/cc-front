@@ -115,7 +115,8 @@
       "business_profile": "Business profile required",
       "financing_type": "Financing type required",
       "projects": "At least one project must be selected"
-    }
+    },
+    "send_code_error": "Error sending verification code"
   },
   "request_details": {
     "title": "Request Details",
@@ -155,12 +156,13 @@
     "edit": "Edit",
     "submit": "Submit Request",
     "submitting": "Submitting...",
-    "back": "Back"
+    "back": "Back",
+    "missing_data": "Registration data is missing. Please start the process again."
   },
   "registration_success": {
     "title": "Request Sent",
     "subtitle": "Your access request has been submitted successfully",
-    "step": "Step 3 of 3 - Confirmation",
+    "step": "Step 4 of 4 - Confirmation",
     "success_title": "Request submitted successfully!",
     "message1": "Your access request has been sent to our security team.",
     "message2": "You will receive a confirmation email once your account is approved.",
@@ -215,7 +217,8 @@
         "code": "6-digit code required"
       },
       "invalid_code": "Invalid verification code",
-      "verification_error": "Error verifying the code"
+      "verification_error": "Error verifying the code",
+      "submission_error": "Error submitting the request"
     },
     "detail": {
       "title": "Rejected Request",
@@ -305,5 +308,56 @@
     "new_claim": "New Claim",
     "new_withdrawal": "New Withdrawal",
     "download_report": "Download Report"
+  },
+  "admin": {
+    "access_requests": {
+      "title": "Pending Access Requests",
+      "back": "Back to Dashboard",
+      "loading": "Loading requests...",
+      "load_error": "Error loading requests",
+      "no_requests": "No pending requests",
+      "view_detail": "View Details",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "financing_type": "Financing Type",
+        "submission_date": "Submission Date",
+        "status": "Status",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "abandoned": "Abandoned"
+      }
+    },
+    "access_request_detail": {
+      "title": "Access Request Details",
+      "back": "Back to List",
+      "loading": "Loading details...",
+      "load_error": "Error loading details",
+      "not_found": "Request not found",
+      "approve": "Approve Request",
+      "reject": "Reject Request",
+      "approve_success": "The request has been successfully approved",
+      "reject_success": "The request has been rejected",
+      "approve_error": "Error approving request",
+      "reject_error": "Error rejecting request"
+    },
+    "reject_modal": {
+      "title": "Reject Request",
+      "warning": "This action cannot be undone. The user will receive a notification with the rejection reason.",
+      "reason_label": "Rejection Reason",
+      "reason_placeholder": "Please describe in detail the reasons for rejection...",
+      "reason_help": "This reason will be communicated to the user. Be clear and professional.",
+      "cancel": "Cancel",
+      "confirm": "Confirm Rejection",
+      "submitting": "Processing...",
+      "validation": {
+        "required": "Rejection reason is required",
+        "min_length": "Reason must be at least 10 characters long"
+      }
+    }
   }
 }

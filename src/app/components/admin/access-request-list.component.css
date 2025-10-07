@@ -1,0 +1,26 @@
+.card-header {
+  padding: 1.5rem;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table td {
+  vertical-align: middle;
+}
+
+.badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.btn-sm {
+  white-space: nowrap;
+}
+
+.badge-sm {
+  font-size: 0.7rem;
+  padding: 0.25em 0.45em;
+  border-radius: 0.3rem;
+}

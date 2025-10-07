@@ -15,7 +15,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './registration-review.component.css'
 })
 export class RegistrationReviewComponent implements OnInit {
-  registration: RegistrationDetail | null = null;
+  registration: any = null;
   isLoading = true;
   email = '';
 
@@ -40,10 +40,33 @@ export class RegistrationReviewComponent implements OnInit {
   ngOnInit(): void {
     const data = sessionStorage.getItem('registrationReviewData');
     if (data) {
-      this.email = JSON.parse(data).email;
-      this.registration = JSON.parse(data);
-      this.registration?.accessRequest
+      try {
+        const parsedData = JSON.parse(data);
+        this.email = parsedData.email;
+        this.registration = parsedData;
+
+        // S'assurer que selectedProjectCodes est un tableau
+        if (this.registration && !Array.isArray(this.registration.selectedProjectCodes)) {
+          this.registration.selectedProjectCodes = [];
+        }
+
+        this.isLoading = false;
+      } catch (error) {
+        console.error('❌ Erreur lors du parsing des données:', error);
+        this.errorMessage = this.i18n.t('registration_review.missing_data');
+        this.isLoading = false;
+        // Rediriger vers le formulaire après 3 secondes
+        setTimeout(() => {
+          this.router.navigate(['/register/form']);
+        }, 3000);
+      }
+    } else {
+      this.errorMessage = this.i18n.t('registration_review.missing_data');
       this.isLoading = false;
+      // Rediriger vers le formulaire après 3 secondes
+      setTimeout(() => {
+        this.router.navigate(['/register/form']);
+      }, 3000);
     }
   }
 
@@ -55,17 +78,16 @@ export class RegistrationReviewComponent implements OnInit {
     if (this.otpForm.valid) {
       this.isSubmitting = true;
       this.errorMessage = '';
-      
+
       const code = this.otpForm.get('code')?.value;
-      
+
       this.registrationService.verifyCode(this.email, code).subscribe({
         next: (isValid) => {
-          this.isSubmitting = false;
           if (isValid) {
-            // Code valide, rediriger vers le récapitulatif
-            this.router.navigate(['/register/detail']);
+            this.submitRegistration();
           } else {
             this.errorMessage = this.i18n.t('amend.otp.invalid_code');
+            this.isSubmitting = false;
           }
         },
         error: (error) => {
@@ -77,10 +99,77 @@ export class RegistrationReviewComponent implements OnInit {
     }
   }
 
+  private submitRegistration(): void {
+    if (!this.registration) {
+      this.errorMessage = this.i18n.t('registration_review.missing_data');
+      this.isSubmitting = false;
+      return;
+    }
+
+    // Valider et normaliser selectedProjectCodes
+    let selectedProjectCodes: string[] = [];
+    if (this.registration.selectedProjectCodes) {
+      if (Array.isArray(this.registration.selectedProjectCodes)) {
+        selectedProjectCodes = this.registration.selectedProjectCodes;
+      } else if (typeof this.registration.selectedProjectCodes === 'string') {
+        // Si c'est une chaîne, essayer de la parser
+        try {
+          const parsed = JSON.parse(this.registration.selectedProjectCodes);
+          selectedProjectCodes = Array.isArray(parsed) ? parsed : [];
+        } catch {
+          selectedProjectCodes = [];
+        }
+      }
+    }
+
+    // Convertir selectedProjectCodes en Projects avec le format attendu par l'API
+    const projects = selectedProjectCodes.map(code => ({ sapCode: code }));
+
+    const registrationRequest = {
+      email: this.registration.email,
+      firstName: this.registration.firstName,
+      lastName: this.registration.lastName,
+      functionId: this.registration.functionId,
+      countryId: this.registration.countryId,
+      businessProfileId: this.registration.businessProfileId,
+      financingTypeId: this.registration.financingTypeId,
+      Projects: projects
+    };
+
+    this.registrationService.submitRegistration(registrationRequest).subscribe({
+      next: (response) => {
+        console.log('✅ Demande soumise avec succès:', response);
+        this.isSubmitting = false;
+
+        sessionStorage.setItem('registrationRequestId', response.accessRequest.id);
+        sessionStorage.setItem('registrationMessage', response.message);
+        sessionStorage.removeItem('registrationReviewData');
+
+        this.router.navigate(['/register/success']);
+      },
+      error: (errorResponse) => {
+        console.error('❌ Erreur lors de la soumission:', errorResponse);
+
+        // Gérer différents types d'erreurs
+        if (errorResponse?.error?.message) {
+          this.errorMessage = errorResponse.error.message;
+        } else if (errorResponse?.message) {
+          this.errorMessage = errorResponse.message;
+        } else if (typeof errorResponse === 'string') {
+          this.errorMessage = errorResponse;
+        } else {
+          this.errorMessage = this.i18n.t('amend.otp.submission_error');
+        }
+
+        this.isSubmitting = false;
+      }
+    });
+  }
+
   resendCode(): void {
     if (this.resendCooldown > 0) return;
     
-    this.registrationService.sendVerificationCode(this.email).subscribe({
+    this.registrationService.sendVerificationCode(this.email, false).subscribe({
       next: (response) => {
         if (response.success) {
           this.startCooldown();

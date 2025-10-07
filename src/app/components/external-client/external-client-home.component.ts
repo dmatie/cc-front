@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { User } from '../../models/user.model';
 
 interface ClientStats {
@@ -35,7 +35,7 @@ interface Notification {
 @Component({
   selector: 'app-external-client-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, AuthenticatedNavbarComponent],
   templateUrl: './external-client-home.component.html',
   styleUrls: ['./external-client-home.component.css']
 })
@@ -191,21 +191,6 @@ export class ExternalClientHomeComponent implements OnInit {
 
   getUnreadNotificationsCount(): number {
     return this.recentNotifications.filter(n => !n.read).length;
-  }
-
-  logout(): void {
-    console.log('🔐 Logging out...');
-    this.authService.logout()
-      .then(() => {
-        console.log('✅ Logout successful');
-        // Redirection vers la page d'accueil
-        window.location.href = '/home';
-      })
-      .catch(error => {
-        console.error('❌ Logout error:', error);
-        // En cas d'erreur, rediriger manuellement
-        window.location.href = '/home';
-      });
   }
 
   // Méthodes pour les actions rapides

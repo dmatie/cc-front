@@ -1,0 +1,80 @@
+@if (isVisible) {
+  <div class="modal-backdrop fade show" (click)="handleCancel()"></div>
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-x-circle me-2"></i>{{ i18n.t('admin.reject_modal.title') }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            [disabled]="isSubmitting"
+            (click)="handleCancel()">
+          </button>
+        </div>
+
+        <form [formGroup]="rejectForm" (ngSubmit)="handleReject()">
+          <div class="modal-body">
+            <div class="alert alert-warning">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ i18n.t('admin.reject_modal.warning') }}
+            </div>
+
+            <div class="mb-3">
+              <label for="reason" class="form-label fw-bold">
+                {{ i18n.t('admin.reject_modal.reason_label') }}
+                <span class="text-danger">*</span>
+              </label>
+              <textarea
+                id="reason"
+                class="form-control"
+                formControlName="reason"
+                rows="5"
+                [placeholder]="i18n.t('admin.reject_modal.reason_placeholder')"
+                [class.is-invalid]="reasonControl?.invalid && reasonControl?.touched"
+                [disabled]="isSubmitting">
+              </textarea>
+              @if (reasonControl?.invalid && reasonControl?.touched) {
+                <div class="invalid-feedback">
+                  @if (reasonControl?.errors?.['required']) {
+                    {{ i18n.t('admin.reject_modal.validation.required') }}
+                  }
+                  @if (reasonControl?.errors?.['minlength']) {
+                    {{ i18n.t('admin.reject_modal.validation.min_length') }}
+                  }
+                </div>
+              }
+              <small class="text-muted">
+                {{ i18n.t('admin.reject_modal.reason_help') }}
+              </small>
+            </div>
+          </div>
+
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              [disabled]="isSubmitting"
+              (click)="handleCancel()">
+              <i class="bi bi-x-lg me-2"></i>{{ i18n.t('admin.reject_modal.cancel') }}
+            </button>
+            <button
+              type="submit"
+              class="btn btn-danger"
+              [disabled]="rejectForm.invalid || isSubmitting">
+              @if (isSubmitting) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                {{ i18n.t('admin.reject_modal.submitting') }}
+              } @else {
+                <i class="bi bi-x-circle me-2"></i>
+                {{ i18n.t('admin.reject_modal.confirm') }}
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

@@ -9,7 +9,7 @@ export const environment = {
         backendScope:'api://586ffe0a-59c4-4e52-af81-be102e2e6e07/access_as_user'
     },
     features: {
-        enableMockData: true, // true = Mock services, false = API services
+        enableMockData: false, // true = Mock services, false = API services
         enableDebugLogs: true,
         enableCaptcha: true
     }

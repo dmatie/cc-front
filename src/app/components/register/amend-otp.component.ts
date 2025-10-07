@@ -71,7 +71,7 @@ export class AmendOtpComponent implements OnInit {
   resendCode(): void {
     if (this.resendCooldown > 0) return;
     
-    this.registrationService.sendVerificationCode(this.email).subscribe({
+    this.registrationService.sendVerificationCode(this.email, true).subscribe({
       next: (response) => {
         if (response.success) {
           this.startCooldown();

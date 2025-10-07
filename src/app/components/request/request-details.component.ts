@@ -1,9 +1,10 @@
 import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { I18nService } from '../../services/i18n.service';
 
 @Component({
   selector: 'app-request-details',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './request-details.component.html',
   styleUrl: './request-details.component.css'
 })

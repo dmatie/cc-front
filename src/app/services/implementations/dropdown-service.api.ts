@@ -165,11 +165,18 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   // MÉTHODES PRIVÉES
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
+    const token = localStorage.getItem('token');
+    const headers: any = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'X-Requested-With': 'XMLHttpRequest'
-    });
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    return new HttpHeaders(headers);
   }
 
   private buildHttpParams(filter?: DropdownFilter): HttpParams {

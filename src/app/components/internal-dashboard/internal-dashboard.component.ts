@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { LanguageSwitcherComponent } from '../language-switcher/language-switcher.component';
+import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { User } from '../../models/user.model';
 
 interface InternalStats {
@@ -16,7 +16,7 @@ interface InternalStats {
 @Component({
   selector: 'app-internal-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterModule, LanguageSwitcherComponent],
+  imports: [CommonModule, RouterModule, AuthenticatedNavbarComponent],
   templateUrl: './internal-dashboard.component.html',
   styleUrls: ['./internal-dashboard.component.css']
 })
@@ -34,6 +34,7 @@ export class InternalDashboardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private router: Router,
     public i18n: I18nService
   ) {
     console.log('🏢 InternalDashboardComponent constructor called');
@@ -58,23 +59,10 @@ export class InternalDashboardComponent implements OnInit {
     console.log('✅ Internal user data loaded successfully:', this.currentUser.firstName, this.currentUser.lastName);
   }
 
-  logout(): void {
-    console.log('🔐 Internal user logging out...');
-    this.authService.logout()
-      .then(() => {
-        console.log('✅ Logout successful');
-        window.location.href = '/home';
-      })
-      .catch(error => {
-        console.error('❌ Logout error:', error);
-        window.location.href = '/home';
-      });
-  }
-
   // Actions rapides
   manageAccessRequests(): void {
     console.log('📝 Managing access requests...');
-    // Rediriger vers la gestion des demandes d'accès
+    this.router.navigate(['/admin/accessrequests']);
   }
 
   manageClaims(): void {

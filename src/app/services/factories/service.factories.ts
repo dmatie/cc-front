@@ -10,6 +10,8 @@ import { ErrorTranslationService } from '../error-translation.service';
 import { AbstractProjectsService } from '../abstract/projects-service.abstract';
 import { MockProjectsService } from '../implementations/projects-service.mock';
 import { ApiProjectsService } from '../implementations/projects-service.api';
+import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
+import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 
 /**
  * Factory pour le service dropdown
@@ -85,3 +87,28 @@ export const ServiceFactoryUtils = {
     };
   }
 };
+
+
+export function MSALInstanceFactory() {
+  return new PublicClientApplication({
+      auth: {
+        clientId: environment.azureAd.clientId,
+        authority: environment.azureAd.authority,
+        redirectUri: environment.azureAd.redirectUri,
+        postLogoutRedirectUri: environment.azureAd.postLogoutRedirectUri
+      },
+      cache: {
+        cacheLocation: 'localStorage',
+        storeAuthStateInCookie: false
+      }
+  });
+}
+
+export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
+  const protectedResourceMap = new Map<string, Array<string>>();
+  protectedResourceMap.set('https://localhost:7242/api/*', [environment.azureAd.backendScope]);
+  return {
+    interactionType: InteractionType.Redirect,
+    protectedResourceMap
+  };
+}

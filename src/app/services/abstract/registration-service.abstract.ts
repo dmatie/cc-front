@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { AmendRegistrationRequest, RegistrationDetail, RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError } from '../../models/registration.model';
+import { AmendRegistrationRequest, RegistrationDetail, RegistrationRequest, RegistrationResponse, RegistrationResponseAll, RegistrationStatus, ValidationError } from '../../models/registration.model';
 
 /**
  * Service abstrait pour la gestion des enregistrements
@@ -44,7 +44,7 @@ export abstract class AbstractRegistrationService {
     dateFrom?: Date;
     dateTo?: Date;
     search?: string;
-  }): Observable<RegistrationStatus[]>;
+  }): Observable<RegistrationResponseAll>;
 
   /**
    * Approuver une demande d'enregistrement
@@ -70,11 +70,18 @@ export abstract class AbstractRegistrationService {
  abstract getRegistrationByEmail(email: string): Observable<RegistrationDetail | null>;
 
   /**
+   * Obtenir une demande d'enregistrement par email
+   * @param email Adresse email
+   * @returns Observable avec les détails de la demande ou null si non trouvée
+   */
+ abstract getRegistrationById(id: string): Observable<RegistrationDetail | null>;
+ 
+  /**
    * Envoyer un code de vérification par email
    * @param email Adresse email
    * @returns Observable avec la confirmation d'envoi
    */
-  abstract sendVerificationCode(email: string): Observable<{ success: boolean; message: string }>;
+  abstract sendVerificationCode(email: string, isEmailExist: boolean): Observable<{ success: boolean; message: string }>;
 
   /**
    * Vérifier le code de validation

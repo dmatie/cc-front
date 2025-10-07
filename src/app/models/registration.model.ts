@@ -18,6 +18,10 @@ export const StatusMapper: Record<StatusEnum, StatusType> = {
   [StatusEnum.Cancelled]: 'cancelled',
 };
 
+export interface ProjectRequest {
+  sapCode: string;
+}
+
 export interface RegistrationRequest {
   email: string;
   firstName: string;
@@ -26,7 +30,8 @@ export interface RegistrationRequest {
   countryId: string;
   businessProfileId: string;
   financingTypeId: string;
-  selectedProjectCodes: string[];
+  selectedProjectCodes?: string[];
+  Projects: ProjectRequest[];
 }
 
 export interface AccessRequest {
@@ -69,7 +74,8 @@ export interface AmendRegistrationRequest {
   countryId: string;
   businessProfileId: string;
   financingTypeId: string;
-  selectedProjectCodes: string[];
+  selectedProjectCodes?: string[];
+  Projects: ProjectRequest[];
 }
 
 export interface AccessRequestDetail {
@@ -90,6 +96,14 @@ export interface AccessRequestDetail {
   countryName: string;
   businessProfileName: string;
   financingTypeName: string;
+}
+
+export interface RegistrationResponseAll {
+  accessRequests: AccessRequestDetail[],
+  pageNumber: number,
+  pageSize: number,
+  totalCount: number,
+  totalPages: number,
 }
 
 export interface RegistrationDetail {

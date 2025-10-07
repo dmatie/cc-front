@@ -246,7 +246,10 @@ export class AmendEditComponent implements OnInit, OnDestroy {
     if (this.amendForm.valid && this.registration) {
       this.isSubmitting = true;
       this.submitError = '';
-      
+
+      // Convertir selectedProjectCodes en Projects avec le format attendu par l'API
+      const projects = this.selectedProjectCodes.map(code => ({ sapCode: code }));
+
       const amendRequest: AmendRegistrationRequest = {
         id: this.registration.accessRequest.id,
         email: this.registration.accessRequest.email,
@@ -256,7 +259,7 @@ export class AmendEditComponent implements OnInit, OnDestroy {
         countryId: this.amendForm.get('countryId')?.value,
         businessProfileId: this.amendForm.get('businessProfileId')?.value,
         financingTypeId: this.amendForm.get('financingTypeId')?.value,
-        selectedProjectCodes: this.selectedProjectCodes
+        Projects: projects
       };
       
       this.registrationService.updateRegistration(amendRequest).subscribe({

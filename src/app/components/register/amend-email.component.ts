@@ -64,7 +64,7 @@ export class AmendEmailComponent {
   }
 
   private sendVerificationCode(email: string): void {
-    this.registrationService.sendVerificationCode(email).subscribe({
+    this.registrationService.sendVerificationCode(email, true).subscribe({
       next: (response) => {
         if (response.success) {
           // Stocker l'email pour les étapes suivantes

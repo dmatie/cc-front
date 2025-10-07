@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { AbstractRegistrationService } from '../abstract/registration-service.abstract';
-import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, AccessRequest, RegistrationDetail, AmendRegistrationRequest, AccessRequestDetail } from '../../models/registration.model';
+import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, AccessRequest, RegistrationDetail, AmendRegistrationRequest, AccessRequestDetail, RegistrationResponseAll } from '../../models/registration.model';
 import { ErrorTranslationService } from '../error-translation.service';
 import { MapAccessRequestModelStatusToApi } from '../../core/utils/helper';
 
@@ -203,9 +203,9 @@ export class MockRegistrationService extends AbstractRegistrationService {
     }
 
     // Validation des projets sélectionnés
-    if (!request.selectedProjectCodes || request.selectedProjectCodes.length === 0) {
+    if (!request.Projects || request.Projects.length === 0) {
       errors.push({
-        field: 'selectedProjectCodes',
+        field: 'Projects',
         error: 'ERR.General.ProjectsRequired',
         message: 'Au moins un projet doit être sélectionné'
       });
@@ -221,38 +221,51 @@ export class MockRegistrationService extends AbstractRegistrationService {
     );
   }
 
-  getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; search?: string; }): Observable<RegistrationStatus[]> {
-    console.log('📋 [MOCK] Getting all registrations with filter:', filter);
-    
-    return of(null).pipe(
-      delay(500),
-      map(() => {
-        let registrations = Array.from(this.mockRegistrations.values());
-        
-        if (filter) {
-          if (filter.status) {
-            registrations = registrations.filter(r => r.status === filter.status);
-          }
-          if (filter.dateFrom) {
-            registrations = registrations.filter(r => r.submissionDate >= filter.dateFrom!);
-          }
-          if (filter.dateTo) {
-            registrations = registrations.filter(r => r.submissionDate <= filter.dateTo!);
-          }
-          if (filter.search) {
-            const searchTerm = filter.search.toLowerCase();
-            registrations = registrations.filter(r => 
-              r.requestId.toLowerCase().includes(searchTerm) ||
-              (r.reviewNotes && r.reviewNotes.toLowerCase().includes(searchTerm))
-            );
-          }
-        }
-        
-        return registrations.sort((a, b) => b.submissionDate.getTime() - a.submissionDate.getTime());
-      })
-    );
-  }
+getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; search?: string; }): Observable<RegistrationResponseAll> {
+  console.log('📋 [MOCK] Getting all registrations with filter:', filter);
 
+  return of(null).pipe(
+    delay(500),
+    map(() => {
+      let registrations = Array.from(this.mockRegistrationDetails.values());
+
+      if (filter) {
+        if (filter.status) {
+          const statusNumber = MapAccessRequestModelStatusToApi(filter.status as any);
+          registrations = registrations.filter(r => r.accessRequest.status === statusNumber);
+        }
+        if (filter.dateFrom) {
+          registrations = registrations.filter(r => r.accessRequest.submissionDate >= filter.dateFrom!);
+        }
+        if (filter.dateTo) {
+          registrations = registrations.filter(r => r.accessRequest.submissionDate <= filter.dateTo!);
+        }
+        if (filter.search) {
+          const searchTerm = filter.search.toLowerCase();
+          registrations = registrations.filter(r =>
+            r.accessRequest.email.toLowerCase().includes(searchTerm) ||
+            r.accessRequest.firstName.toLowerCase().includes(searchTerm) ||
+            r.accessRequest.lastName.toLowerCase().includes(searchTerm)
+          );
+        }
+      }
+
+      // Tri par date de soumission décroissante
+      registrations = registrations.sort((a, b) => b.accessRequest.submissionDate.getTime() - a.accessRequest.submissionDate.getTime());
+
+      // Adaptation pour retourner RegistrationResponseAll
+      const response: RegistrationResponseAll = {
+        accessRequests : registrations.map(r => r.accessRequest),
+        pageNumber: 1,
+        pageSize: registrations.length,
+        totalPages: 1,
+        totalCount: registrations.length,
+      };
+
+      return response;
+    })
+  );
+}
   approveRegistration(requestId: string, approverNotes?: string): Observable<{ success: boolean; message: string; }> {
     console.log('✅ [MOCK] Approving registration:', requestId, approverNotes);
     
@@ -318,7 +331,23 @@ export class MockRegistrationService extends AbstractRegistrationService {
     );
   }
 
-  sendVerificationCode(email: string): Observable<{ success: boolean; message: string; }> {
+    getRegistrationById(id: string): Observable<RegistrationDetail | null> {
+    console.log('🔍 [MOCK] Getting registration by ID:', id);
+    
+    return of(null).pipe(
+      delay(800),
+      map(() => {
+
+        const registration = Array.from(this.mockRegistrationDetails.values())
+          .find(detail => detail.accessRequest.id === id);
+          
+        console.log('📋 [MOCK] Registration found:', registration ? 'Yes' : 'No');
+        return registration || null;
+      })
+    );
+  }
+
+  sendVerificationCode(email: string, isEmailExist: boolean): Observable<{ success: boolean; message: string; }> {
     console.log('📧 [MOCK] Sending verification code to:', email);
     
     return of(null).pipe(
@@ -391,6 +420,9 @@ export class MockRegistrationService extends AbstractRegistrationService {
         // Mettre à jour la demande existante
         const existingDetail = this.mockRegistrationDetails.get(request.email.toLowerCase());
         if (existingDetail) {
+          // Convertir Projects en selectedProjectCodes pour le stockage
+          const selectedProjectCodes = request.Projects.map(p => p.sapCode);
+
           const updatedDetail: AccessRequestDetail = {
             ...existingDetail.accessRequest,
             firstName: request.firstName,
@@ -399,7 +431,7 @@ export class MockRegistrationService extends AbstractRegistrationService {
             countryId: request.countryId,
             businessProfileId: request.businessProfileId,
             financingTypeId: request.financingTypeId,
-            selectedProjectCodes: request.selectedProjectCodes,
+            selectedProjectCodes: selectedProjectCodes,
             status: MapAccessRequestModelStatusToApi('pending'),
             rejectionReason: undefined,
             submissionDate: new Date()

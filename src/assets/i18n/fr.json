@@ -115,7 +115,8 @@
       "business_profile": "Profil d'entreprise requis",
       "financing_type": "Type de financement requis",
       "projects": "Au moins un projet doit être sélectionné"
-    }
+    },
+    "send_code_error": "Erreur lors de l'envoi du code de vérification"
   },
   "request_details": {
     "title": "Détails de la Demande",
@@ -149,12 +150,13 @@
     "edit": "Modifier",
     "submit": "Soumettre la demande",
     "submitting": "Envoi en cours...",
-    "back": "Retour"
+    "back": "Retour",
+    "missing_data": "Données de registration manquantes. Veuillez recommencer le processus."
   },
   "registration_success": {
     "title": "Demande Envoyée",
     "subtitle": "Votre demande d'accès a été soumise avec succès",
-    "step": "Étape 3 sur 3 - Confirmation",
+    "step": "Étape 4 sur 4 - Confirmation",
     "success_title": "Demande soumise avec succès !",
     "message1": "Votre demande d'accès a été envoyée à notre équipe de sécurité.",
     "message2": "Vous recevrez un email de confirmation une fois votre compte approuvé.",
@@ -208,7 +210,8 @@
         "code": "Code de 6 chiffres requis"
       },
       "invalid_code": "Code de vérification invalide",
-      "verification_error": "Erreur lors de la vérification du code"
+      "verification_error": "Erreur lors de la vérification du code",
+      "submission_error": "Erreur lors de la soumission de la demande"
     },
     "detail": {
       "title": "Demande Rejetée",
@@ -438,5 +441,56 @@
     "system_error": "Erreur système",
     "business_error": "Erreur métier",
     "unexpected_error": "Une erreur inattendue s'est produite"
+  },
+  "admin": {
+    "access_requests": {
+      "title": "Demandes d'accès en attente",
+      "back": "Retour au tableau de bord",
+      "loading": "Chargement des demandes...",
+      "load_error": "Erreur lors du chargement des demandes",
+      "no_requests": "Aucune demande en attente",
+      "view_detail": "Voir le détail",
+      "table": {
+        "name": "Nom",
+        "email": "Email",
+        "financing_type": "Type de financement",
+        "submission_date": "Date de soumission",
+        "status": "Statut",
+        "actions": "Actions"
+      },
+      "status": {
+        "pending": "En attente",
+        "approved": "Approuvé",
+        "rejected": "Rejeté",
+        "abandoned": "Abandonné"
+      }
+    },
+    "access_request_detail": {
+      "title": "Détail de la demande d'accès",
+      "back": "Retour à la liste",
+      "loading": "Chargement du détail...",
+      "load_error": "Erreur lors du chargement du détail",
+      "not_found": "Demande non trouvée",
+      "approve": "Approuver la demande",
+      "reject": "Rejeter la demande",
+      "approve_success": "La demande a été approuvée avec succès",
+      "reject_success": "La demande a été rejetée",
+      "approve_error": "Erreur lors de l'approbation",
+      "reject_error": "Erreur lors du rejet"
+    },
+    "reject_modal": {
+      "title": "Rejeter la demande",
+      "warning": "Cette action ne peut pas être annulée. L'utilisateur recevra une notification avec le motif de rejet.",
+      "reason_label": "Motif de rejet",
+      "reason_placeholder": "Veuillez décrire en détail les raisons du rejet...",
+      "reason_help": "Ce motif sera communiqué à l'utilisateur. Soyez clair et professionnel.",
+      "cancel": "Annuler",
+      "confirm": "Confirmer le rejet",
+      "submitting": "Traitement en cours...",
+      "validation": {
+        "required": "Le motif de rejet est obligatoire",
+        "min_length": "Le motif doit contenir au moins 10 caractères"
+      }
+    }
   }
 }

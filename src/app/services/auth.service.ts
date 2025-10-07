@@ -338,19 +338,22 @@ export class AuthService {
   }
 
   async getAccessToken(): Promise<string | null> {
+    const account = this.msalInstance.getActiveAccount();
+    if (!account) {
+      console.warn('Aucun compte actif dans MSAL');
+      return null;
+    }
+
+    const request = {
+      account,
+      scopes: [environment.azureAd.backendScope]
+    };
+
     try {
-      const accounts = this.msalInstance.getAllAccounts();
-      if (!accounts.length) return null;
-
-      const silentRequest: SilentRequest = {
-        scopes: [environment.azureAd.backendScope],
-        account: accounts[0]
-      };
-
-      const response = await this.msalInstance.acquireTokenSilent(silentRequest);
-      return response.accessToken;
-    } catch (e) {
-      console.error('acquireTokenSilent failed', e);
+      const result = await this.msalInstance.acquireTokenSilent(request);
+      return result.accessToken;
+    } catch (error) {
+      console.error('❌ Erreur lors du refresh du token:', error);
       return null;
     }
   }

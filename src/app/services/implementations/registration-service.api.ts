@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular
 import { Observable, throwError, of } from 'rxjs';
 import { map, catchError, retry, timeout } from 'rxjs/operators';
 import { AbstractRegistrationService } from '../abstract/registration-service.abstract';
-import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, RegistrationDetail, AmendRegistrationRequest } from '../../models/registration.model';
+import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, RegistrationDetail, AmendRegistrationRequest, RegistrationResponseAll } from '../../models/registration.model';
 import { environment } from '../../../environments/environment';
 import { ErrorTranslationService } from '../error-translation.service';
 
@@ -41,8 +41,8 @@ export class ApiRegistrationService extends AbstractRegistrationService {
   getRegistrationStatus(requestId: string): Observable<RegistrationStatus> {
     console.log('🔍 [API] Checking registration status for:', requestId);
 
-    return this.http.get<RegistrationStatus>(`${this.apiUrl}/status/${requestId}`, { 
-      headers: this.getHeaders() 
+    return this.http.get<RegistrationStatus>(`${this.apiUrl}/status/${requestId}`, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
@@ -131,8 +131,8 @@ export class ApiRegistrationService extends AbstractRegistrationService {
   checkEmailExists(email: string): Observable<boolean> {
     console.log('📧 [API] Checking if email exists:', email);
 
-    return this.http.get<{exists: boolean}>(`${this.apiUrl}/check-email/${encodeURIComponent(email)}`, { 
-      headers: this.getHeaders() 
+    return this.http.get<{ exists: boolean }>(`${this.apiUrl}/check-email/${encodeURIComponent(email)}`, {
+      headers: this.getHeaders()
     }).pipe(
       map(response => response.exists),
       catchError(() => throwError(() => false))
@@ -141,9 +141,9 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
   getRegistrationByEmail(email: string): Observable<RegistrationDetail | null> {
     console.log('🔍 [API] Getting registration by email:', email);
-    
-    return this.http.get<RegistrationDetail>(`${this.apiUrl}/by-email/?email=${encodeURIComponent(email)}`, { 
-      headers: this.getHeaders() 
+
+    return this.http.get<RegistrationDetail>(`${this.apiUrl}/by-email/?email=${encodeURIComponent(email)}`, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       catchError(error => {
@@ -155,32 +155,48 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
-  sendVerificationCode(email: string): Observable<{ success: boolean; message: string; }> {
-    console.log('📧 [API] Sending verification code to:', email);
-    
-    const body = {email: email };
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/GenerateOtp`, body, { 
-      headers: this.getHeaders() 
+  getRegistrationById(id: string): Observable<RegistrationDetail | null> {
+    console.log('🔍 [API] Getting registration by ID:', id);
+
+    return this.http.get<RegistrationDetail>(`${this.apiUrl}/${encodeURIComponent(id)}`, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
-    map(response => {
-      // Si la réponse est vide, retourne success: true
-      if (!response || Object.keys(response).length === 0) {
-        return { success: true, message: '' };
-      }
-      // Sinon, retourne la réponse telle quelle (en ajoutant success: true si absent)
-      return { success: response.success ?? true, message: response.message ?? '' };
-    }),
-    catchError(error => this.handleError(error))
+      catchError(error => {
+        if (error.status === 404) {
+          return of(null);
+        }
+        return this.handleError(error);
+      })
+    );
+  }
+
+  sendVerificationCode(email: string, isEmailExist: boolean): Observable<{ success: boolean; message: string; }> {
+    console.log('📧 [API] Sending verification code to:', email);
+
+    const body = { email: email, isEmailExist: isEmailExist };
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/GenerateOtp`, body, {
+      headers: this.getHeaders()
+    }).pipe(
+      timeout(this.timeout),
+      map(response => {
+        // Si la réponse est vide, retourne success: true
+        if (!response || Object.keys(response).length === 0) {
+          return { success: true, message: '' };
+        }
+        // Sinon, retourne la réponse telle quelle (en ajoutant success: true si absent)
+        return { success: response.success ?? true, message: response.message ?? '' };
+      }),
+      catchError(error => this.handleError(error))
     );
   }
 
   verifyCode(email: string, code: string): Observable<boolean> {
     console.log('🔐 [API] Verifying code for email:', email);
-    
-    const body = {email: email, code: code };
-    return this.http.post< boolean>(`${this.apiUrl}/verify-otp`, body, { 
-      headers: this.getHeaders() 
+
+    const body = { email: email, code: code };
+    return this.http.post<boolean>(`${this.apiUrl}/verify-otp`, body, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       map(response => response),
@@ -193,9 +209,9 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
   abandonRegistration(id: string): Observable<{ success: boolean; message: string; }> {
     console.log('🗑️ [API] Abandoning registration:', id);
-    
-    return this.http.delete<{ success: boolean; message: string; }>(`${this.apiUrl}/${id}/abandon`, { 
-      headers: this.getHeaders() 
+
+    return this.http.delete<{ success: boolean; message: string; }>(`${this.apiUrl}/${id}/abandon`, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
@@ -204,9 +220,9 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
   updateRegistration(request: AmendRegistrationRequest): Observable<RegistrationResponse> {
     console.log('📝 [API] Updating registration:', request);
-    
-    return this.http.patch<RegistrationResponse>(`${this.apiUrl}/${request.id}`, request, { 
-      headers: this.getHeaders() 
+
+    return this.http.patch<RegistrationResponse>(`${this.apiUrl}`, request, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       map(response => this.processResponse(response)),
@@ -214,7 +230,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
-  getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; search?: string; }): Observable<RegistrationStatus[]> {
+  getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; search?: string; }): Observable<RegistrationResponseAll> {
     console.log('📋 [API] Getting all registrations with filter:', filter);
 
     let params = new HttpParams();
@@ -225,9 +241,9 @@ export class ApiRegistrationService extends AbstractRegistrationService {
       if (filter.search) params = params.set('search', filter.search);
     }
 
-    return this.http.get<RegistrationStatus[]>(`${this.apiUrl}/all`, { 
+    return this.http.get<RegistrationResponseAll>(`${this.apiUrl}`, {
       headers: this.getHeaders(),
-      params 
+      params
     }).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
@@ -238,8 +254,8 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     console.log('✅ [API] Approving registration:', requestId, approverNotes);
 
     const body = { approverNotes };
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve`, body, { 
-      headers: this.getHeaders() 
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve`, body, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
@@ -250,8 +266,8 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     console.log('❌ [API] Rejecting registration:', requestId, rejectionReason);
 
     const body = { rejectionReason };
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject`, body, { 
-      headers: this.getHeaders() 
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject`, body, {
+      headers: this.getHeaders()
     }).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
@@ -261,11 +277,19 @@ export class ApiRegistrationService extends AbstractRegistrationService {
   // MÉTHODES PRIVÉES
 
   private getHeaders(): HttpHeaders {
-    return new HttpHeaders({
+    const token = localStorage.getItem('token');
+    const headers: any = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'X-Requested-With': 'XMLHttpRequest'
-    });
+    };
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+
+    return new HttpHeaders(headers);
   }
 
   private processResponse(response: RegistrationResponse): RegistrationResponse {

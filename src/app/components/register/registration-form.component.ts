@@ -212,63 +212,39 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     if (this.registrationForm.valid) {
       this.isSubmitting = true;
       this.submitError = '';
+      this.fieldErrors = {};
 
       const formData = this.registrationForm.value;
+
+      formData.selectedProjectCodes = Array.isArray(this.selectedProjectCodes)
+        ? this.selectedProjectCodes
+        : [];
 
       formData.countryName = this.getCountryName(formData.countryId);
       formData.businessProfileName = this.getBusinessProfileName(formData.businessProfileId);
       formData.financingTypeName = this.getFinancingTypeName(formData.financingTypeId);
       formData.functionName = this.getFunctionName(formData.functionId);
 
+      const email = this.registrationForm.get('email')?.value;
 
-      sessionStorage.setItem('registrationReviewData', JSON.stringify(formData));
-      this.router.navigate(['/register/review']);
-
-      // Préparer la demande
-      const registrationRequest: RegistrationRequest = {
-        email: this.registrationForm.get('email')?.value,
-        firstName: this.registrationForm.get('firstName')?.value,
-        lastName: this.registrationForm.get('lastName')?.value,
-        functionId: this.registrationForm.get('functionId')?.value,
-        countryId: this.registrationForm.get('countryId')?.value,
-        businessProfileId: this.registrationForm.get('businessProfileId')?.value,
-        financingTypeId: this.registrationForm.get('financingTypeId')?.value,
-        selectedProjectCodes: this.selectedProjectCodes
-      };
-
-      // Envoyer la demande
-      /*this.registrationService.submitRegistration(registrationRequest).subscribe({
+      // Envoyer le code de vérification
+      this.registrationService.sendVerificationCode(email, false).subscribe({
         next: (response) => {
-          console.log('✅ Demande soumise avec succès:', response);
-          this.isSubmitting = false;
-          this.submitError = '';
-          this.fieldErrors = {};
-
-          // Stocker l'ID de la demande pour la page de succès
-          sessionStorage.setItem('registrationRequestId', response.accessRequest.id);
-          sessionStorage.setItem('registrationMessage', response.message);
-
-          // Rediriger vers la page de succès
-          this.router.navigate(['/register/success']);
-        },
-        error: (errorResponse) => {
-          console.error('❌ Erreur lors de la soumission:', errorResponse);
-          this.isSubmitting = false;
-
-          // Gérer les erreurs de validation
-          if (errorResponse.errors && errorResponse.errors.length > 0) {
-            this.fieldErrors = {};
-            errorResponse.errors.forEach((error: any) => {
-              const fieldName = this.mapFieldName(error.field);
-              this.fieldErrors[fieldName] = this.errorTranslation.translateErrorCode(error.error);
-            });
-            this.submitError = errorResponse.message || 'Erreurs de validation';
+          if (response.success) {
+            // Stocker les données pour la page de révision
+            sessionStorage.setItem('registrationReviewData', JSON.stringify(formData));
+            this.router.navigate(['/register/review']);
           } else {
-            this.submitError = errorResponse.message || 'Une erreur est survenue';
-            this.fieldErrors = {};
+            this.submitError = response.message || this.i18n.t('registration_form.send_code_error');
+            this.isSubmitting = false;
           }
+        },
+        error: (error) => {
+          console.error('❌ Erreur lors de l\'envoi du code:', error);
+          this.submitError = this.i18n.t('registration_form.send_code_error');
+          this.isSubmitting = false;
         }
-      });*/
+      });
     } else {
       this.markFormGroupTouched();
     }
