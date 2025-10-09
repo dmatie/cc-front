@@ -1,6 +1,6 @@
 import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation, withHashLocation } from '@angular/router';
-import { provideHttpClient, HttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, HttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
 import { LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
 import localeEn from '@angular/common/locales/en';
@@ -15,6 +15,8 @@ import { dropdownServiceFactory, MSALInstanceFactory, MSALInterceptorConfigFacto
 import { AuthService } from './services/auth.service';
 import { AbstractProjectsService } from './services/abstract/projects-service.abstract';
 import { MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalInterceptor, MsalService } from '@azure/msal-angular';
+import { loggingInterceptor } from './interceptors/logging-interceptor';
+import { AuthInterceptor } from './interceptors/auth-interceptor';
 
 // Register locales
 registerLocaleData(localeEn, 'en');
@@ -33,11 +35,11 @@ function getLocale(): string {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    //provideRouter(routes),
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
-    provideHttpClient(withInterceptorsFromDi()),
-
-    //provideHttpClient(),
+    provideHttpClient(
+      withInterceptorsFromDi(),
+      withInterceptors([loggingInterceptor])
+    ),
     { provide: LOCALE_ID, useValue: getLocale() },
     I18nService,
     ErrorTranslationService,
@@ -60,24 +62,20 @@ export const appConfig: ApplicationConfig = {
       deps: [HttpClient]
     },
     {
+      provide: MSAL_INSTANCE,
+      useFactory: MSALInstanceFactory
+    },
+    MsalService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    },
+    {
       provide: APP_INITIALIZER,
       useFactory: (auth: AuthService) => () => auth.waitForInit(),
       deps: [AuthService],
       multi: true
-    },
-    /*{
-      provide: MSAL_INSTANCE,
-      useFactory: MSALInstanceFactory
-    },
-    {
-      provide: MSAL_INTERCEPTOR_CONFIG,
-      useFactory: MSALInterceptorConfigFactory
-    },
-     {
-      provide: HTTP_INTERCEPTORS,
-      useClass: MsalInterceptor,
-      multi: true
-    },
-    MsalService*/
+    }
   ]
 };

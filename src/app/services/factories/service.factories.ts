@@ -106,7 +106,14 @@ export function MSALInstanceFactory() {
 
 export function MSALInterceptorConfigFactory(): MsalInterceptorConfiguration {
   const protectedResourceMap = new Map<string, Array<string>>();
-  protectedResourceMap.set('https://localhost:7242/api/*', [environment.azureAd.backendScope]);
+
+  protectedResourceMap.set(environment.apiUrl, [environment.azureAd.backendScope]);
+
+  console.log('🔧 [MSAL Interceptor] Protected resource map configured:', {
+    url: `${environment.apiUrl}`,
+    scope: environment.azureAd.backendScope
+  });
+
   return {
     interactionType: InteractionType.Redirect,
     protectedResourceMap

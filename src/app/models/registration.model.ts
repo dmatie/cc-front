@@ -89,7 +89,7 @@ export interface AccessRequestDetail {
   financingTypeId: string;
   selectedProjectCodes: string[];
   status: StatusEnum;
-  rejectionReason?: string;
+  processingComments?: string;
   submissionDate: Date;
   processedDate?: Date;
   functionName: string;

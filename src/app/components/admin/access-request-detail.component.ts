@@ -114,7 +114,13 @@ export class AccessRequestDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('❌ Erreur lors du rejet:', error);
-        this.errorMessage = error.message || this.i18n.t('admin.access_request_detail.reject_error');
+        if(error !== null && error.message) {
+          this.errorMessage = error.message || this.i18n.t('admin.access_request_detail.reject_error');
+        }
+        if(error !== null && error.status === 400) {
+          this.errorMessage = error.title || this.i18n.t('admin.access_request_detail.reject_error');
+        }
+
         this.isProcessing = false;
       }
     });

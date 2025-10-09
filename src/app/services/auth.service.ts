@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
@@ -9,6 +9,7 @@ import {
   SilentRequest,
   AccountInfo
 } from '@azure/msal-browser';
+import { MSAL_INSTANCE } from '@azure/msal-angular';
 import { User, LoginRequest, AuthResponse } from '../models/user.model';
 import { environment } from '../../environments/environment';
 import { AppConstants } from '../core/constants/app-constants';
@@ -17,35 +18,23 @@ import { AppConstants } from '../core/constants/app-constants';
   providedIn: 'root'
 })
 export class AuthService {
-  private msalInstance: PublicClientApplication;
   private initialized = false;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
-    this.msalInstance = new PublicClientApplication({
-      auth: {
-        clientId: environment.azureAd.clientId,
-        authority: environment.azureAd.authority,
-        redirectUri: environment.azureAd.redirectUri,
-        postLogoutRedirectUri: environment.azureAd.postLogoutRedirectUri
-      },
-      cache: {
-        cacheLocation: 'localStorage',
-        storeAuthStateInCookie: false
-      }
-    });
-
-    // lance l'init mais on ne la bloque pas
+  constructor(
+    private http: HttpClient,
+    @Inject(MSAL_INSTANCE) private msalInstance: PublicClientApplication
+  ) {
     this.initializeMsal();
     this.loadUserFromStorage();
   }
 
-  /**
+  /**setActiveAccount
    * Initialise MSAL et traite la réponse de redirection si elle existe.
    */
   private async initializeMsal(): Promise<void> {
-    if (this.initialized) return; // évite les doubles appels
+    if (this.initialized) return;
 
     await this.msalInstance.initialize();
     this.initialized = true;
@@ -55,8 +44,13 @@ export class AuthService {
     if (response) {
       console.log('🔄 Réponse de redirection reçue');
       await this.handleAuthenticationResult(response);
-      // redirection Angular vers le client home
       window.location.replace('/client/home');
+    } else {
+      const accounts = this.msalInstance.getAllAccounts();
+      if (accounts.length > 0) {
+        this.msalInstance.setActiveAccount(accounts[0]);
+        console.log('✅ Active account restored for MSAL interceptor:', accounts[0].username);
+      }
     }
   }
 
@@ -135,7 +129,9 @@ export class AuthService {
     const account = result.account;
     if (!account) throw new Error('No account information');
 
-    // Extraire les rôles depuis le token
+    this.msalInstance.setActiveAccount(account);
+    console.log('✅ Active account set for MSAL interceptor:', account.username);
+
     const roles = this.extractRolesFromToken(result.accessToken);
     const userRole = this.determineUserRole(roles, account.username);
 

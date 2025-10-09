@@ -36,7 +36,7 @@ export class MockRegistrationService extends AbstractRegistrationService {
       financingTypeId: 'public-001',
       selectedProjectCodes: ['P-DZ-F01-001'],
       status: MapAccessRequestModelStatusToApi('rejected'),
-      rejectionReason: 'Informations insuffisantes concernant la justification métier. Veuillez fournir plus de détails sur votre rôle dans les projets demandés.',
+      processingComments: 'Informations insuffisantes concernant la justification métier. Veuillez fournir plus de détails sur votre rôle dans les projets demandés.',
       submissionDate: new Date('2024-01-15'),
       processedDate: new Date('2024-01-18'),
       functionName: 'Project Accountant',
@@ -433,7 +433,7 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
             financingTypeId: request.financingTypeId,
             selectedProjectCodes: selectedProjectCodes,
             status: MapAccessRequestModelStatusToApi('pending'),
-            rejectionReason: undefined,
+            processingComments: undefined,
             submissionDate: new Date()
           };
           

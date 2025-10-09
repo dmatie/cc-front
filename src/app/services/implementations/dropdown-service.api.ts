@@ -21,12 +21,9 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   getCountries(filter?: DropdownFilter): Observable<DropdownResponse<Country>> {
     console.log('[API] Fetching countries with filter:', filter);
-    
+
     const params = this.buildHttpParams(filter);
-    return this.http.get<{countries: Country[], totalCount: number}>(`${this.apiUrl}/countries`, { 
-      headers: this.getHeaders(),
-      params 
-    }).pipe(
+    return this.http.get<{countries: Country[], totalCount: number}>(`${this.apiUrl}/countries`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
       map(response => ({
@@ -41,12 +38,9 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   getFunctions(filter?: DropdownFilter): Observable<DropdownResponse<UserFunction>> {
     console.log('[API] Fetching functions with filter:', filter);
-    
+
     const params = this.buildHttpParams(filter);
-    return this.http.get<{functions: UserFunction[], totalCount: number}>(`${this.apiUrl}/functions`, { 
-      headers: this.getHeaders(),
-      params 
-    }).pipe(
+    return this.http.get<{functions: UserFunction[], totalCount: number}>(`${this.apiUrl}/functions`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
       map(response => ({
@@ -61,12 +55,9 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   getBusinessProfiles(filter?: DropdownFilter): Observable<DropdownResponse<BusinessProfile>> {
     console.log('Fetching business profiles with filter:', filter);
-    
+
     const params = this.buildHttpParams(filter);
-    return this.http.get<{businessProfiles: BusinessProfile[], totalCount: number}>(`${this.apiUrl}/business-profiles`, { 
-      headers: this.getHeaders(),
-      params 
-    }).pipe(
+    return this.http.get<{businessProfiles: BusinessProfile[], totalCount: number}>(`${this.apiUrl}/business-profiles`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
       map(response => ({
@@ -79,14 +70,11 @@ export class ApiDropdownService extends AbstractDropdownService {
     );
   }
 
-    getFinancingTypes(filter?: DropdownFilter): Observable<DropdownResponse<FinancingType>> {
+  getFinancingTypes(filter?: DropdownFilter): Observable<DropdownResponse<FinancingType>> {
     console.log('[API] Fetching business profiles with filter:', filter);
-    
+
     const params = this.buildHttpParams(filter);
-    return this.http.get<{financingTypes: FinancingType[], totalCount: number}>(`${this.apiUrl}/financing-types`, { 
-      headers: this.getHeaders(),
-      params 
-    }).pipe(
+    return this.http.get<{financingTypes: FinancingType[], totalCount: number}>(`${this.apiUrl}/financing-types`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
       map(response => ({
@@ -101,10 +89,8 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   getCountryById(id: string): Observable<Country | null> {
     console.log('[API] Fetching country by ID:', id);
-    
-    return this.http.get<Country>(`${this.apiUrl}/countries/${id}`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<Country>(`${this.apiUrl}/countries/${id}`).pipe(
       timeout(this.timeout),
       catchError(error => {
         if (error.status === 404) {
@@ -117,10 +103,8 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   getFunctionById(id: string): Observable<UserFunction | null> {
     console.log('[API] Fetching function by ID:', id);
-    
-    return this.http.get<UserFunction>(`${this.apiUrl}/functions/${id}`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<UserFunction>(`${this.apiUrl}/functions/${id}`).pipe(
       timeout(this.timeout),
       catchError(error => {
         if (error.status === 404) {
@@ -133,10 +117,8 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   getBusinessProfileById(id: string): Observable<BusinessProfile | null> {
     console.log('[API] Fetching business profile by ID:', id);
-    
-    return this.http.get<BusinessProfile>(`${this.apiUrl}/business-profiles/${id}`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<BusinessProfile>(`${this.apiUrl}/business-profiles/${id}`).pipe(
       timeout(this.timeout),
       catchError(error => {
         if (error.status === 404) {
@@ -147,12 +129,10 @@ export class ApiDropdownService extends AbstractDropdownService {
     );
   }
 
-    getFInancingTypeById(id: string): Observable<FinancingType | null> {
+  getFInancingTypeById(id: string): Observable<FinancingType | null> {
     console.log('[API] Financing types by ID:', id);
-    
-    return this.http.get<FinancingType>(`${this.apiUrl}/financing-types/${id}`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<FinancingType>(`${this.apiUrl}/financing-types/${id}`).pipe(
       timeout(this.timeout),
       catchError(error => {
         if (error.status === 404) {
@@ -164,20 +144,6 @@ export class ApiDropdownService extends AbstractDropdownService {
   }
 
   // MÉTHODES PRIVÉES
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    const headers: any = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return new HttpHeaders(headers);
-  }
 
   private buildHttpParams(filter?: DropdownFilter): HttpParams {
     let params = new HttpParams();

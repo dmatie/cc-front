@@ -23,11 +23,8 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   getProjectsByCountry(countryCode: string, pageNumber: number = 1, pageSize: number = 10): Observable<ProjectsResponse> {
     console.log('[API] Fetching projects for country:', countryCode);
-    
-    
-    return this.http.get<ProjectsResponse>(`${this.apiUrl}/country/${countryCode}`, { 
-      headers: this.getHeaders(),
-    }).pipe(
+
+    return this.http.get<ProjectsResponse>(`${this.apiUrl}/country/${countryCode}`).pipe(
       timeout(this.timeout),
       retry(2),
       catchError(error => this.handleError('projects by country', error))
@@ -36,12 +33,9 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   getProjects(filter?: ProjectFilter): Observable<ProjectsResponse> {
     console.log('[API] Fetching projects with filter:', filter);
-    
+
     const params = this.buildHttpParams(filter);
-    return this.http.get<ProjectsResponse>(`${this.apiUrl}`, { 
-      headers: this.getHeaders(),
-      params 
-    }).pipe(
+    return this.http.get<ProjectsResponse>(`${this.apiUrl}`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
       catchError(error => this.handleError('projects', error))
@@ -50,10 +44,8 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   getProjectBySapCode(sapCode: string): Observable<Project | null> {
     console.log('[API] Fetching project by SAP code:', sapCode);
-    
-    return this.http.get<Project>(`${this.apiUrl}/${encodeURIComponent(sapCode)}`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<Project>(`${this.apiUrl}/${encodeURIComponent(sapCode)}`).pipe(
       timeout(this.timeout),
       catchError(error => {
         if (error.status === 404) {
@@ -66,16 +58,13 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   searchProjects(searchTerm: string, countryCode?: string): Observable<Project[]> {
     console.log('[API] Searching projects:', searchTerm, countryCode);
-    
+
     let params = new HttpParams().set('search', searchTerm);
     if (countryCode) {
       params = params.set('countryCode', countryCode);
     }
-    
-    return this.http.get<{projects: Project[]}>(`${this.apiUrl}/search`, { 
-      headers: this.getHeaders(),
-      params 
-    }).pipe(
+
+    return this.http.get<{projects: Project[]}>(`${this.apiUrl}/search`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
       map(response => response.projects),
@@ -85,10 +74,8 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   getProjectStats(): Observable<ProjectStats> {
     console.log('📊 [API] Fetching project stats');
-    
-    return this.http.get<ProjectStats>(`${this.apiUrl}/stats`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<ProjectStats>(`${this.apiUrl}/stats`).pipe(
       timeout(this.timeout),
       retry(2),
       catchError(error => this.handleError('project stats', error))
@@ -97,11 +84,9 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   getProjectsBySapCodes(sapCodes: string[]): Observable<Project[]> {
     console.log('🏗️ [API] Fetching projects by SAP codes:', sapCodes);
-    
+
     const body = { sapCodes };
-    return this.http.post<{projects: Project[]}>(`${this.apiUrl}/by-codes`, body, { 
-      headers: this.getHeaders()
-    }).pipe(
+    return this.http.post<{projects: Project[]}>(`${this.apiUrl}/by-codes`, body).pipe(
       timeout(this.timeout),
       retry(2),
       map(response => response.projects),
@@ -111,10 +96,8 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   projectExists(sapCode: string): Observable<boolean> {
     console.log('🔍 [API] Checking if project exists:', sapCode);
-    
-    return this.http.get<{exists: boolean}>(`${this.apiUrl}/${encodeURIComponent(sapCode)}/exists`, { 
-      headers: this.getHeaders()
-    }).pipe(
+
+    return this.http.get<{exists: boolean}>(`${this.apiUrl}/${encodeURIComponent(sapCode)}/exists`).pipe(
       timeout(this.timeout),
       map(response => response.exists),
       catchError(error => {
@@ -127,21 +110,6 @@ export class ApiProjectsService extends AbstractProjectsService {
   }
 
   // MÉTHODES PRIVÉES
-
-  private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
-    const headers: any = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-Requested-With': 'XMLHttpRequest'
-    };
-
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    return new HttpHeaders(headers);
-  }
 
   private buildHttpParams(filter?: ProjectFilter): HttpParams {
     let params = new HttpParams();
