@@ -329,6 +329,11 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
+  getUserEmail(): string | null {
+    const user = this.getCurrentUser();
+    return user ? user.email : null;
+  }
+
   getToken(): string | null {
     return localStorage.getItem('token');
   }

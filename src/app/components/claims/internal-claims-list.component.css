@@ -1,0 +1,25 @@
+.table-hover tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+}
+
+.badge {
+  font-weight: 500;
+  padding: 0.5em 0.75em;
+}
+
+.card.border-primary,
+.card.border-info,
+.card.border-success {
+  border-width: 2px;
+}

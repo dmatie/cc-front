@@ -87,6 +87,31 @@ export const routes: Routes = [
     path: 'no-access',
     loadComponent: () => import('./components/no-access/no-access.component').then(m => m.NoAccessComponent)
   },
+
+  // Claims - External users
+  {
+    path: 'claims',
+    loadComponent: () => import('./components/claims/external-claims-list.component').then(m => m.ExternalClaimsListComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+  {
+    path: 'claims/:id',
+    loadComponent: () => import('./components/claims/claim-detail.component').then(m => m.ClaimDetailComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+
+  // Claims - Internal users
+  {
+    path: 'admin/claims',
+    loadComponent: () => import('./components/claims/internal-claims-list.component').then(m => m.InternalClaimsListComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
+  {
+    path: 'admin/claims/:id',
+    loadComponent: () => import('./components/claims/claim-detail.component').then(m => m.ClaimDetailComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
+
   // Route par défaut (404)
   {
     path: '**',

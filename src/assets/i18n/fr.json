@@ -22,7 +22,10 @@
     "back": "Retour",
     "continue": "Continuer",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "actions": "Actions",
+    "by": "par",
+    "error": "Une erreur s'est produite"
   },
   "home": {
     "title": "Portail Client AfDB",
@@ -491,6 +494,42 @@
         "required": "Le motif de rejet est obligatoire",
         "min_length": "Le motif doit contenir au moins 10 caractères"
       }
+    }
+  },
+  "claims": {
+    "myClaimsTitle": "Mes Réclamations",
+    "allClaimsTitle": "Toutes les Réclamations",
+    "createClaim": "Créer une Réclamation",
+    "noClaims": "Aucune réclamation à afficher",
+    "claimType": "Type de Réclamation",
+    "country": "Pays",
+    "status": "Statut",
+    "createdAt": "Créé le",
+    "user": "Utilisateur",
+    "claimDetails": "Détails de la Réclamation",
+    "description": "Description",
+    "responses": "Réponses",
+    "noResponses": "Aucune réponse pour le moment",
+    "addResponse": "Ajouter une Réponse",
+    "timeline": "Chronologie",
+    "claimCreated": "Réclamation Créée",
+    "selectClaimType": "Sélectionner le type de réclamation",
+    "selectCountry": "Sélectionner le pays",
+    "descriptionPlaceholder": "Décrivez votre problème en détail...",
+    "fillAllFields": "Veuillez remplir tous les champs obligatoires",
+    "submitClaim": "Soumettre la Réclamation",
+    "responseComment": "Commentaire de Réponse",
+    "responseCommentPlaceholder": "Entrez votre réponse...",
+    "submitResponse": "Soumettre la Réponse",
+    "selectStatus": "Sélectionner le statut",
+    "filterByStatus": "Filtrer par Statut",
+    "status": {
+      "all": "Tous les Statuts",
+      "pending": "En Attente",
+      "in_progress": "En Cours",
+      "resolved": "Résolu",
+      "closed": "Clôturé",
+      "rejected": "Rejeté"
     }
   }
 }

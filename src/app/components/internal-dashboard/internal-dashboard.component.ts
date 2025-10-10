@@ -67,7 +67,7 @@ export class InternalDashboardComponent implements OnInit {
 
   manageClaims(): void {
     console.log('📞 Managing claims...');
-    // Rediriger vers la gestion des réclamations
+    this.router.navigate(['/admin/claims']);
   }
 
   manageDisbursements(): void {

@@ -22,7 +22,10 @@
     "back": "Back",
     "continue": "Continue",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "actions": "Actions",
+    "by": "by",
+    "error": "An error occurred"
   },
   "home": {
     "title": "AfDB Client Portal",
@@ -358,6 +361,42 @@
         "required": "Rejection reason is required",
         "min_length": "Reason must be at least 10 characters long"
       }
+    }
+  },
+  "claims": {
+    "myClaimsTitle": "My Claims",
+    "allClaimsTitle": "All Claims",
+    "createClaim": "Create Claim",
+    "noClaims": "No claims to display",
+    "claimType": "Claim Type",
+    "country": "Country",
+    "status": "Status",
+    "createdAt": "Created At",
+    "user": "User",
+    "claimDetails": "Claim Details",
+    "description": "Description",
+    "responses": "Responses",
+    "noResponses": "No responses yet",
+    "addResponse": "Add Response",
+    "timeline": "Timeline",
+    "claimCreated": "Claim Created",
+    "selectClaimType": "Select claim type",
+    "selectCountry": "Select country",
+    "descriptionPlaceholder": "Describe your issue in detail...",
+    "fillAllFields": "Please fill in all required fields",
+    "submitClaim": "Submit Claim",
+    "responseComment": "Response Comment",
+    "responseCommentPlaceholder": "Enter your response...",
+    "submitResponse": "Submit Response",
+    "selectStatus": "Select status",
+    "filterByStatus": "Filter by Status",
+    "status": {
+      "all": "All Status",
+      "pending": "Pending",
+      "in_progress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed",
+      "rejected": "Rejected"
     }
   }
 }
