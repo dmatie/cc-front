@@ -1,7 +1,0 @@
-{
-  "typescript.preferences.includePackageJsonAutoImports": "on",
-  "typescript.suggest.autoImports": true,
-  "debug.javascript.usePreview": true,
-  "debug.javascript.codelens.npmScripts": "all",
-  "debug.javascript.unmapMissingSources": true
-}
