@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { Claim, ClaimStatus } from '../../models/claim.model';
 import { CreateClaimModalComponent } from './create-claim-modal.component';
+import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
 @Component({
   selector: 'app-external-claims-list',
   standalone: true,
-  imports: [CommonModule, CreateClaimModalComponent],
+  imports: [CommonModule, CreateClaimModalComponent, AuthenticatedNavbarComponent],
   templateUrl: './external-claims-list.component.html',
   styleUrls: ['./external-claims-list.component.css']
 })

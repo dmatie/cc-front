@@ -1,3 +1,8 @@
+<app-authenticated-navbar
+  [title]="i18n.t('nav.claims')"
+  [userType]="isInternalUser ? 'internal' : 'external'">
+</app-authenticated-navbar>
+
 <div class="container-fluid py-4">
   <div *ngIf="loading" class="text-center py-5">
     <div class="spinner-border text-primary" role="status">

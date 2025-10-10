@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { ClaimMockService } from '../../services/claim-mock.service';
 import { I18nService } from '../../services/i18n.service';
 import { Claim, ClaimStatus } from '../../models/claim.model';
+import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
 @Component({
   selector: 'app-internal-claims-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent],
   templateUrl: './internal-claims-list.component.html',
   styleUrls: ['./internal-claims-list.component.css']
 })

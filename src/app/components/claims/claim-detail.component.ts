@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { Claim, ClaimProcess, ClaimStatus } from '../../models/claim.model';
 import { ClaimResponseModalComponent } from './claim-response-modal.component';
+import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
 @Component({
   selector: 'app-claim-detail',
   standalone: true,
-  imports: [CommonModule, ClaimResponseModalComponent],
+  imports: [CommonModule, ClaimResponseModalComponent, AuthenticatedNavbarComponent],
   templateUrl: './claim-detail.component.html',
   styleUrls: ['./claim-detail.component.css']
 })
