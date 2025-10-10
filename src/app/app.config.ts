@@ -11,11 +11,10 @@ import { I18nService } from './services/i18n.service';
 import { AbstractDropdownService } from './services/abstract/dropdown-service.abstract';
 import { AbstractRegistrationService } from './services/abstract/registration-service.abstract';
 import { ErrorTranslationService } from './services/error-translation.service';
-import { dropdownServiceFactory, MSALInstanceFactory, MSALInterceptorConfigFactory, projectsServiceFactory, registrationServiceFactory } from './services/factories/service.factories';
+import { dropdownServiceFactory, MSALInstanceFactory, projectsServiceFactory, registrationServiceFactory } from './services/factories/service.factories';
 import { AuthService } from './services/auth.service';
 import { AbstractProjectsService } from './services/abstract/projects-service.abstract';
-import { MSAL_INSTANCE, MSAL_INTERCEPTOR_CONFIG, MsalInterceptor, MsalService } from '@azure/msal-angular';
-import { loggingInterceptor } from './interceptors/logging-interceptor';
+import { MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 
 // Register locales
@@ -38,7 +37,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(
       withInterceptorsFromDi(),
-      withInterceptors([loggingInterceptor])
     ),
     { provide: LOCALE_ID, useValue: getLocale() },
     I18nService,
