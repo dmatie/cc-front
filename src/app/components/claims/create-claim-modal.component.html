@@ -1,69 +1,104 @@
-<div class="modal-backdrop" (click)="onBackdropClick($event)">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">{{ i18n.t('claims.createClaim') }}</h5>
-        <button type="button" class="btn-close" (click)="onClose()" [disabled]="loading"></button>
-      </div>
-      <div class="modal-body">
+@if (true) {
+  <div class="modal-backdrop fade show"></div>
+  <div class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">
+            <i class="bi bi-plus-circle me-2"></i>{{ i18n.t('claims.createClaim') }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            [disabled]="loading"
+            (click)="onClose()">
+          </button>
+        </div>
+
         <form (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label class="form-label">{{ i18n.t('claims.claimType') }} <span class="text-danger">*</span></label>
-            <select
-              class="form-select"
-              [(ngModel)]="claimType"
-              name="claimType"
-              required>
-              <option value="">{{ i18n.t('claims.selectClaimType') }}</option>
-              <option *ngFor="let type of claimTypes" [value]="type">{{ type }}</option>
-            </select>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label fw-bold">
+                {{ i18n.t('claims.claimType') }}
+                <span class="text-danger">*</span>
+              </label>
+              <select
+                class="form-select"
+                [(ngModel)]="claimType"
+                name="claimType"
+                [disabled]="loading"
+                required>
+                <option value="">{{ i18n.t('claims.selectClaimType') }}</option>
+                @for (type of claimTypes; track type) {
+                  <option [value]="type">{{ type }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">
+                {{ i18n.t('claims.country') }}
+                <span class="text-danger">*</span>
+              </label>
+              <select
+                class="form-select"
+                [(ngModel)]="country"
+                name="country"
+                [disabled]="loading"
+                required>
+                <option value="">{{ i18n.t('claims.selectCountry') }}</option>
+                @for (c of countries; track c) {
+                  <option [value]="c">{{ c }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-bold">
+                {{ i18n.t('claims.description') }}
+                <span class="text-danger">*</span>
+              </label>
+              <textarea
+                class="form-control"
+                [(ngModel)]="comment"
+                name="comment"
+                rows="5"
+                [placeholder]="i18n.t('claims.descriptionPlaceholder')"
+                [disabled]="loading"
+                required></textarea>
+            </div>
+
+            @if (errorMessage) {
+              <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ errorMessage }}
+              </div>
+            }
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">{{ i18n.t('claims.country') }} <span class="text-danger">*</span></label>
-            <select
-              class="form-select"
-              [(ngModel)]="country"
-              name="country"
-              required>
-              <option value="">{{ i18n.t('claims.selectCountry') }}</option>
-              <option *ngFor="let c of countries" [value]="c">{{ c }}</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">{{ i18n.t('claims.description') }} <span class="text-danger">*</span></label>
-            <textarea
-              class="form-control"
-              [(ngModel)]="comment"
-              name="comment"
-              rows="5"
-              [placeholder]="i18n.t('claims.descriptionPlaceholder')"
-              required></textarea>
-          </div>
-
-          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-            {{ errorMessage }}
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              [disabled]="loading"
+              (click)="onClose()">
+              <i class="bi bi-x-lg me-2"></i>{{ i18n.t('common.cancel') }}
+            </button>
+            <button
+              type="submit"
+              class="btn btn-primary"
+              [disabled]="loading || !isValid()">
+              @if (loading) {
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                {{ i18n.t('claims.submitting') }}
+              } @else {
+                <i class="bi bi-check-circle me-2"></i>
+                {{ i18n.t('claims.submitClaim') }}
+              }
+            </button>
           </div>
         </form>
       </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="onClose()"
-          [disabled]="loading">
-          {{ i18n.t('common.cancel') }}
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          (click)="onSubmit()"
-          [disabled]="loading || !isValid()">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
-          {{ i18n.t('claims.submitClaim') }}
-        </button>
-      </div>
     </div>
   </div>
-</div>
+}
