@@ -83,4 +83,8 @@ export class ExternalClaimsListComponent implements OnInit {
   getStatusLabel(status: ClaimStatus): string {
     return this.i18n.t(`claims.status.${status.toLowerCase()}`);
   }
+
+    goBack(): void {
+    this.router.navigate(['/claims']); 
+  }
 }

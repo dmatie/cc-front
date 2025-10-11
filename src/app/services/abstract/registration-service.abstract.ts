@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { AmendRegistrationRequest, RegistrationDetail, RegistrationRequest, RegistrationResponse, RegistrationResponseAll, RegistrationStatus, ValidationError } from '../../models/registration.model';
+import { AmendRegistrationRequest, ApproveRequest, RegistrationDetail, RegistrationRequest, RegistrationResponse, RegistrationResponseAll, RegistrationStatus, RejectRequest, ValidationError } from '../../models/registration.model';
 
 /**
  * Service abstrait pour la gestion des enregistrements
@@ -52,7 +52,7 @@ export abstract class AbstractRegistrationService {
    * @param approverNotes Notes de l'approbateur
    * @returns Observable avec la réponse
    */
-  abstract approveRegistration(requestId: string, approverNotes?: string): Observable<{ success: boolean; message: string }>;
+  abstract approveRegistration(requestId: string, approveContent: ApproveRequest): Observable<{ success: boolean; message: string }>;
 
   /**
    * Rejeter une demande d'enregistrement
@@ -60,7 +60,7 @@ export abstract class AbstractRegistrationService {
    * @param rejectionReason Motif du rejet
    * @returns Observable avec la réponse
    */
-  abstract rejectRegistration(requestId: string, rejectionReason: string): Observable<{ success: boolean; message: string }>;
+  abstract rejectRegistration(requestId: string, rejectContent: RejectRequest): Observable<{ success: boolean; message: string }>;
 
   /**
    * Obtenir une demande d'enregistrement par email

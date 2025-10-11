@@ -1,11 +1,23 @@
 <app-authenticated-navbar
-  [title]="i18n.t('nav.claims')"
+  [title]="i18n.t('nav.home')"
   [userType]="'external'">
 </app-authenticated-navbar>
 
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ i18n.t('claims.myClaimsTitle') }}</h4>
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('admin.access_requests.back') }}
+          </button>
+        </div>
+
+ <div class="card-body">
+
 <div class="container-fluid py-4">
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>{{ i18n.t('claims.myClaimsTitle') }}</h2>
+  <div class="d-flex justify-content-end align-items-center mb-4">
     <button class="btn btn-primary" (click)="openCreateModal()">
       <i class="bi bi-plus-circle me-2"></i>
       {{ i18n.t('claims.createClaim') }}
@@ -72,6 +84,14 @@
     </div>
   </div>
 </div>
+
+  </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
 
 <app-create-claim-modal
   *ngIf="showCreateModal"

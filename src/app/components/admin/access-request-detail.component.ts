@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
 import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
-import { RegistrationDetail } from '../../models/registration.model';
+import { ApproveRequest, RegistrationDetail, RejectRequest } from '../../models/registration.model';
 import { RequestDetailsComponent } from '../request/request-details.component';
 import { RejectModalComponent } from '../shared/reject-modal.component';
 
@@ -70,7 +70,14 @@ export class AccessRequestDetailComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.registrationService.approveRegistration(this.requestId).subscribe({
+    const approveContent: ApproveRequest = {
+      comment: '',
+      approverEmail: '',
+      accessRequestId: this.requestId,
+      isFromApplication: true
+    };
+
+    this.registrationService.approveRegistration(this.requestId, approveContent).subscribe({
       next: (response) => {
         this.successMessage = this.i18n.t('admin.access_request_detail.approve_success');
         this.isProcessing = false;
@@ -102,7 +109,14 @@ export class AccessRequestDetailComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
-    this.registrationService.rejectRegistration(this.requestId, reason).subscribe({
+      const rejectContent : RejectRequest = {
+        accessRequestId: this.requestId,
+        rejectionReason: reason,
+        isFromApplication: true,
+        approverEmail: ''
+      };
+
+    this.registrationService.rejectRegistration(this.requestId, rejectContent).subscribe({
       next: (response) => {
         this.successMessage = this.i18n.t('admin.access_request_detail.reject_success');
         this.isProcessing = false;

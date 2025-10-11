@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { AbstractRegistrationService } from '../abstract/registration-service.abstract';
-import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, AccessRequest, RegistrationDetail, AmendRegistrationRequest, AccessRequestDetail, RegistrationResponseAll } from '../../models/registration.model';
+import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, AccessRequest, RegistrationDetail, AmendRegistrationRequest, AccessRequestDetail, RegistrationResponseAll, ApproveRequest, RejectRequest } from '../../models/registration.model';
 import { ErrorTranslationService } from '../error-translation.service';
 import { MapAccessRequestModelStatusToApi } from '../../core/utils/helper';
 
@@ -266,8 +266,8 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
     })
   );
 }
-  approveRegistration(requestId: string, approverNotes?: string): Observable<{ success: boolean; message: string; }> {
-    console.log('✅ [MOCK] Approving registration:', requestId, approverNotes);
+  approveRegistration(requestId: string, approveContent: ApproveRequest): Observable<{ success: boolean; message: string; }> {
+    console.log('✅ [MOCK] Approving registration:', requestId, approveContent);
     
     return of(null).pipe(
       delay(1000),
@@ -280,7 +280,7 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
         registration.status = 'approved';
         registration.lastUpdated = new Date();
         registration.approvedBy = 'admin@system.com';
-        registration.reviewNotes = approverNotes || 'Demande approuvée';
+        registration.reviewNotes = approveContent.comment || 'Demande approuvée';
         
         this.mockRegistrations.set(requestId, registration);
         
@@ -292,9 +292,9 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
     );
   }
 
-  rejectRegistration(requestId: string, rejectionReason: string): Observable<{ success: boolean; message: string; }> {
-    console.log('❌ [MOCK] Rejecting registration:', requestId, rejectionReason);
-    
+  rejectRegistration(requestId: string, rejectContent: RejectRequest): Observable<{ success: boolean; message: string; }> {
+    console.log('❌ [MOCK] Rejecting registration:', requestId, rejectContent);
+
     return of(null).pipe(
       delay(1000),
       map(() => {
@@ -305,9 +305,9 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
         
         registration.status = 'rejected';
         registration.lastUpdated = new Date();
-        registration.rejectedReason = rejectionReason;
-        registration.reviewNotes = `Demande rejetée: ${rejectionReason}`;
-        
+        registration.rejectedReason = rejectContent.rejectionReason;
+        registration.reviewNotes = `Demande rejetée: ${rejectContent.rejectionReason}`;
+
         this.mockRegistrations.set(requestId, registration);
         
         return {

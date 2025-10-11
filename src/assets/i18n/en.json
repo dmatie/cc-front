@@ -374,6 +374,7 @@
     "createdAt": "Created At",
     "user": "User",
     "claimDetails": "Claim Details",
+    "claimBackToList": "Back to List",
     "description": "Description",
     "responses": "Responses",
     "noResponses": "No responses yet",

@@ -97,4 +97,8 @@ export class InternalClaimsListComponent implements OnInit {
     }
     return this.claims.filter(c => c.status === status).length;
   }
+
+  goBack(): void {
+    this.router.navigate(['/internal/dashboard']); 
+  }
 }

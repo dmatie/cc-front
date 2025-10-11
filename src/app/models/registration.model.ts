@@ -78,6 +78,21 @@ export interface AmendRegistrationRequest {
   Projects: ProjectRequest[];
 }
 
+export interface ApproveRequest {
+  accessRequestId: string;
+  comment: string;
+  isFromApplication: boolean;
+  approverEmail: string;
+}
+
+export interface RejectRequest {
+  accessRequestId: string;
+  rejectionReason: string;
+  isFromApplication: boolean;
+  approverEmail: string;
+}
+
+
 export interface AccessRequestDetail {
   id: string;
   email: string;

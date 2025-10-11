@@ -507,6 +507,7 @@
     "createdAt": "Créé le",
     "user": "Utilisateur",
     "claimDetails": "Détails de la Réclamation",
+    "claimBackToList": "Retour à la Liste",
     "description": "Description",
     "responses": "Réponses",
     "noResponses": "Aucune réponse pour le moment",

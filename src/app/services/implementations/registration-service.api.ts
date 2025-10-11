@@ -3,9 +3,10 @@ import { HttpClient, HttpHeaders, HttpParams, HttpErrorResponse } from '@angular
 import { Observable, throwError, of } from 'rxjs';
 import { map, catchError, retry, timeout } from 'rxjs/operators';
 import { AbstractRegistrationService } from '../abstract/registration-service.abstract';
-import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, RegistrationDetail, AmendRegistrationRequest, RegistrationResponseAll } from '../../models/registration.model';
+import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, RegistrationDetail, AmendRegistrationRequest, RegistrationResponseAll, ApproveRequest, RejectRequest } from '../../models/registration.model';
 import { environment } from '../../../environments/environment';
 import { ErrorTranslationService } from '../error-translation.service';
+import { App } from '../../../main';
 
 /**
  * Implémentation API du service d'enregistrement
@@ -229,21 +230,19 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
-  approveRegistration(requestId: string, approverNotes?: string): Observable<{ success: boolean; message: string; }> {
-    console.log('✅ [API] Approving registration:', requestId, approverNotes);
+  approveRegistration(requestId: string, approveContent: ApproveRequest): Observable<{ success: boolean; message: string; }> {
+    console.log('✅ [API] Approving registration:', requestId, approveContent);
 
-    const body = { approverNotes };
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve`, body).pipe(
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve`, approveContent).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
     );
   }
 
-  rejectRegistration(requestId: string, rejectionReason: string): Observable<{ success: boolean; message: string; }> {
-    console.log('❌ [API] Rejecting registration:', requestId, rejectionReason);
+  rejectRegistration(requestId: string, rejectContent: RejectRequest): Observable<{ success: boolean; message: string; }> {
+    console.log('❌ [API] Rejecting registration:', requestId, rejectContent);
 
-    const body = { accessRequestId: requestId, rejectionReason: rejectionReason };
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject`, body).pipe(
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject`, rejectContent).pipe(
       timeout(this.timeout),
       catchError(error => this.handleError(error))
     );
