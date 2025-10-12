@@ -11,9 +11,10 @@ import { I18nService } from './services/i18n.service';
 import { AbstractDropdownService } from './services/abstract/dropdown-service.abstract';
 import { AbstractRegistrationService } from './services/abstract/registration-service.abstract';
 import { ErrorTranslationService } from './services/error-translation.service';
-import { dropdownServiceFactory, MSALInstanceFactory, projectsServiceFactory, registrationServiceFactory } from './services/factories/service.factories';
+import { dropdownServiceFactory, MSALInstanceFactory, projectsServiceFactory, registrationServiceFactory, claimServiceFactory } from './services/factories/service.factories';
 import { AuthService } from './services/auth.service';
 import { AbstractProjectsService } from './services/abstract/projects-service.abstract';
+import { ClaimService } from './services/abstract/claim-service.abstract';
 import { MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 
@@ -57,6 +58,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: AbstractProjectsService,
       useFactory: projectsServiceFactory,
+      deps: [HttpClient]
+    },
+    {
+      provide: ClaimService,
+      useFactory: claimServiceFactory,
       deps: [HttpClient]
     },
     {

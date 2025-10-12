@@ -3,6 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, map, catchError } from 'rxjs/operators';
 import { AbstractDropdownService } from '../abstract/dropdown-service.abstract';
 import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilter, FinancingType } from '../../models/dropdown.model';
+import { ClaimTypesResponse, ClaimType } from '../../models/claim.model';
 
 /**
  * Implémentation mock du service dropdown
@@ -329,6 +330,50 @@ export class MockDropdownService extends AbstractDropdownService {
       delay(200),
       map(() => this.mockFinancingTypes.find(profile => profile.id === id) || null)
     );
+  }
+
+  getClaimTypes(): Observable<ClaimTypesResponse> {
+    console.log('[MOCK] Fetching claim types');
+    return of({
+      claimTypes: [
+        {
+          id: 'ct1',
+          name: 'Data Access Issue',
+          nameFr: 'Problème d\'accès aux données',
+          description: 'Issues related to accessing project data',
+          createdAt: new Date('2025-01-01').toISOString()
+        },
+        {
+          id: 'ct2',
+          name: 'Incorrect Information',
+          nameFr: 'Information incorrecte',
+          description: 'Issues with incorrect or outdated information',
+          createdAt: new Date('2025-01-01').toISOString()
+        },
+        {
+          id: 'ct3',
+          name: 'Technical Error',
+          nameFr: 'Erreur technique',
+          description: 'Technical issues with the system',
+          createdAt: new Date('2025-01-01').toISOString()
+        },
+        {
+          id: 'ct4',
+          name: 'Missing Documents',
+          nameFr: 'Documents manquants',
+          description: 'Issues with missing documents',
+          createdAt: new Date('2025-01-01').toISOString()
+        },
+        {
+          id: 'ct5',
+          name: 'Other',
+          nameFr: 'Autre',
+          description: 'Other types of issues',
+          createdAt: new Date('2025-01-01').toISOString()
+        }
+      ],
+      totalCount: 5
+    }).pipe(delay(300));
   }
 
   // MÉTHODES PRIVÉES DE SIMULATION

@@ -10,6 +10,9 @@ import { ErrorTranslationService } from '../error-translation.service';
 import { AbstractProjectsService } from '../abstract/projects-service.abstract';
 import { MockProjectsService } from '../implementations/projects-service.mock';
 import { ApiProjectsService } from '../implementations/projects-service.api';
+import { ClaimService } from '../abstract/claim-service.abstract';
+import { ClaimServiceApi } from '../implementations/claim-service.api';
+import { ClaimServiceMock } from '../implementations/claim-service.mock';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 
@@ -52,6 +55,20 @@ export function projectsServiceFactory(http: HttpClient): AbstractProjectsServic
   } else {
     console.log('🔧 [FACTORY] Using API Projects Service');
     return new ApiProjectsService(http);
+  }
+}
+
+/**
+ * Factory pour le service claims
+ * Retourne l'implémentation appropriée selon l'environnement
+ */
+export function claimServiceFactory(http: HttpClient): ClaimService {
+  if (environment.features.enableMockData) {
+    console.log('🔧 [FACTORY] Using MOCK Claim Service');
+    return new ClaimServiceMock();
+  } else {
+    console.log('🔧 [FACTORY] Using API Claim Service');
+    return new ClaimServiceApi(http);
   }
 }
 

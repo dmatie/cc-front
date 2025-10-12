@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, timeout, retry, map } from 'rxjs/operators';
 import { AbstractDropdownService } from '../abstract/dropdown-service.abstract';
 import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilter, FinancingType } from '../../models/dropdown.model';
+import { ClaimTypesResponse } from '../../models/claim.model';
 import { environment } from '../../../environments/environment';
 
 /**
@@ -84,6 +85,16 @@ export class ApiDropdownService extends AbstractDropdownService {
         message: 'Business profiles loaded successfully'
       })),
       catchError(error => this.handleError('financing-types', error))
+    );
+  }
+
+  getClaimTypes(): Observable<ClaimTypesResponse> {
+    console.log('[API] Fetching claim types');
+
+    return this.http.get<ClaimTypesResponse>(`${this.apiUrl}/claim-types`).pipe(
+      timeout(this.timeout),
+      retry(2),
+      catchError(error => this.handleError('claim-types', error))
     );
   }
 

@@ -1,11 +1,12 @@
 import { Observable } from 'rxjs';
 import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilter, FinancingType } from '../../models/dropdown.model';
+import { ClaimTypesResponse } from '../../models/claim.model';
 
 /**
  * Service abstrait pour la gestion des listes déroulantes
  */
 export abstract class AbstractDropdownService {
-  
+
   /**
    * Obtenir la liste des pays
    * @param filter Filtres optionnels
@@ -33,6 +34,12 @@ export abstract class AbstractDropdownService {
    * @returns Observable avec la réponse contenant les types de financement
    */
   abstract getFinancingTypes(filter?: DropdownFilter): Observable<DropdownResponse<FinancingType>>;
+
+  /**
+   * Obtenir la liste des types de réclamation
+   * @returns Observable avec la réponse contenant les types de réclamation
+   */
+  abstract getClaimTypes(): Observable<ClaimTypesResponse>;
 
   /**
    * Obtenir un pays par son ID

@@ -21,6 +21,7 @@ export class AuthService {
   private initialized = false;
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  public customUserId: string | null = null;
 
   constructor(
     private http: HttpClient,
