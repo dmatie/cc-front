@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClaimMockService } from '../../services/claim-mock.service';
+import { ClaimService } from '../../services/abstract/claim-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { Claim, ClaimProcess, ClaimStatus } from '../../models/claim.model';
+import { Claim, ClaimProcess, ClaimStatus, getClaimStatusLabel } from '../../models/claim.model';
 import { ClaimResponseModalComponent } from './claim-response-modal.component';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
@@ -25,7 +25,7 @@ export class ClaimDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private claimService: ClaimMockService,
+    private claimService: ClaimService,
     private authService: AuthService,
     public i18n: I18nService
   ) {}
@@ -43,34 +43,20 @@ export class ClaimDetailComponent implements OnInit {
 
     this.claimService.getClaimById(claimId).subscribe({
       next: (claim) => {
-        if (claim) {
-          this.claim = claim;
-          this.loadClaimProcesses(claimId);
-        } else {
-          this.loading = false;
-          this.router.navigate(['/claims']);
-        }
+        this.claim = claim;
+        this.claimProcesses = claim.processes.sort((a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        this.loading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading claim:', error);
         this.loading = false;
         this.router.navigate(['/claims']);
       }
     });
   }
 
-  loadClaimProcesses(claimId: string): void {
-    this.claimService.getClaimProcesses(claimId).subscribe({
-      next: (processes) => {
-        this.claimProcesses = processes.sort((a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
-  }
 
   openResponseModal(): void {
     this.showResponseModal = true;
@@ -97,28 +83,25 @@ export class ClaimDetailComponent implements OnInit {
 
   getStatusClass(status: ClaimStatus): string {
     switch (status) {
-      case ClaimStatus.PENDING:
+      case ClaimStatus.Submitted:
         return 'badge bg-warning text-dark';
-      case ClaimStatus.IN_PROGRESS:
+      case ClaimStatus.InProgress:
         return 'badge bg-info text-dark';
-      case ClaimStatus.RESOLVED:
-        return 'badge bg-success';
-      case ClaimStatus.CLOSED:
+      case ClaimStatus.Closed:
         return 'badge bg-secondary';
-      case ClaimStatus.REJECTED:
-        return 'badge bg-danger';
       default:
         return 'badge bg-light text-dark';
     }
   }
 
   getStatusLabel(status: ClaimStatus): string {
-    return this.i18n.t(`claims.status.${status.toLowerCase()}`);
+    const lang = this.i18n.getCurrentLocale() as 'en' | 'fr';
+    return getClaimStatusLabel(status, lang);
   }
 
   canAddResponse(): boolean {
     return this.isInternalUser &&
            this.claim !== null &&
-           this.claim.status !== ClaimStatus.CLOSED;
+           this.claim.status !== ClaimStatus.Closed;
   }
 }

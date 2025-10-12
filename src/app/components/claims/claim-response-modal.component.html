@@ -31,7 +31,7 @@
                 <option value="">{{ i18n.t('claims.selectStatus') }}</option>
                 @for (option of statusOptions; track option.value) {
                   <option [value]="option.value">
-                    {{ i18n.t('claims.status.' + option.value.toLowerCase()) }}
+                    {{ getStatusLabel(option.value) }}
                   </option>
                 }
               </select>

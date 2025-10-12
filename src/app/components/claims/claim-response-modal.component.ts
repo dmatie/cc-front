@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ClaimMockService } from '../../services/claim-mock.service';
+import { ClaimService } from '../../services/abstract/claim-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { ClaimStatus, CreateClaimProcessDto } from '../../models/claim.model';
+import { ClaimStatus, CreateClaimProcessDto, getClaimStatusLabel } from '../../models/claim.model';
 
 @Component({
   selector: 'app-claim-response-modal',
@@ -18,20 +18,18 @@ export class ClaimResponseModalComponent {
   @Output() close = new EventEmitter<void>();
   @Output() responseCreated = new EventEmitter<void>();
 
-  status = '';
+  status: ClaimStatus | '' = '';
   comment = '';
   loading = false;
   errorMessage = '';
 
   statusOptions = [
-    { value: ClaimStatus.IN_PROGRESS, label: 'In Progress' },
-    { value: ClaimStatus.RESOLVED, label: 'Resolved' },
-    { value: ClaimStatus.CLOSED, label: 'Closed' },
-    { value: ClaimStatus.REJECTED, label: 'Rejected' }
+    { value: ClaimStatus.InProgress, label: 'In Progress' },
+    { value: ClaimStatus.Closed, label: 'Closed' }
   ];
 
   constructor(
-    private claimService: ClaimMockService,
+    private claimService: ClaimService,
     private authService: AuthService,
     public i18n: I18nService
   ) {}
@@ -42,40 +40,47 @@ export class ClaimResponseModalComponent {
       return;
     }
 
+    const userId = this.authService.getCustomUserId();
+    if (!userId) {
+      this.errorMessage = this.i18n.t('common.error');
+      return;
+    }
+
     this.loading = true;
     this.errorMessage = '';
 
     const dto: CreateClaimProcessDto = {
       claimId: this.claimId,
+      userId: userId,
       status: this.status as ClaimStatus,
       comment: this.comment
     };
 
-    const userEmail = this.authService.getUserEmail() || '';
-
-    this.claimService.createClaimProcess(dto, userEmail).subscribe({
+    this.claimService.createClaimProcess(this.claimId, dto).subscribe({
       next: () => {
         this.loading = false;
         this.responseCreated.emit();
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error creating response:', error);
         this.loading = false;
-        this.errorMessage = this.i18n.t('common.error');
+        this.errorMessage = error?.message || this.i18n.t('common.error');
       }
     });
   }
 
   isValid(): boolean {
-    return this.status.trim() !== '' && this.comment.trim() !== '';
+    return this.status !== '' && this.comment.trim() !== '';
   }
 
   onClose(): void {
-    this.close.emit();
+    if (!this.loading) {
+      this.close.emit();
+    }
   }
 
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onClose();
-    }
+  getStatusLabel(status: ClaimStatus): string {
+    const lang = this.i18n.getCurrentLocale() as 'en' | 'fr';
+    return getClaimStatusLabel(status, lang);
   }
 }

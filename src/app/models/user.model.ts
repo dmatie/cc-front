@@ -32,3 +32,18 @@ export interface AuthResponse {
   user: User;
   expiresIn: number;
 }
+
+export interface UserMeResponse {
+  user: {
+    id: string;
+    email: string;
+    firstName: string;
+    lastName: string;
+    fullName: string;
+    role: number;
+    isActive: boolean;
+    entraIdObjectId: string;
+    organizationName: string;
+    createdAt: string;
+  };
+}

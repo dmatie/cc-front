@@ -53,12 +53,12 @@
               <tbody>
                 <tr *ngFor="let claim of claims" style="cursor: pointer;">
                   <td (click)="viewClaimDetail(claim.id)">
-                    <strong>{{ claim.claimType }}</strong>
+                    <strong>{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName }}</strong>
                     <div class="text-muted small text-truncate" style="max-width: 300px;">
                       {{ claim.comment }}
                     </div>
                   </td>
-                  <td (click)="viewClaimDetail(claim.id)">{{ claim.country }}</td>
+                  <td (click)="viewClaimDetail(claim.id)">{{ claim.countryName }}</td>
                   <td (click)="viewClaimDetail(claim.id)">
                     <span [class]="getStatusClass(claim.status)">
                       {{ getStatusLabel(claim.status) }}

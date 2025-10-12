@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ClaimMockService } from '../../services/claim-mock.service';
+import { ClaimService } from '../../services/abstract/claim-service.abstract';
 import { I18nService } from '../../services/i18n.service';
-import { Claim, ClaimStatus } from '../../models/claim.model';
+import { Claim, ClaimStatus, getClaimStatusLabel } from '../../models/claim.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
 @Component({
@@ -18,19 +18,17 @@ export class InternalClaimsListComponent implements OnInit {
   claims: Claim[] = [];
   filteredClaims: Claim[] = [];
   loading = false;
-  selectedStatus = 'ALL';
+  selectedStatus: ClaimStatus | 'ALL' = 'ALL';
 
   statusOptions = [
-    { value: 'ALL', label: 'All Status' },
-    { value: ClaimStatus.PENDING, label: 'Pending' },
-    { value: ClaimStatus.IN_PROGRESS, label: 'In Progress' },
-    { value: ClaimStatus.RESOLVED, label: 'Resolved' },
-    { value: ClaimStatus.CLOSED, label: 'Closed' },
-    { value: ClaimStatus.REJECTED, label: 'Rejected' }
+    { value: 'ALL' as const, label: 'All Status' },
+    { value: ClaimStatus.Submitted, label: 'Submitted' },
+    { value: ClaimStatus.InProgress, label: 'In Progress' },
+    { value: ClaimStatus.Closed, label: 'Closed' }
   ];
 
   constructor(
-    private claimService: ClaimMockService,
+    private claimService: ClaimService,
     private router: Router,
     public i18n: I18nService
   ) {}
@@ -42,13 +40,18 @@ export class InternalClaimsListComponent implements OnInit {
   loadClaims(): void {
     this.loading = true;
 
-    this.claimService.getClaims().subscribe({
+    const params = this.selectedStatus === 'ALL'
+      ? { pageNumber: 1, pageSize: 100 }
+      : { status: this.selectedStatus, pageNumber: 1, pageSize: 100 };
+
+    this.claimService.getClaims(params).subscribe({
       next: (claims) => {
         this.claims = claims;
         this.applyFilter();
         this.loading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading claims:', error);
         this.loading = false;
       }
     });
@@ -63,7 +66,7 @@ export class InternalClaimsListComponent implements OnInit {
   }
 
   onStatusFilterChange(): void {
-    this.applyFilter();
+    this.loadClaims();
   }
 
   viewClaimDetail(claimId: string): void {
@@ -72,26 +75,23 @@ export class InternalClaimsListComponent implements OnInit {
 
   getStatusClass(status: ClaimStatus): string {
     switch (status) {
-      case ClaimStatus.PENDING:
+      case ClaimStatus.Submitted:
         return 'badge bg-warning text-dark';
-      case ClaimStatus.IN_PROGRESS:
+      case ClaimStatus.InProgress:
         return 'badge bg-info text-dark';
-      case ClaimStatus.RESOLVED:
-        return 'badge bg-success';
-      case ClaimStatus.CLOSED:
+      case ClaimStatus.Closed:
         return 'badge bg-secondary';
-      case ClaimStatus.REJECTED:
-        return 'badge bg-danger';
       default:
         return 'badge bg-light text-dark';
     }
   }
 
   getStatusLabel(status: ClaimStatus): string {
-    return this.i18n.t(`claims.status.${status.toLowerCase()}`);
+    const lang = this.i18n.getCurrentLocale() as 'en' | 'fr';
+    return getClaimStatusLabel(status, lang);
   }
 
-  getStatusCount(status: string): number {
+  getStatusCount(status: ClaimStatus | 'ALL'): number {
     if (status === 'ALL') {
       return this.claims.length;
     }
@@ -99,6 +99,6 @@ export class InternalClaimsListComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/internal/dashboard']); 
+    this.router.navigate(['/internal/dashboard']);
   }
 }

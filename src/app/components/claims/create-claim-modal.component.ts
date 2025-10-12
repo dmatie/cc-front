@@ -1,10 +1,13 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ClaimMockService } from '../../services/claim-mock.service';
+import { ClaimService } from '../../services/abstract/claim-service.abstract';
+import { AbstractDropdownService } from '../../services/abstract/dropdown-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { CreateClaimDto } from '../../models/claim.model';
+import { ClaimType } from '../../models/claim.model';
+import { Country } from '../../models/dropdown.model';
 
 @Component({
   selector: 'app-create-claim-modal',
@@ -13,42 +16,56 @@ import { CreateClaimDto } from '../../models/claim.model';
   templateUrl: './create-claim-modal.component.html',
   styleUrls: ['./create-claim-modal.component.css']
 })
-export class CreateClaimModalComponent {
+export class CreateClaimModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
   @Output() claimCreated = new EventEmitter<void>();
 
-  claimType = '';
-  country = '';
+  claimTypeId = '';
+  countryId = '';
   comment = '';
   loading = false;
   errorMessage = '';
 
-  claimTypes = [
-    'Data Access Issue',
-    'Incorrect Information',
-    'Technical Error',
-    'Missing Documents',
-    'Other'
-  ];
-
-  countries = [
-    'Nigeria',
-    'Kenya',
-    'Ghana',
-    'South Africa',
-    'Egypt',
-    'Tanzania',
-    'Ethiopia',
-    'Morocco',
-    'Uganda',
-    'Senegal'
-  ];
+  claimTypes: ClaimType[] = [];
+  countries: Country[] = [];
+  loadingData = false;
 
   constructor(
-    private claimService: ClaimMockService,
+    private claimService: ClaimService,
+    private dropdownService: AbstractDropdownService,
     private authService: AuthService,
     public i18n: I18nService
   ) {}
+
+  ngOnInit(): void {
+    this.loadDropdownData();
+  }
+
+  loadDropdownData(): void {
+    this.loadingData = true;
+
+    this.dropdownService.getClaimTypes().subscribe({
+      next: (response) => {
+        this.claimTypes = response.claimTypes;
+      },
+      error: (error) => {
+        console.error('Error loading claim types:', error);
+        this.errorMessage = this.i18n.t('common.error');
+      }
+    });
+
+    this.dropdownService.getCountries().subscribe({
+      next: (response) => {
+        this.countries = response.data;
+        this.loadingData = false;
+      },
+      error: (error) => {
+        console.error('Error loading countries:', error);
+        this.errorMessage = this.i18n.t('common.error');
+        this.loadingData = false;
+      }
+    });
+  }
 
   onSubmit(): void {
     if (!this.isValid()) {
@@ -56,42 +73,48 @@ export class CreateClaimModalComponent {
       return;
     }
 
+    const userId = this.authService.getCustomUserId();
+    if (!userId) {
+      this.errorMessage = this.i18n.t('common.error');
+      return;
+    }
+
     this.loading = true;
     this.errorMessage = '';
 
     const dto: CreateClaimDto = {
-      claimType: this.claimType,
-      country: this.country,
+      claimTypeId: this.claimTypeId,
+      userId: userId,
+      countryId: this.countryId,
       comment: this.comment
     };
 
-    const userEmail = this.authService.getUserEmail() || '';
-
-    this.claimService.createClaim(dto, userEmail).subscribe({
+    this.claimService.createClaim(dto).subscribe({
       next: () => {
         this.loading = false;
         this.claimCreated.emit();
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error creating claim:', error);
         this.loading = false;
-        this.errorMessage = this.i18n.t('common.error');
+        this.errorMessage = error?.message || this.i18n.t('common.error');
       }
     });
   }
 
   isValid(): boolean {
-    return this.claimType.trim() !== '' &&
-           this.country.trim() !== '' &&
+    return this.claimTypeId.trim() !== '' &&
+           this.countryId.trim() !== '' &&
            this.comment.trim() !== '';
   }
 
   onClose(): void {
-    this.close.emit();
+    if (!this.loading) {
+      this.close.emit();
+    }
   }
 
-  onBackdropClick(event: MouseEvent): void {
-    if (event.target === event.currentTarget) {
-      this.onClose();
-    }
+  getClaimTypeName(claimType: ClaimType): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? claimType.nameFr : claimType.name;
   }
 }

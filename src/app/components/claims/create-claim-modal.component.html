@@ -24,13 +24,13 @@
               </label>
               <select
                 class="form-select"
-                [(ngModel)]="claimType"
-                name="claimType"
-                [disabled]="loading"
+                [(ngModel)]="claimTypeId"
+                name="claimTypeId"
+                [disabled]="loading || loadingData"
                 required>
                 <option value="">{{ i18n.t('claims.selectClaimType') }}</option>
-                @for (type of claimTypes; track type) {
-                  <option [value]="type">{{ type }}</option>
+                @for (type of claimTypes; track type.id) {
+                  <option [value]="type.id">{{ getClaimTypeName(type) }}</option>
                 }
               </select>
             </div>
@@ -42,13 +42,13 @@
               </label>
               <select
                 class="form-select"
-                [(ngModel)]="country"
-                name="country"
-                [disabled]="loading"
+                [(ngModel)]="countryId"
+                name="countryId"
+                [disabled]="loading || loadingData"
                 required>
                 <option value="">{{ i18n.t('claims.selectCountry') }}</option>
-                @for (c of countries; track c) {
-                  <option [value]="c">{{ c }}</option>
+                @for (c of countries; track c.id) {
+                  <option [value]="c.id">{{ c.name }}</option>
                 }
               </select>
             </div>

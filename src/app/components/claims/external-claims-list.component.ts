@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { ClaimMockService } from '../../services/claim-mock.service';
+import { ClaimService } from '../../services/abstract/claim-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { Claim, ClaimStatus } from '../../models/claim.model';
+import { Claim, ClaimStatus, getClaimStatusLabel } from '../../models/claim.model';
 import { CreateClaimModalComponent } from './create-claim-modal.component';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
@@ -21,7 +21,7 @@ export class ExternalClaimsListComponent implements OnInit {
   showCreateModal = false;
 
   constructor(
-    private claimService: ClaimMockService,
+    private claimService: ClaimService,
     private authService: AuthService,
     private router: Router,
     public i18n: I18nService
@@ -33,14 +33,25 @@ export class ExternalClaimsListComponent implements OnInit {
 
   loadClaims(): void {
     this.loading = true;
-    const userEmail = this.authService.getUserEmail() || '';
+    const userId = this.authService.getCustomUserId();
 
-    this.claimService.getClaimsByUser(userEmail).subscribe({
+    if (!userId) {
+      console.error('User ID not available');
+      this.loading = false;
+      return;
+    }
+
+    this.claimService.getClaimsByUser({
+      userId: userId,
+      pageNumber: 1,
+      pageSize: 100
+    }).subscribe({
       next: (claims) => {
         this.claims = claims;
         this.loading = false;
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error loading claims:', error);
         this.loading = false;
       }
     });
@@ -65,26 +76,23 @@ export class ExternalClaimsListComponent implements OnInit {
 
   getStatusClass(status: ClaimStatus): string {
     switch (status) {
-      case ClaimStatus.PENDING:
+      case ClaimStatus.Submitted:
         return 'badge bg-warning text-dark';
-      case ClaimStatus.IN_PROGRESS:
+      case ClaimStatus.InProgress:
         return 'badge bg-info text-dark';
-      case ClaimStatus.RESOLVED:
-        return 'badge bg-success';
-      case ClaimStatus.CLOSED:
+      case ClaimStatus.Closed:
         return 'badge bg-secondary';
-      case ClaimStatus.REJECTED:
-        return 'badge bg-danger';
       default:
         return 'badge bg-light text-dark';
     }
   }
 
   getStatusLabel(status: ClaimStatus): string {
-    return this.i18n.t(`claims.status.${status.toLowerCase()}`);
+    const lang = this.i18n.getCurrentLocale() as 'en' | 'fr';
+    return getClaimStatusLabel(status, lang);
   }
 
-    goBack(): void {
-    this.router.navigate(['/claims']); 
+  goBack(): void {
+    this.router.navigate(['/claims']);
   }
 }

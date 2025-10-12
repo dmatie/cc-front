@@ -353,11 +353,32 @@ export class AuthService {
 
     try {
       const result = await this.msalInstance.acquireTokenSilent(request);
+
+      if (!this.customUserId && account.username) {
+        await this.fetchAndSetCustomUserId(account.username);
+      }
+
       return result.accessToken;
     } catch (error) {
       console.error('❌ Erreur lors du refresh du token:', error);
       return null;
     }
+  }
+
+  private async fetchAndSetCustomUserId(email: string): Promise<void> {
+    try {
+      const response = await this.http.get<any>(`${environment.apiUrl}/Users/me/${email}`).toPromise();
+      if (response?.user?.id) {
+        this.customUserId = response.user.id;
+        console.log('✅ Custom User ID set:', this.customUserId);
+      }
+    } catch (error) {
+      console.error('❌ Error fetching user ID:', error);
+    }
+  }
+
+  getCustomUserId(): string | null {
+    return this.customUserId;
   }
 }
 
