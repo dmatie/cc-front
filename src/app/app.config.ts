@@ -17,6 +17,7 @@ import { AbstractProjectsService } from './services/abstract/projects-service.ab
 import { ClaimService } from './services/abstract/claim-service.abstract';
 import { MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
+import { ApiErrorInterceptor } from './interceptors/api-error-interceptor';
 
 // Register locales
 registerLocaleData(localeEn, 'en');
@@ -73,6 +74,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiErrorInterceptor,
       multi: true
     },
     {

@@ -3,5 +3,8 @@
   "typescript.suggest.autoImports": true,
   "debug.javascript.usePreview": true,
   "debug.javascript.codelens.npmScripts": "all",
-  "debug.javascript.unmapMissingSources": true
+  "debug.javascript.unmapMissingSources": true,
+  "appService.showBuildDuringDeployPrompt": false,
+  "appService.defaultWebAppToDeploy": "/subscriptions/5a131fc8-8961-487d-a380-1075145a2504/resourceGroups/RG-CC-DEV/providers/Microsoft.Web/sites/cc-perso-app",
+  "appService.deploySubpath": "dist\\ccapp\\browser",
 }

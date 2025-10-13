@@ -1,6 +1,4 @@
-<app-authenticated-navbar
-  [title]="i18n.t('nav.claims')"
-  [userType]="isInternalUser ? 'internal' : 'external'">
+<app-authenticated-navbar [title]="i18n.t('nav.claims')" [userType]="isInternalUser ? 'internal' : 'external'">
 </app-authenticated-navbar>
 
 <div class="container py-5">
@@ -13,147 +11,143 @@
             <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('claims.claimBackToList') }}
           </button>
         </div>
- <div class="card-body">
+        <div class="card-body">
 
 
-<div class="container-fluid py-4">
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
-    </div>
-  </div>
-
-  <div *ngIf="!loading && claim">
-    <div class="d-flex justify-content-end align-items-center mb-4">
-      <button
-        *ngIf="canAddResponse()"
-        class="btn btn-primary"
-        (click)="openResponseModal()">
-        <i class="bi bi-plus-circle me-2"></i>
-        {{ i18n.t('claims.addResponse') }}
-      </button>
-    </div>
-
-    <div class="row">
-      <div class="col-lg-8">
-        <div class="card shadow-sm mb-4">
-          <div class="card-header bg-white">
-            <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName }}</h5>
-              <span [class]="getStatusClass(claim.status)">
-                {{ getStatusLabel(claim.status) }}
-              </span>
-            </div>
-          </div>
-          <div class="card-body">
-            <div class="row mb-3">
-              <div class="col-md-6">
-                <label class="text-muted small">{{ i18n.t('claims.user') }}</label>
-                <div><strong>{{ claim.userFullName }}</strong></div>
-                <div class="text-muted small">{{ claim.userEmail }}</div>
-              </div>
-              <div class="col-md-6">
-                <label class="text-muted small">{{ i18n.t('claims.country') }}</label>
-                <div><strong>{{ claim.countryName }}</strong></div>
+          <div class="container-fluid py-4">
+            <div *ngIf="loading" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
               </div>
             </div>
-            <div class="mb-3">
-              <label class="text-muted small">{{ i18n.t('claims.createdAt') }}</label>
-              <div>{{ claim.createdAt | date: 'full' }}</div>
-            </div>
-            <div class="mb-0">
-              <label class="text-muted small">{{ i18n.t('claims.description') }}</label>
-              <div class="bg-light p-3 rounded">{{ claim.comment }}</div>
-            </div>
-          </div>
-        </div>
 
-        <div class="card shadow-sm">
-          <div class="card-header bg-white">
-            <h5 class="mb-0">
-              <i class="bi bi-chat-left-text me-2"></i>
-              {{ i18n.t('claims.responses') }} ({{ claimProcesses.length }})
-            </h5>
-          </div>
-          <div class="card-body">
-            <div *ngIf="claimProcesses.length === 0" class="text-muted text-center py-4">
-              <i class="bi bi-inbox fs-1"></i>
-              <p class="mt-2">{{ i18n.t('claims.noResponses') }}</p>
-            </div>
+            <div *ngIf="!loading && claim">
+              <div class="d-flex justify-content-end align-items-center mb-4">
+                <button *ngIf="canAddResponse()" class="btn btn-primary" (click)="openResponseModal()">
+                  <i class="bi bi-plus-circle me-2"></i>
+                  {{ i18n.t('claims.addResponse') }}
+                </button>
+              </div>
 
-            <div *ngFor="let process of claimProcesses; let last = last" [class.mb-4]="!last">
-              <div class="d-flex">
-                <div class="flex-shrink-0 me-3">
-                  <div class="avatar-circle">
-                    <i class="bi bi-person-fill"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1">
-                  <div class="d-flex justify-content-between align-items-start mb-2">
-                    <div>
-                      <strong>{{ process.userFullName }}</strong>
-                      <div class="text-muted small">
-                        {{ process.createdAt | date: 'medium' }}
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr :
+                          claim.claimTypeName }}</h5>
+                        <span [class]="getStatusClass(claim.status)">
+                          {{ getStatusLabel(claim.status) }}
+                        </span>
                       </div>
                     </div>
-                    <span [class]="getStatusClass(process.status)">
-                      {{ getStatusLabel(process.status) }}
-                    </span>
+                    <div class="card-body">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <label class="text-muted small">{{ i18n.t('claims.user') }}</label>
+                          <div><strong>{{ claim.userFullName }}</strong></div>
+                          <div class="text-muted small">{{ claim.userEmail }}</div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="text-muted small">{{ i18n.t('claims.country') }}</label>
+                          <div><strong>{{ claim.countryName }}</strong></div>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="text-muted small">{{ i18n.t('claims.createdAt') }}</label>
+                        <div>{{ claim.createdAt | date: 'full' }}</div>
+                      </div>
+                      <div class="mb-0">
+                        <label class="text-muted small">{{ i18n.t('claims.description') }}</label>
+                        <div class="bg-light p-3 rounded">{{ claim.comment }}</div>
+                      </div>
+                    </div>
                   </div>
-                  <div class="response-comment bg-light p-3 rounded">
-                    {{ process.comment }}
+
+                  <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">
+                        <i class="bi bi-chat-left-text me-2"></i>
+                        {{ i18n.t('claims.responses') }} ({{ claimProcesses.length }})
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <div *ngIf="claimProcesses.length === 0" class="text-muted text-center py-4">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mt-2">{{ i18n.t('claims.noResponses') }}</p>
+                      </div>
+
+                      <div *ngFor="let process of claimProcesses; let last = last" [class.mb-4]="!last">
+                        <div class="d-flex">
+                          <div class="flex-shrink-0 me-3">
+                            <div class="avatar-circle">
+                              <i class="bi bi-person-fill"></i>
+                            </div>
+                          </div>
+                          <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                              <div>
+                                <strong>{{ process.userFullName }}</strong>
+                                <div class="text-muted small">
+                                  {{ process.createdAt | date: 'medium' }}
+                                </div>
+                              </div>
+                              <span [class]="getStatusClass(process.status)">
+                                {{ getStatusLabel(process.status) }}
+                              </span>
+                            </div>
+                            <div class="response-comment bg-light p-3 rounded">
+                              {{ process.comment }}
+                            </div>
+                          </div>
+                        </div>
+                        <hr *ngIf="!last" class="my-4">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">{{ i18n.t('claims.timeline') }}</h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="timeline">
+                        <div class="timeline-item">
+                          <div class="timeline-marker bg-primary"></div>
+                          <div class="timeline-content">
+                            <div class="small text-muted">{{ claim.createdAt | date: 'short' }}</div>
+                            <div><strong>{{ i18n.t('claims.claimCreated') }}</strong></div>
+                          </div>
+                        </div>
+
+                        <div *ngFor="let process of claimProcesses" class="timeline-item">
+                          <div class="timeline-marker" [class.bg-success]="process.status === 3"
+                            [class.bg-info]="process.status === 2" [class.bg-warning]="process.status === 1"></div>
+                          <div class="timeline-content">
+                            <div class="small text-muted">{{ process.createdAt | date: 'short' }}</div>
+                            <div><strong>{{ getStatusLabel(process.status) }}</strong></div>
+                            <div class="small">{{ i18n.t('common.by') }} {{ process.userFullName }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-              <hr *ngIf="!last" class="my-4">
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="col-lg-4">
-        <div class="card shadow-sm">
-          <div class="card-header bg-white">
-            <h5 class="mb-0">{{ i18n.t('claims.timeline') }}</h5>
-          </div>
-          <div class="card-body">
-            <div class="timeline">
-              <div class="timeline-item">
-                <div class="timeline-marker bg-primary"></div>
-                <div class="timeline-content">
-                  <div class="small text-muted">{{ claim.createdAt | date: 'short' }}</div>
-                  <div><strong>{{ i18n.t('claims.claimCreated') }}</strong></div>
-                </div>
-              </div>
-
-              <div *ngFor="let process of claimProcesses" class="timeline-item">
-                <div class="timeline-marker" [class.bg-secondary]="process.status === 3"
-                     [class.bg-info]="process.status === 2"
-                     [class.bg-warning]="process.status === 1"></div>
-                <div class="timeline-content">
-                  <div class="small text-muted">{{ process.createdAt | date: 'short' }}</div>
-                  <div><strong>{{ getStatusLabel(process.status) }}</strong></div>
-                  <div class="small">{{ i18n.t('common.by') }} {{ process.userFullName }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   </div>
 </div>
-  </div>
-
-      </div>
-    </div>
-  </div>
-</div>
 
 
-<app-claim-response-modal
-  *ngIf="showResponseModal && claim"
-  [claimId]="claim.id"
-  (close)="closeResponseModal()"
-  (responseCreated)="onResponseCreated()">
+<app-claim-response-modal 
+*ngIf="showResponseModal && claim" [claimId]="claim.id" 
+(close)="closeResponseModal()"
+(responseCreated)="onResponseCreated()">
 </app-claim-response-modal>

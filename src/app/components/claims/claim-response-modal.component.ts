@@ -40,19 +40,16 @@ export class ClaimResponseModalComponent {
       return;
     }
 
-    const userId = this.authService.getCustomUserId();
-    if (!userId) {
-      this.errorMessage = this.i18n.t('common.error');
-      return;
-    }
-
     this.loading = true;
     this.errorMessage = '';
 
+    const statusNumber = typeof this.status === 'string'
+      ? parseInt(this.status, 10)
+      : this.status as number;
+
     const dto: CreateClaimProcessDto = {
       claimId: this.claimId,
-      userId: userId,
-      status: this.status as ClaimStatus,
+      status: statusNumber,
       comment: this.comment
     };
 

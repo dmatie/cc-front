@@ -46,7 +46,7 @@ export class InternalClaimsListComponent implements OnInit {
 
     this.claimService.getClaims(params).subscribe({
       next: (claims) => {
-        this.claims = claims;
+        this.claims = claims.claims;
         this.applyFilter();
         this.loading = false;
       },
@@ -76,11 +76,11 @@ export class InternalClaimsListComponent implements OnInit {
   getStatusClass(status: ClaimStatus): string {
     switch (status) {
       case ClaimStatus.Submitted:
-        return 'badge bg-warning text-dark';
+        return 'badge bg-warning';
       case ClaimStatus.InProgress:
-        return 'badge bg-info text-dark';
+        return 'badge bg-info';
       case ClaimStatus.Closed:
-        return 'badge bg-secondary';
+        return 'badge bg-success';
       default:
         return 'badge bg-light text-dark';
     }

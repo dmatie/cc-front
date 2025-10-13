@@ -1,6 +1,4 @@
-<app-authenticated-navbar
-  [title]="i18n.t('nav.home')"
-  [userType]="'external'">
+<app-authenticated-navbar [title]="i18n.t('nav.home')" [userType]="'external'">
 </app-authenticated-navbar>
 
 <div class="container py-5">
@@ -14,78 +12,84 @@
           </button>
         </div>
 
- <div class="card-body">
+        <div class="card-body">
 
-<div class="container-fluid py-4">
-  <div class="d-flex justify-content-end align-items-center mb-4">
-    <button class="btn btn-primary" (click)="openCreateModal()">
-      <i class="bi bi-plus-circle me-2"></i>
-      {{ i18n.t('claims.createClaim') }}
-    </button>
-  </div>
+          <div class="container-fluid py-4">
+            <div class="d-flex justify-content-end align-items-center mb-4">
+              <button class="btn btn-primary" (click)="openCreateModal()">
+                <i class="bi bi-plus-circle me-2"></i>
+                {{ i18n.t('claims.createClaim') }}
+              </button>
+            </div>
 
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
-    </div>
-  </div>
+            <div *ngIf="loading" class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+              </div>
+            </div>
 
-  <div *ngIf="!loading && claims.length === 0" class="alert alert-info">
-    <i class="bi bi-info-circle me-2"></i>
-    {{ i18n.t('claims.noClaims') }}
-  </div>
+            @if (errorMessage) {
+              <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ errorMessage }}
+              </div>
+            }
 
-  <div *ngIf="!loading && claims.length > 0" class="row">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>{{ i18n.t('claims.claimType') }}</th>
-                  <th>{{ i18n.t('claims.country') }}</th>
-                  <th>{{ i18n.t('claims.status') }}</th>
-                  <th>{{ i18n.t('claims.createdAt') }}</th>
-                  <th class="text-end">{{ i18n.t('common.actions') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let claim of claims" style="cursor: pointer;">
-                  <td (click)="viewClaimDetail(claim.id)">
-                    <strong>{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName }}</strong>
-                    <div class="text-muted small text-truncate" style="max-width: 300px;">
-                      {{ claim.comment }}
+            <div *ngIf="!loading && claims.length === 0 && !errorMessage" class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              {{ i18n.t('claims.noClaims') }}
+            </div>
+
+            <div *ngIf="!loading && claims.length > 0" class="row">
+              <div class="col-12">
+                <div class="card shadow-sm">
+                  <div class="card-body p-0">
+                    <div class="table-responsive">
+                      <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                          <tr>
+                            <th>{{ i18n.t('claims.claimType') }}</th>
+                            <th>{{ i18n.t('claims.country') }}</th>
+                            <th>{{ i18n.t('claims.statusField') }}</th>
+                            <th>{{ i18n.t('claims.createdAt') }}</th>
+                            <th class="text-end">{{ i18n.t('common.actions') }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let claim of claims" style="cursor: pointer;">
+                            <td (click)="viewClaimDetail(claim.id)">
+                              <strong>{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName
+                                }}</strong>
+                              <div class="text-muted small text-truncate" style="max-width: 300px;">
+                                {{ claim.comment }}
+                              </div>
+                            </td>
+                            <td (click)="viewClaimDetail(claim.id)">{{ claim.countryName }}</td>
+                            <td (click)="viewClaimDetail(claim.id)">
+                              <span [class]="getStatusClass(claim.status)">
+                                {{ getStatusLabel(claim.status) }}
+                              </span>
+                            </td>
+                            <td (click)="viewClaimDetail(claim.id)">
+                              {{ claim.createdAt | date: 'short' }}
+                            </td>
+                            <td class="text-end">
+                              <button class="btn btn-sm btn-outline-primary" (click)="viewClaimDetail(claim.id)">
+                                <i class="bi bi-eye me-1"></i>
+                                {{ i18n.t('common.view') }}
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
                     </div>
-                  </td>
-                  <td (click)="viewClaimDetail(claim.id)">{{ claim.countryName }}</td>
-                  <td (click)="viewClaimDetail(claim.id)">
-                    <span [class]="getStatusClass(claim.status)">
-                      {{ getStatusLabel(claim.status) }}
-                    </span>
-                  </td>
-                  <td (click)="viewClaimDetail(claim.id)">
-                    {{ claim.createdAt | date: 'short' }}
-                  </td>
-                  <td class="text-end">
-                    <button
-                      class="btn btn-sm btn-outline-primary"
-                      (click)="viewClaimDetail(claim.id)">
-                      <i class="bi bi-eye me-1"></i>
-                      {{ i18n.t('common.view') }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-  </div>
 
       </div>
     </div>
@@ -93,8 +97,7 @@
 </div>
 
 
-<app-create-claim-modal
-  *ngIf="showCreateModal"
-  (close)="closeCreateModal()"
-  (claimCreated)="onClaimCreated()">
+<app-create-claim-modal *ngIf="showCreateModal" 
+(close)="closeCreateModal()" 
+(claimCreated)="onClaimCreated()">
 </app-create-claim-modal>

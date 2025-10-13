@@ -19,6 +19,7 @@ export class ExternalClaimsListComponent implements OnInit {
   claims: Claim[] = [];
   loading = false;
   showCreateModal = false;
+  errorMessage = '';
 
   constructor(
     private claimService: ClaimService,
@@ -33,26 +34,24 @@ export class ExternalClaimsListComponent implements OnInit {
 
   loadClaims(): void {
     this.loading = true;
-    const userId = this.authService.getCustomUserId();
-
-    if (!userId) {
-      console.error('User ID not available');
-      this.loading = false;
-      return;
-    }
 
     this.claimService.getClaimsByUser({
-      userId: userId,
       pageNumber: 1,
       pageSize: 100
     }).subscribe({
       next: (claims) => {
-        this.claims = claims;
+        this.claims = claims.claims
         this.loading = false;
       },
       error: (error) => {
         console.error('Error loading claims:', error);
         this.loading = false;
+        this.errorMessage = error.message;
+
+        if (error.validationErrors?.length) {
+          this.errorMessage = error.validationErrors[0].error;
+        }
+
       }
     });
   }
@@ -77,11 +76,11 @@ export class ExternalClaimsListComponent implements OnInit {
   getStatusClass(status: ClaimStatus): string {
     switch (status) {
       case ClaimStatus.Submitted:
-        return 'badge bg-warning text-dark';
+        return 'badge bg-warning';
       case ClaimStatus.InProgress:
-        return 'badge bg-info text-dark';
+        return 'badge bg-info';
       case ClaimStatus.Closed:
-        return 'badge bg-secondary';
+        return 'badge bg-success';
       default:
         return 'badge bg-light text-dark';
     }
@@ -93,6 +92,6 @@ export class ExternalClaimsListComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/claims']);
+    this.router.navigate(['/client/home']);
   }
 }

@@ -10,7 +10,9 @@ import {
   UserClaimQueryParams,
   CreateClaimDto,
   CreateClaimResponse,
-  CreateClaimProcessDto
+  CreateClaimProcessDto,
+  GetClaimsResponse,
+  GetClaimResponse
 } from '../../models/claim.model';
 
 @Injectable({
@@ -23,7 +25,7 @@ export class ClaimServiceApi extends ClaimService {
     super();
   }
 
-  getClaims(params?: ClaimQueryParams): Observable<Claim[]> {
+  getClaims(params?: ClaimQueryParams): Observable<GetClaimsResponse> {
     let httpParams = new HttpParams();
 
     if (params?.status) {
@@ -36,10 +38,10 @@ export class ClaimServiceApi extends ClaimService {
       httpParams = httpParams.set('PageSize', params.pageSize.toString());
     }
 
-    return this.http.get<Claim[]>(this.apiUrl, { params: httpParams });
+    return this.http.get<GetClaimsResponse>(this.apiUrl, { params: httpParams });
   }
 
-  getClaimsByUser(params: UserClaimQueryParams): Observable<Claim[]> {
+  getClaimsByUser(params: UserClaimQueryParams): Observable<GetClaimsResponse> {
     let httpParams = new HttpParams();
 
     if (params.status) {
@@ -52,12 +54,12 @@ export class ClaimServiceApi extends ClaimService {
       httpParams = httpParams.set('PageSize', params.pageSize.toString());
     }
 
-    const url = `${this.apiUrl}/user/${params.userId}`;
-    return this.http.get<Claim[]>(url, { params: httpParams });
+    const url = `${this.apiUrl}/by-user`;
+    return this.http.get<GetClaimsResponse>(url, { params: httpParams });
   }
 
-  getClaimById(id: string): Observable<Claim> {
-    return this.http.get<Claim>(`${this.apiUrl}/${id}`);
+  getClaimById(id: string): Observable<GetClaimResponse> {
+    return this.http.get<GetClaimResponse>(`${this.apiUrl}/${id}`);
   }
 
   createClaim(dto: CreateClaimDto): Observable<CreateClaimResponse> {

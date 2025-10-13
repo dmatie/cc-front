@@ -22,6 +22,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
   public customUserId: string | null = null;
+  private isFetchingUserId = false;
 
   constructor(
     private http: HttpClient,
@@ -85,7 +86,7 @@ export class AuthService {
   login(credentials: LoginRequest): Observable<AuthResponse> {
     // Simulation pour le développement - remplacer par l'appel réel à votre API
     return this.simulateLogin(credentials).pipe(
-      tap(response => {
+      tap(async response => {
         localStorage.setItem('token', response.token);
         localStorage.setItem('user', JSON.stringify(response.user));
         localStorage.setItem('isAuthenticated', 'true');
@@ -302,6 +303,8 @@ export class AuthService {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     localStorage.removeItem('isAuthenticated');
+    localStorage.removeItem('customUserId');
+    this.customUserId = null;
     this.currentUserSubject.next(null);
   }
 
@@ -353,32 +356,11 @@ export class AuthService {
 
     try {
       const result = await this.msalInstance.acquireTokenSilent(request);
-
-      if (!this.customUserId && account.username) {
-        await this.fetchAndSetCustomUserId(account.username);
-      }
-
       return result.accessToken;
     } catch (error) {
       console.error('❌ Erreur lors du refresh du token:', error);
       return null;
     }
-  }
-
-  private async fetchAndSetCustomUserId(email: string): Promise<void> {
-    try {
-      const response = await this.http.get<any>(`${environment.apiUrl}/Users/me/${email}`).toPromise();
-      if (response?.user?.id) {
-        this.customUserId = response.user.id;
-        console.log('✅ Custom User ID set:', this.customUserId);
-      }
-    } catch (error) {
-      console.error('❌ Error fetching user ID:', error);
-    }
-  }
-
-  getCustomUserId(): string | null {
-    return this.customUserId;
   }
 }
 

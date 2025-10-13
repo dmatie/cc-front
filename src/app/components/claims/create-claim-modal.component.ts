@@ -21,14 +21,11 @@ export class CreateClaimModalComponent implements OnInit {
   @Output() claimCreated = new EventEmitter<void>();
 
   claimTypeId = '';
-  countryId = '';
   comment = '';
   loading = false;
   errorMessage = '';
 
   claimTypes: ClaimType[] = [];
-  countries: Country[] = [];
-  loadingData = false;
 
   constructor(
     private claimService: ClaimService,
@@ -42,27 +39,15 @@ export class CreateClaimModalComponent implements OnInit {
   }
 
   loadDropdownData(): void {
-    this.loadingData = true;
-
+    this.loading = true;
     this.dropdownService.getClaimTypes().subscribe({
       next: (response) => {
         this.claimTypes = response.claimTypes;
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error loading claim types:', error);
         this.errorMessage = this.i18n.t('common.error');
-      }
-    });
-
-    this.dropdownService.getCountries().subscribe({
-      next: (response) => {
-        this.countries = response.data;
-        this.loadingData = false;
-      },
-      error: (error) => {
-        console.error('Error loading countries:', error);
-        this.errorMessage = this.i18n.t('common.error');
-        this.loadingData = false;
       }
     });
   }
@@ -73,19 +58,11 @@ export class CreateClaimModalComponent implements OnInit {
       return;
     }
 
-    const userId = this.authService.getCustomUserId();
-    if (!userId) {
-      this.errorMessage = this.i18n.t('common.error');
-      return;
-    }
-
     this.loading = true;
     this.errorMessage = '';
 
     const dto: CreateClaimDto = {
       claimTypeId: this.claimTypeId,
-      userId: userId,
-      countryId: this.countryId,
       comment: this.comment
     };
 
@@ -104,7 +81,6 @@ export class CreateClaimModalComponent implements OnInit {
 
   isValid(): boolean {
     return this.claimTypeId.trim() !== '' &&
-           this.countryId.trim() !== '' &&
            this.comment.trim() !== '';
   }
 

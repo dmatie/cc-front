@@ -1,3 +1,5 @@
+import { PaginationFields } from "./list.shared.model";
+
 export interface Claim {
   id: string;
   claimTypeId: string;
@@ -54,8 +56,6 @@ export interface ClaimTypesResponse {
 
 export interface CreateClaimDto {
   claimTypeId: string;
-  userId: string;
-  countryId: string;
   comment: string;
 }
 
@@ -66,7 +66,6 @@ export interface CreateClaimResponse {
 
 export interface CreateClaimProcessDto {
   claimId: string;
-  userId: string;
   status: ClaimStatus;
   comment: string;
 }
@@ -78,7 +77,14 @@ export interface ClaimQueryParams {
 }
 
 export interface UserClaimQueryParams extends ClaimQueryParams {
-  userId: string;
+}
+
+export interface GetClaimsResponse extends PaginationFields {
+  claims: Claim[];
+}
+
+export interface GetClaimResponse {
+  claim: Claim;
 }
 
 export function getClaimStatusLabel(status: ClaimStatus, language: 'en' | 'fr' = 'en'): string {

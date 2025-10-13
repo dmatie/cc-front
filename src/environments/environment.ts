@@ -1,6 +1,6 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://your-production-api.com/api', // URL de production
+    apiUrl: 'http://cc-perso-api.azurewebsites.net/api', // URL de production
     azureAd: {
         clientId: '7b937ab1-2b96-4206-b373-f0aacb79b4a7', // Client ID de test - À remplacer
         authority: 'https://login.microsoftonline.com/common', // Utilise 'common' pour test

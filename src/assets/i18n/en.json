@@ -312,6 +312,146 @@
     "new_withdrawal": "New Withdrawal",
     "download_report": "Download Report"
   },
+  "external": {
+    "dashboard": {
+      "title": "Client Dashboard",
+      "welcome": "Welcome",
+      "account_active": "Active Account"
+    },
+    "stats": {
+      "active_projects": "Active Projects",
+      "active_projects_desc": "ongoing projects",
+      "disbursements": "Disbursements",
+      "disbursements_desc": "active requests",
+      "claims": "Claims",
+      "claims_desc": "pending",
+      "reports": "Reports",
+      "reports_desc": "available"
+    },
+    "actions": {
+      "title": "Quick Actions",
+      "request_disbursement": "Request Disbursement",
+      "create_claim": "Create Claim",
+      "download_report": "Download Report",
+      "contact_support": "Contact Support"
+    },
+    "info": {
+      "title": "Useful Information",
+      "client_support": "Client Support",
+      "support_hours": "Mon-Fri 8am-6pm",
+      "security": "Security",
+      "security_desc": "Last login:",
+      "documentation": "Documentation",
+      "documentation_desc": "Guides and manuals",
+      "access": "Access"
+    }
+  },
+  "internal": {
+    "nav": {
+      "title": "AfDB - Administration",
+      "user": "User",
+      "loading": "Loading...",
+      "profile": "My Profile",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "welcome": "Welcome",
+      "internal_access": "Internal Access"
+    },
+    "stats": {
+      "access_requests": "Access Requests",
+      "access_requests_desc": "pending approval",
+      "claims": "Claims",
+      "claims_desc": "to process",
+      "disbursements": "Disbursements",
+      "disbursements_desc": "to approve",
+      "users": "Users",
+      "users_desc": "total in system"
+    },
+    "actions": {
+      "title": "Quick Actions",
+      "access_requests": "Manage Access Requests",
+      "claims": "Process Claims",
+      "disbursements": "Approve Disbursements",
+      "users": "Manage Users"
+    },
+    "info": {
+      "title": "System Information",
+      "system_status": "System Status",
+      "system_status_desc": "All services are running",
+      "operational": "Operational",
+      "pending_tasks": "Pending Tasks",
+      "pending_tasks_desc": "Actions required today",
+      "documentation": "Documentation",
+      "documentation_desc": "Admin guides",
+      "access": "Access"
+    }
+  },
+  "no_access": {
+    "nav": {
+      "title": "AfDB - Access Denied",
+      "logout": "Logout"
+    },
+    "title": "Access Denied",
+    "subtitle": "You are not authorized to access this application",
+    "access_denied": "Access Denied",
+    "message1": "Your Microsoft account is authenticated but you do not have the required permissions to access this application.",
+    "message2": "Please contact your administrator or request access via the registration form.",
+    "user_info": "Your Account Information",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "azure_id": "Azure AD Account",
+    "detected_roles": "Detected Roles",
+    "request_access": "Request Access",
+    "request_access_desc": "Fill out the registration form",
+    "contact_support": "Contact Support",
+    "contact_support_desc": "Get help",
+    "go_home": "Back Home",
+    "go_home_desc": "Return to the main page",
+    "request_access_button": "Request Access",
+    "contact_support_button": "Contact Support",
+    "go_home_button": "Back to Home",
+    "support_info": "Technical Support"
+  },
+  "client": {
+    "good_morning": "Good Morning",
+    "good_afternoon": "Good Afternoon",
+    "good_evening": "Good Evening",
+    "my_profile": "My Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "errors": {
+    "reference_data_not_exist": "Reference data not found",
+    "invalid_email_format": "Invalid email format",
+    "email_already_exists": "This email already exists",
+    "first_name_too_short": "First name must be at least 2 characters",
+    "last_name_too_short": "Last name must be at least 2 characters",
+    "function_required": "Position is required",
+    "country_required": "Country is required",
+    "business_profile_required": "Business profile is required",
+    "financing_type_required": "Financing type is required",
+    "invalid_credentials": "Invalid credentials",
+    "account_locked": "Account locked",
+    "token_expired": "Session expired",
+    "access_denied": "Access denied",
+    "insufficient_rights": "Insufficient rights",
+    "database_error": "Database error",
+    "service_unavailable": "Service unavailable",
+    "timeout_error": "Timeout error",
+    "duplicate_entry": "Duplicate entry",
+    "invalid_operation": "Invalid operation",
+    "resource_not_found": "Resource not found",
+    "general_error": "General error",
+    "authentication_error": "Authentication error",
+    "permission_error": "Permission error",
+    "system_error": "System error",
+    "business_error": "Business error",
+    "unexpected_error": "An unexpected error occurred"
+  },
   "admin": {
     "access_requests": {
       "title": "Pending Access Requests",
@@ -370,7 +510,7 @@
     "noClaims": "No claims to display",
     "claimType": "Claim Type",
     "country": "Country",
-    "status": "Status",
+    "statusField": "Status",
     "createdAt": "Created At",
     "user": "User",
     "claimDetails": "Claim Details",
@@ -393,11 +533,9 @@
     "filterByStatus": "Filter by Status",
     "status": {
       "all": "All Status",
-      "pending": "Pending",
-      "in_progress": "In Progress",
-      "resolved": "Resolved",
-      "closed": "Closed",
-      "rejected": "Rejected"
+      "submitted": "Submitted",
+      "inprogress": "In Progress",
+      "closed": "Closed"
     }
   }
 }

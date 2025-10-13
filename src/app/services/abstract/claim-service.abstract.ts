@@ -5,13 +5,15 @@ import {
   UserClaimQueryParams,
   CreateClaimDto,
   CreateClaimResponse,
-  CreateClaimProcessDto
+  CreateClaimProcessDto,
+  GetClaimsResponse,
+  GetClaimResponse
 } from '../../models/claim.model';
 
 export abstract class ClaimService {
-  abstract getClaims(params?: ClaimQueryParams): Observable<Claim[]>;
-  abstract getClaimsByUser(params: UserClaimQueryParams): Observable<Claim[]>;
-  abstract getClaimById(id: string): Observable<Claim>;
+  abstract getClaims(params?: ClaimQueryParams): Observable<GetClaimsResponse>;
+  abstract getClaimsByUser(params: UserClaimQueryParams): Observable<GetClaimsResponse>;
+  abstract getClaimById(id: string): Observable<GetClaimResponse>;
   abstract createClaim(dto: CreateClaimDto): Observable<CreateClaimResponse>;
   abstract createClaimProcess(claimId: string, dto: CreateClaimProcessDto): Observable<Claim>;
 }

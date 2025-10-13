@@ -43,8 +43,8 @@ export class ClaimDetailComponent implements OnInit {
 
     this.claimService.getClaimById(claimId).subscribe({
       next: (claim) => {
-        this.claim = claim;
-        this.claimProcesses = claim.processes.sort((a, b) =>
+        this.claim = claim.claim;
+        this.claimProcesses = claim.claim.processes.sort((a, b) =>
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         this.loading = false;
@@ -84,11 +84,11 @@ export class ClaimDetailComponent implements OnInit {
   getStatusClass(status: ClaimStatus): string {
     switch (status) {
       case ClaimStatus.Submitted:
-        return 'badge bg-warning text-dark';
+        return 'badge bg-warning';
       case ClaimStatus.InProgress:
-        return 'badge bg-info text-dark';
+        return 'badge bg-info';
       case ClaimStatus.Closed:
-        return 'badge bg-secondary';
+        return 'badge bg-success';
       default:
         return 'badge bg-light text-dark';
     }

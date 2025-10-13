@@ -8,7 +8,9 @@ import {
   UserClaimQueryParams,
   CreateClaimDto,
   CreateClaimResponse,
-  CreateClaimProcessDto
+  CreateClaimProcessDto,
+  GetClaimsResponse,
+  GetClaimResponse
 } from '../../models/claim.model';
 
 @Injectable({
@@ -73,32 +75,48 @@ export class ClaimServiceMock extends ClaimService {
     }
   ];
 
-  getClaims(params?: ClaimQueryParams): Observable<Claim[]> {
+  getClaims(params?: ClaimQueryParams): Observable<GetClaimsResponse> {
     let filtered = [...this.mockClaims];
 
     if (params?.status) {
       filtered = filtered.filter(c => c.status === params.status);
     }
 
-    return of(filtered).pipe(delay(300));
+    let claims: GetClaimsResponse = {
+      claims: filtered,
+      totalCount: filtered.length,
+      pageNumber: 1,
+      pageSize: filtered.length,
+      totalPages: 1
+    };
+
+    return of(claims).pipe(delay(300));
   }
 
-  getClaimsByUser(params: UserClaimQueryParams): Observable<Claim[]> {
-    let filtered = this.mockClaims.filter(c => c.userId === params.userId);
+  getClaimsByUser(params: UserClaimQueryParams): Observable<GetClaimsResponse> {
+    let filtered = this.mockClaims.filter(c => c.userId === 'guid-mock-user');
 
     if (params.status) {
       filtered = filtered.filter(c => c.status === params.status);
     }
 
-    return of(filtered).pipe(delay(300));
+    let claims: GetClaimsResponse = {
+      claims: filtered,
+      totalCount: filtered.length,
+      pageNumber: 1,
+      pageSize: filtered.length,
+      totalPages: 1
+    };
+
+    return of(claims).pipe(delay(300));
   }
 
-  getClaimById(id: string): Observable<Claim> {
+  getClaimById(id: string): Observable<GetClaimResponse> {
     const claim = this.mockClaims.find(c => c.id === id);
     if (!claim) {
       throw new Error('Claim not found');
     }
-    return of(claim).pipe(delay(300));
+    return of({ claim }).pipe(delay(300));
   }
 
   createClaim(dto: CreateClaimDto): Observable<CreateClaimResponse> {
@@ -107,9 +125,9 @@ export class ClaimServiceMock extends ClaimService {
       claimTypeId: dto.claimTypeId,
       claimTypeName: 'Mock Type',
       claimTypeNameFr: 'Type Mock',
-      countryId: dto.countryId,
+      countryId: 'guid-mock-country',
       countryName: 'Mock Country',
-      userId: dto.userId,
+      userId: 'guid-mock-user',
       userFirstName: 'Mock',
       userLastName: 'User',
       userFullName: 'Mock User',
@@ -141,7 +159,7 @@ export class ClaimServiceMock extends ClaimService {
     const newProcess = {
       id: `p${Date.now()}`,
       claimId: claimId,
-      userId: dto.userId,
+      userId: 'guid-mock-admin',
       userFirstName: 'Admin',
       userLastName: 'User',
       userFullName: 'Admin User',

@@ -503,7 +503,7 @@
     "noClaims": "Aucune réclamation à afficher",
     "claimType": "Type de Réclamation",
     "country": "Pays",
-    "status": "Statut",
+    "statusField": "Statut",
     "createdAt": "Créé le",
     "user": "Utilisateur",
     "claimDetails": "Détails de la Réclamation",
@@ -526,11 +526,9 @@
     "filterByStatus": "Filtrer par Statut",
     "status": {
       "all": "Tous les Statuts",
-      "pending": "En Attente",
-      "in_progress": "En Cours",
-      "resolved": "Résolu",
-      "closed": "Clôturé",
-      "rejected": "Rejeté"
+      "submitted": "Soumis",
+      "inprogress": "En Cours",
+      "closed": "Clôturé"
     }
   }
 }
