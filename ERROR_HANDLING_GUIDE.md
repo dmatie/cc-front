@@ -14,6 +14,42 @@ Le `ErrorHandlerService` est le service centralisé pour gérer toutes les erreu
 
 ## 🎯 Architecture
 
+### Architecture recommandée (avec handleApiErrorRx)
+
+```
+┌──────────────────────────────────────────────────────────┐
+│              Appel API qui échoue                        │
+└─────────────────────┬────────────────────────────────────┘
+                      │
+                      ▼
+      ┌───────────────────────────────┐
+      │   Service API                 │
+      │   .pipe(                      │
+      │     catchError(               │
+      │       handleApiErrorRx()      │← Gestion centralisée !
+      │     )                         │
+      │   )                           │
+      └────────────┬──────────────────┘
+                   │
+                   ▼
+      ┌───────────────────────────────┐
+      │   ErrorHandlerService         │
+      │   • Logging                   │
+      │   • Traduction (i18n)         │
+      │   • Formatage                 │
+      └────────────┬──────────────────┘
+                   │
+                   ▼
+      ┌───────────────────────────────┐
+      │   Composant (simple)          │
+      │   error.message               │← Erreur déjà traitée !
+      └───────────────────────────────┘
+```
+
+### Architecture alternative (legacy)
+
+Si tu préfères gérer les erreurs dans le composant :
+
 ```
 ┌──────────────────────────────────────────────────────────┐
 │              Appel API qui échoue                        │
@@ -23,6 +59,12 @@ Le `ErrorHandlerService` est le service centralisé pour gérer toutes les erreu
       ┌───────────────────────────────┐
       │   ApiErrorInterceptor         │
       │   Transforme en ApiError      │
+      └────────────┬──────────────────┘
+                   │
+                   ▼
+      ┌───────────────────────────────┐
+      │   Composant                   │
+      │   handleApiError(error)       │← Gestion manuelle
       └────────────┬──────────────────┘
                    │
                    ▼
@@ -42,9 +84,102 @@ Le `ErrorHandlerService` est le service centralisé pour gérer toutes les erreu
 
 ---
 
-## 💻 Utilisation dans les composants
+## 💻 Utilisation
 
-### Exemple 1 : Gestion d'erreur simple
+### ✅ MÉTHODE RECOMMANDÉE : Gestion dans les services API
+
+**Avantages :**
+- Code DRY (Don't Repeat Yourself)
+- Pas besoin d'injecter `ErrorHandlerService` dans les composants
+- Erreurs déjà traduites et formatées
+- Logging automatique avec contexte du service
+
+#### 1. Dans le service API
+
+```typescript
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { ErrorHandlerService } from '../error-handler.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiRegistrationService {
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService  // ← Injection du service
+  ) {}
+
+  submitRegistration(data: any): Observable<any> {
+    return this.http.post('/api/registrations', data).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))  // ← Gestion centralisée !
+    );
+  }
+
+  getRegistration(id: string): Observable<any> {
+    return this.http.get(`/api/registrations/${id}`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))  // ← Même pattern partout
+    );
+  }
+}
+```
+
+#### 2. Dans le composant (SIMPLIFIÉ)
+
+```typescript
+import { Component } from '@angular/core';
+import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
+
+@Component({
+  selector: 'app-registration-form',
+  templateUrl: './registration-form.component.html'
+})
+export class RegistrationFormComponent {
+  errorMessage = '';
+  isSubmitting = false;
+
+  constructor(
+    private registrationService: AbstractRegistrationService
+    // ✅ Plus besoin d'injecter ErrorHandlerService !
+  ) {}
+
+  onSubmit() {
+    this.isSubmitting = true;
+    this.errorMessage = '';
+
+    this.registrationService.submitRegistration(this.formData).subscribe({
+      next: (response) => {
+        this.isSubmitting = false;
+        this.router.navigate(['/success']);
+      },
+      error: (error) => {
+        // ✅ L'erreur est déjà traitée et traduite !
+        this.errorMessage = error.message;
+        this.isSubmitting = false;
+      }
+    });
+  }
+}
+```
+
+**Dans le template HTML :**
+```html
+<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+  {{ errorMessage }}
+</div>
+
+<button (click)="onSubmit()" [disabled]="isSubmitting">
+  {{ isSubmitting ? 'Envoi...' : 'Soumettre' }}
+</button>
+```
+
+---
+
+### ⚠️ MÉTHODE ALTERNATIVE : Gestion dans le composant (Legacy)
+
+Utilise cette méthode uniquement si tu as besoin de logique spécifique dans le composant.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -56,44 +191,31 @@ import { AbstractRegistrationService } from '../../services/abstract/registratio
   templateUrl: './registration-form.component.html'
 })
 export class RegistrationFormComponent {
-  errorMessage = '';  // Message à afficher dans la vue
+  errorMessage = '';
   isSubmitting = false;
 
   constructor(
     private registrationService: AbstractRegistrationService,
-    private errorHandler: ErrorHandlerService
+    private errorHandler: ErrorHandlerService  // ← Injection nécessaire
   ) {}
 
   onSubmit() {
     this.isSubmitting = true;
-    this.errorMessage = '';  // Reset l'erreur
+    this.errorMessage = '';
 
     this.registrationService.submitRegistration(this.formData).subscribe({
       next: (response) => {
-        // Succès
         this.isSubmitting = false;
         this.router.navigate(['/success']);
       },
       error: (error) => {
-        // ✅ Utilisation du ErrorHandlerService
+        // ⚠️ Gestion manuelle de l'erreur
         this.errorMessage = this.errorHandler.handleApiError(error, 'RegistrationForm');
         this.isSubmitting = false;
       }
     });
   }
 }
-```
-
-**Dans le template HTML :**
-```html
-<!-- Affichage du message d'erreur -->
-<div *ngIf="errorMessage" class="alert alert-danger" role="alert">
-  {{ errorMessage }}
-</div>
-
-<button (click)="onSubmit()" [disabled]="isSubmitting">
-  {{ isSubmitting ? 'Envoi...' : 'Soumettre' }}
-</button>
 ```
 
 ---

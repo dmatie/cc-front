@@ -6,6 +6,7 @@ import { AbstractDropdownService } from '../abstract/dropdown-service.abstract';
 import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilter, FinancingType } from '../../models/dropdown.model';
 import { ClaimTypesResponse } from '../../models/claim.model';
 import { environment } from '../../../environments/environment';
+import { ErrorHandlerService } from '../error-handler.service';
 
 /**
  * Implémentation API du service dropdown
@@ -16,7 +17,10 @@ export class ApiDropdownService extends AbstractDropdownService {
   private readonly apiUrl = `${environment.apiUrl}/references`;
   private readonly timeout = 30000; // 30 secondes
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService
+  ) {
     super();
   }
 
@@ -33,7 +37,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         total: response.totalCount,
         message: 'Countries loaded successfully'
       })),
-      catchError(error => this.handleError('countries', error))
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
     );
   }
 
@@ -50,7 +54,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         total: response.totalCount,
         message: 'Functions loaded successfully'
       })),
-      catchError(error => this.handleError('functions', error))
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
     );
   }
 
@@ -67,7 +71,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         total: response.totalCount,
         message: 'Business profiles loaded successfully'
       })),
-      catchError(error => this.handleError('business-profiles', error))
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
     );
   }
 
@@ -84,7 +88,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         total: response.totalCount,
         message: 'Business profiles loaded successfully'
       })),
-      catchError(error => this.handleError('financing-types', error))
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
     );
   }
 
@@ -94,7 +98,7 @@ export class ApiDropdownService extends AbstractDropdownService {
     return this.http.get<ClaimTypesResponse>(`${this.apiUrl}/claim-types`).pipe(
       timeout(this.timeout),
       retry(2),
-      catchError(error => this.handleError('claim-types', error))
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
     );
   }
 
@@ -107,7 +111,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         if (error.status === 404) {
           return throwError(() => null);
         }
-        return this.handleError('country', error);
+        return this.errorHandler.handleApiErrorRx('DropdownService')(error);
       })
     );
   }
@@ -121,7 +125,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         if (error.status === 404) {
           return throwError(() => null);
         }
-        return this.handleError('function', error);
+        return this.errorHandler.handleApiErrorRx('DropdownService')(error);
       })
     );
   }
@@ -135,7 +139,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         if (error.status === 404) {
           return throwError(() => null);
         }
-        return this.handleError('business-profile', error);
+        return this.errorHandler.handleApiErrorRx('DropdownService')(error);
       })
     );
   }
@@ -149,7 +153,7 @@ export class ApiDropdownService extends AbstractDropdownService {
         if (error.status === 404) {
           return throwError(() => null);
         }
-        return this.handleError('financing-types', error);
+        return this.errorHandler.handleApiErrorRx('DropdownService')(error);
       })
     );
   }
@@ -158,7 +162,7 @@ export class ApiDropdownService extends AbstractDropdownService {
 
   private buildHttpParams(filter?: DropdownFilter): HttpParams {
     let params = new HttpParams();
-    
+
     if (filter) {
       if (filter.search) params = params.set('search', filter.search);
       if (filter.isActive !== undefined) params = params.set('isActive', filter.isActive.toString());
@@ -166,51 +170,7 @@ export class ApiDropdownService extends AbstractDropdownService {
       if (filter.sector) params = params.set('sector', filter.sector);
       if (filter.region) params = params.set('region', filter.region);
     }
-    
+
     return params;
-  }
-
-  private handleError(endpoint: string, error: any): Observable<never> {
-    console.error(`[API] Error fetching ${endpoint}:`, error);
-    
-    let errorMessage = 'Une erreur inattendue s\'est produite';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Erreur côté client
-      errorMessage = `Erreur réseau: ${error.error.message}`;
-    } else {
-      // Erreur côté serveur
-      switch (error.status) {
-        case 400:
-          errorMessage = 'Paramètres de requête invalides';
-          break;
-        case 401:
-          errorMessage = 'Non autorisé';
-          break;
-        case 403:
-          errorMessage = 'Accès interdit';
-          break;
-        case 404:
-          errorMessage = 'Ressource non trouvée';
-          break;
-        case 429:
-          errorMessage = 'Trop de requêtes. Veuillez réessayer plus tard';
-          break;
-        case 500:
-          errorMessage = 'Erreur serveur. Veuillez réessayer plus tard';
-          break;
-        default:
-          errorMessage = `Erreur ${error.status}: ${error.message}`;
-      }
-    }
-
-    const errorResponse: DropdownResponse<any> = {
-      success: false,
-      data: [],
-      total: 0,
-      message: errorMessage
-    };
-
-    return throwError(() => errorResponse);
   }
 }

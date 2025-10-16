@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { ClaimService } from '../abstract/claim-service.abstract';
+import { ErrorHandlerService } from '../error-handler.service';
 import {
   Claim,
   ClaimQueryParams,
@@ -21,7 +22,10 @@ import {
 export class ClaimServiceApi extends ClaimService {
   private readonly apiUrl = `${environment.apiUrl}/Claims`;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService
+  ) {
     super();
   }
 
@@ -38,7 +42,9 @@ export class ClaimServiceApi extends ClaimService {
       httpParams = httpParams.set('PageSize', params.pageSize.toString());
     }
 
-    return this.http.get<GetClaimsResponse>(this.apiUrl, { params: httpParams });
+    return this.http.get<GetClaimsResponse>(this.apiUrl, { params: httpParams }).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
   }
 
   getClaimsByUser(params: UserClaimQueryParams): Observable<GetClaimsResponse> {
@@ -55,19 +61,27 @@ export class ClaimServiceApi extends ClaimService {
     }
 
     const url = `${this.apiUrl}/by-user`;
-    return this.http.get<GetClaimsResponse>(url, { params: httpParams });
+    return this.http.get<GetClaimsResponse>(url, { params: httpParams }).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
   }
 
   getClaimById(id: string): Observable<GetClaimResponse> {
-    return this.http.get<GetClaimResponse>(`${this.apiUrl}/${id}`);
+    return this.http.get<GetClaimResponse>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
   }
 
   createClaim(dto: CreateClaimDto): Observable<CreateClaimResponse> {
-    return this.http.post<CreateClaimResponse>(this.apiUrl, dto);
+    return this.http.post<CreateClaimResponse>(this.apiUrl, dto).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
   }
 
   createClaimProcess(claimId: string, dto: CreateClaimProcessDto): Observable<Claim> {
     const url = `${this.apiUrl}/${claimId}/responses`;
-    return this.http.post<Claim>(url, dto);
+    return this.http.post<Claim>(url, dto).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
   }
 }

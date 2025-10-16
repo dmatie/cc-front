@@ -10,7 +10,7 @@ import { routes } from './app.routes';
 import { I18nService } from './services/i18n.service';
 import { AbstractDropdownService } from './services/abstract/dropdown-service.abstract';
 import { AbstractRegistrationService } from './services/abstract/registration-service.abstract';
-import { ErrorTranslationService } from './services/error-translation.service';
+import { ErrorHandlerService } from './services/error-handler.service';
 import { dropdownServiceFactory, MSALInstanceFactory, projectsServiceFactory, registrationServiceFactory, claimServiceFactory } from './services/factories/service.factories';
 import { AuthService } from './services/auth.service';
 import { AbstractProjectsService } from './services/abstract/projects-service.abstract';
@@ -42,29 +42,29 @@ export const appConfig: ApplicationConfig = {
     ),
     { provide: LOCALE_ID, useValue: getLocale() },
     I18nService,
-    ErrorTranslationService,
+    ErrorHandlerService,
 
     // 🏭 PROVIDERS AVEC FACTORIES
     {
       provide: AbstractDropdownService,
       useFactory: dropdownServiceFactory,
-      deps: [HttpClient]
+      deps: [HttpClient, ErrorHandlerService]
     },
 
     {
       provide: AbstractRegistrationService,
       useFactory: registrationServiceFactory,
-      deps: [HttpClient, ErrorTranslationService]
+      deps: [HttpClient, ErrorHandlerService]
     },
     {
       provide: AbstractProjectsService,
       useFactory: projectsServiceFactory,
-      deps: [HttpClient]
+      deps: [HttpClient, ErrorHandlerService]
     },
     {
       provide: ClaimService,
       useFactory: claimServiceFactory,
-      deps: [HttpClient]
+      deps: [HttpClient, ErrorHandlerService]
     },
     {
       provide: MSAL_INSTANCE,

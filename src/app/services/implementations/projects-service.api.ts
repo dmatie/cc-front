@@ -5,6 +5,7 @@ import { catchError, timeout, retry, map } from 'rxjs/operators';
 import { AbstractProjectsService } from '../abstract/projects-service.abstract';
 import { Project, ProjectsResponse, ProjectFilter, ProjectStats } from '../../models/project.model';
 import { environment } from '../../../environments/environment';
+import { ErrorHandlerService } from '../error-handler.service';
 
 /**
  * Implémentation API du service projets
@@ -17,7 +18,10 @@ export class ApiProjectsService extends AbstractProjectsService {
   private readonly apiUrl = `${environment.apiUrl}/projects`;
   private readonly timeout = 30000; // 30 secondes
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private errorHandler: ErrorHandlerService
+  ) {
     super();
   }
 
@@ -27,7 +31,7 @@ export class ApiProjectsService extends AbstractProjectsService {
     return this.http.get<ProjectsResponse>(`${this.apiUrl}/country/${countryCode}`).pipe(
       timeout(this.timeout),
       retry(2),
-      catchError(error => this.handleError('projects by country', error))
+      catchError(this.errorHandler.handleApiErrorRx('ProjectsService'))
     );
   }
 
@@ -38,7 +42,7 @@ export class ApiProjectsService extends AbstractProjectsService {
     return this.http.get<ProjectsResponse>(`${this.apiUrl}`, { params }).pipe(
       timeout(this.timeout),
       retry(2),
-      catchError(error => this.handleError('projects', error))
+      catchError(this.errorHandler.handleApiErrorRx('ProjectsService'))
     );
   }
 
@@ -51,7 +55,7 @@ export class ApiProjectsService extends AbstractProjectsService {
         if (error.status === 404) {
           return of(null);
         }
-        return this.handleError('project', error);
+        return this.errorHandler.handleApiErrorRx('ProjectsService')(error);
       })
     );
   }
@@ -68,7 +72,7 @@ export class ApiProjectsService extends AbstractProjectsService {
       timeout(this.timeout),
       retry(2),
       map(response => response.projects),
-      catchError(error => this.handleError('project search', error))
+      catchError(this.errorHandler.handleApiErrorRx('ProjectsService'))
     );
   }
 
@@ -78,7 +82,7 @@ export class ApiProjectsService extends AbstractProjectsService {
     return this.http.get<ProjectStats>(`${this.apiUrl}/stats`).pipe(
       timeout(this.timeout),
       retry(2),
-      catchError(error => this.handleError('project stats', error))
+      catchError(this.errorHandler.handleApiErrorRx('ProjectsService'))
     );
   }
 
@@ -90,7 +94,7 @@ export class ApiProjectsService extends AbstractProjectsService {
       timeout(this.timeout),
       retry(2),
       map(response => response.projects),
-      catchError(error => this.handleError('projects by codes', error))
+      catchError(this.errorHandler.handleApiErrorRx('ProjectsService'))
     );
   }
 
@@ -104,7 +108,7 @@ export class ApiProjectsService extends AbstractProjectsService {
         if (error.status === 404) {
           return of(false);
         }
-        return this.handleError('project exists', error);
+        return this.errorHandler.handleApiErrorRx('ProjectsService')(error);
       })
     );
   }
@@ -113,7 +117,7 @@ export class ApiProjectsService extends AbstractProjectsService {
 
   private buildHttpParams(filter?: ProjectFilter): HttpParams {
     let params = new HttpParams();
-    
+
     if (filter) {
       if (filter.countryCode) params = params.set('countryCode', filter.countryCode);
       if (filter.search) params = params.set('search', filter.search);
@@ -121,52 +125,7 @@ export class ApiProjectsService extends AbstractProjectsService {
       if (filter.pageSize) params = params.set('pageSize', filter.pageSize.toString());
       if (filter.isActive !== undefined) params = params.set('isActive', filter.isActive.toString());
     }
-    
+
     return params;
-  }
-
-  private handleError(endpoint: string, error: any): Observable<never> {
-    console.error(`❌ [API] Error fetching ${endpoint}:`, error);
-    
-    let errorMessage = 'Une erreur inattendue s\'est produite';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Erreur côté client
-      errorMessage = `Erreur réseau: ${error.error.message}`;
-    } else {
-      // Erreur côté serveur
-      switch (error.status) {
-        case 400:
-          errorMessage = 'Paramètres de requête invalides';
-          break;
-        case 401:
-          errorMessage = 'Non autorisé';
-          break;
-        case 403:
-          errorMessage = 'Accès interdit';
-          break;
-        case 404:
-          errorMessage = 'Projets non trouvés';
-          break;
-        case 429:
-          errorMessage = 'Trop de requêtes. Veuillez réessayer plus tard';
-          break;
-        case 500:
-          errorMessage = 'Erreur serveur. Veuillez réessayer plus tard';
-          break;
-        default:
-          errorMessage = `Erreur ${error.status}: ${error.message}`;
-      }
-    }
-
-    const errorResponse: ProjectsResponse = {
-      projects: [],
-      totalCount: 0,
-      pageNumber: 1,
-      pageSize: 10,
-      totalPages: 0
-    };
-
-    return throwError(() => errorResponse);
   }
 }

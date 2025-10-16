@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { I18nService } from '../../services/i18n.service';
 import { AbstractDropdownService } from '../../services/abstract/dropdown-service.abstract';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
-import { ErrorTranslationService } from '../../services/error-translation.service';
 import { RegistrationRequest } from '../../models/registration.model';
 import { Country, UserFunction, BusinessProfile, FinancingType } from '../../models/dropdown.model';
 import { Project, ProjectsResponse } from '../../models/project.model';
@@ -45,8 +44,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     public i18n: I18nService,
     private dropdownService: AbstractDropdownService,
     private registrationService: AbstractRegistrationService,
-    private projectsService: AbstractProjectsService,
-    private errorTranslation: ErrorTranslationService
+    private projectsService: AbstractProjectsService
   ) {
     console.log(' RegistrationFormComponent constructor called');
 

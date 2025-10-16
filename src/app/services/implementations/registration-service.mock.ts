@@ -3,7 +3,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { AbstractRegistrationService } from '../abstract/registration-service.abstract';
 import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, AccessRequest, RegistrationDetail, AmendRegistrationRequest, AccessRequestDetail, RegistrationResponseAll, ApproveRequest, RejectRequest } from '../../models/registration.model';
-import { ErrorTranslationService } from '../error-translation.service';
+import { ErrorHandlerService } from '../error-handler.service';
 import { MapAccessRequestModelStatusToApi } from '../../core/utils/helper';
 
 /**
@@ -18,7 +18,7 @@ export class MockRegistrationService extends AbstractRegistrationService {
   private mockRegistrationDetails: Map<string, RegistrationDetail> = new Map();
   private mockVerificationCodes: Map<string, string> = new Map();
 
-  constructor(private errorTranslation: ErrorTranslationService) {
+  constructor(private errorHandler: ErrorHandlerService) {
     super();
     this.initializeMockData();
   }

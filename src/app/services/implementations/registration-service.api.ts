@@ -5,7 +5,7 @@ import { map, catchError, retry, timeout } from 'rxjs/operators';
 import { AbstractRegistrationService } from '../abstract/registration-service.abstract';
 import { RegistrationRequest, RegistrationResponse, RegistrationStatus, ValidationError, RegistrationDetail, AmendRegistrationRequest, RegistrationResponseAll, ApproveRequest, RejectRequest } from '../../models/registration.model';
 import { environment } from '../../../environments/environment';
-import { ErrorTranslationService } from '../error-translation.service';
+import { ErrorHandlerService } from '../error-handler.service';
 import { App } from '../../../main';
 
 /**
@@ -21,7 +21,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
   constructor(
     private http: HttpClient,
-    private errorTranslation: ErrorTranslationService
+    private errorHandler: ErrorHandlerService
   ) {
     super();
   }
@@ -33,7 +33,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
       .pipe(
         timeout(this.timeout),
         map(response => this.processResponse(response)),
-        catchError(error => this.handleError(error))
+        catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
       );
   }
 
@@ -42,7 +42,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
     return this.http.get<RegistrationStatus>(`${this.apiUrl}/status/${requestId}`).pipe(
       timeout(this.timeout),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -143,7 +143,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
         if (error.status === 404) {
           return of(null);
         }
-        return this.handleError(error);
+        return this.errorHandler.handleApiErrorRx('RegistrationService')(error);
       })
     );
   }
@@ -157,7 +157,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
         if (error.status === 404) {
           return of(null);
         }
-        return this.handleError(error);
+        return this.errorHandler.handleApiErrorRx('RegistrationService')(error);
       })
     );
   }
@@ -176,7 +176,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
         // Sinon, retourne la réponse telle quelle (en ajoutant success: true si absent)
         return { success: response.success ?? true, message: response.message ?? '' };
       }),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -199,7 +199,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
     return this.http.delete<{ success: boolean; message: string; }>(`${this.apiUrl}/${id}/abandon`).pipe(
       timeout(this.timeout),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -209,7 +209,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     return this.http.patch<RegistrationResponse>(`${this.apiUrl}`, request).pipe(
       timeout(this.timeout),
       map(response => this.processResponse(response)),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -226,7 +226,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
     return this.http.get<RegistrationResponseAll>(`${this.apiUrl}`, { params }).pipe(
       timeout(this.timeout),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -235,7 +235,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
     return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve`, approveContent).pipe(
       timeout(this.timeout),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -244,7 +244,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
 
     return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject`, rejectContent).pipe(
       timeout(this.timeout),
-      catchError(error => this.handleError(error))
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
   }
 
@@ -253,41 +253,5 @@ export class ApiRegistrationService extends AbstractRegistrationService {
   private processResponse(response: RegistrationResponse): RegistrationResponse {
     console.log('✅ [API] Response received:', response);
     return response;
-  }
-
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    console.error('❌ [API] Error during registration:', error);
-
-    let errorMessage = 'Une erreur inattendue s\'est produite';
-    let errors: ValidationError[] = [];
-
-    if (error.error instanceof ErrorEvent) {
-      // Erreur côté client
-      errorMessage = `Erreur réseau: ${error.error.message}`;
-    } else {
-      // Erreur côté serveur
-      switch (error.status) {
-        case 400:
-          errorMessage = error.error?.message || 'Données invalides';
-          errors = (error.error?.errors || []).map((err: any) => ({
-            field: err.field,
-            error: err.error,
-            message: this.errorTranslation.translateErrorCode(err.error),
-            code: err.error
-          }));
-          break;
-        case 409:
-          errorMessage = 'Un compte avec cet email existe déjà';
-          break;
-        case 429:
-          errorMessage = 'Trop de tentatives. Veuillez réessayer plus tard';
-          break;
-        case 500:
-          errorMessage = 'Erreur serveur. Veuillez réessayer plus tard';
-          break;
-      }
-    }
-
-    return throwError(() => ({ message: errorMessage, errors }));
   }
 }

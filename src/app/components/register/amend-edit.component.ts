@@ -6,7 +6,7 @@ import { I18nService } from '../../services/i18n.service';
 import { AbstractDropdownService } from '../../services/abstract/dropdown-service.abstract';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
 import { AbstractProjectsService } from '../../services/abstract/projects-service.abstract';
-import { ErrorTranslationService } from '../../services/error-translation.service';
+import { ErrorHandlerService } from '../../services/error-handler.service';
 import { AmendRegistrationRequest, RegistrationDetail } from '../../models/registration.model';
 import { Country, UserFunction, BusinessProfile, FinancingType } from '../../models/dropdown.model';
 import { Project, ProjectsResponse } from '../../models/project.model';
@@ -48,7 +48,7 @@ export class AmendEditComponent implements OnInit, OnDestroy {
     private dropdownService: AbstractDropdownService,
     private registrationService: AbstractRegistrationService,
     private projectsService: AbstractProjectsService,
-    private errorTranslation: ErrorTranslationService
+    private errorHandler: ErrorHandlerService
   ) {
     this.amendForm = this.fb.group({
       email: [{ value: '', disabled: true }],
@@ -280,12 +280,13 @@ export class AmendEditComponent implements OnInit, OnDestroy {
         error: (errorResponse) => {
           console.error('Erreur lors de la mise à jour:', errorResponse);
           this.isSubmitting = false;
-          
-          if (errorResponse.errors && errorResponse.errors.length > 0) {
+
+          // Les erreurs sont déjà traduites par ErrorHandlerService dans le service API
+          if (errorResponse.validationErrors && errorResponse.validationErrors.length > 0) {
             this.fieldErrors = {};
-            errorResponse.errors.forEach((error: any) => {
+            errorResponse.validationErrors.forEach((error: any) => {
               const fieldName = this.mapFieldName(error.field);
-              this.fieldErrors[fieldName] = this.errorTranslation.translateErrorCode(error.error);
+              this.fieldErrors[fieldName] = error.message;
             });
             this.submitError = errorResponse.message || 'Erreurs de validation';
           } else {
