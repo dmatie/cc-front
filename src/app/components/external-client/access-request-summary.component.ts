@@ -6,8 +6,6 @@ import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { RegistrationDetail, AccessRequestDetail, StatusEnum } from '../../models/registration.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
-import { AbstractProjectsService } from '../../services/abstract/projects-service.abstract';
-import { Project } from '../../models/project.model';
 
 @Component({
   selector: 'app-access-request-summary',
@@ -18,14 +16,12 @@ import { Project } from '../../models/project.model';
 })
 export class AccessRequestSummaryComponent implements OnInit {
   accessRequest: AccessRequestDetail | null = null;
-  projects: Project[] = [];
   loading = false;
   errorMessage = '';
 
   constructor(
     private router: Router,
     private registrationService: AbstractRegistrationService,
-    private projectsService: AbstractProjectsService,
     private authService: AuthService,
     public i18n: I18nService
   ) {}
@@ -47,33 +43,14 @@ export class AccessRequestSummaryComponent implements OnInit {
       next: (response: RegistrationDetail | null) => {
         if (response && response.accessRequest) {
           this.accessRequest = response.accessRequest;
-          this.loadProjects();
         } else {
           this.errorMessage = this.i18n.t('errors.noAccessRequest');
-          this.loading = false;
         }
+        this.loading = false;
       },
       error: (error) => {
         console.error('Error loading access request:', error);
         this.errorMessage = error.message || this.i18n.t('errors.loadingError');
-        this.loading = false;
-      }
-    });
-  }
-
-  loadProjects(): void {
-    if (!this.accessRequest?.selectedProjectCodes || this.accessRequest.selectedProjectCodes.length === 0) {
-      this.loading = false;
-      return;
-    }
-
-    this.projectsService.getProjectsBySapCodes(this.accessRequest.selectedProjectCodes).subscribe({
-      next: (projects: Project[]) => {
-        this.projects = projects;
-        this.loading = false;
-      },
-      error: (error) => {
-        console.error('Error loading projects:', error);
         this.loading = false;
       }
     });
