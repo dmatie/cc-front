@@ -1,0 +1,71 @@
+📦 CCAPP - Configuration Docker
+│
+├── 🐳 Fichiers Docker essentiels
+│   ├── Dockerfile                    (1.2 KB) - Multi-stage build optimisé
+│   ├── docker-compose.yml            (713 B)  - Orchestration simplifiée
+│   ├── nginx.conf                    (1.5 KB) - Configuration Nginx pour Angular SPA
+│   └── .dockerignore                 (507 B)  - Fichiers à exclure
+│
+├── 🔧 Scripts utilitaires
+│   ├── docker-build.sh               (2.6 KB) - Build et lancement interactif
+│   ├── docker-validate.sh            (3.1 KB) - Validation de la configuration
+│   └── [Exécutables: chmod +x]
+│
+└── 📚 Documentation complète
+    ├── START_HERE_DOCKER.md          (2.9 KB) - ⭐ COMMENCER ICI
+    ├── DOCKER_SUMMARY.md             (8.4 KB) - Récapitulatif complet
+    ├── DOCKER_README.md              (2.9 KB) - Guide de démarrage rapide
+    ├── DOCKER_GUIDE.md               (6.9 KB) - Documentation détaillée
+    └── DOCKER_CHEATSHEET.md          (6.7 KB) - Aide-mémoire des commandes
+
+═══════════════════════════════════════════════════════════════
+
+📊 STATISTIQUES
+
+Fichiers de configuration:  4 fichiers  (3.9 KB)
+Scripts utilitaires:        3 fichiers  (5.7 KB)
+Documentation:              5 fichiers  (27.8 KB)
+────────────────────────────────────────────────
+TOTAL:                     12 fichiers  (37.4 KB)
+
+═══════════════════════════════════════════════════════════════
+
+🎯 ORDRE DE LECTURE RECOMMANDÉ
+
+1. START_HERE_DOCKER.md       ← Démarrage ultra-rapide
+2. DOCKER_SUMMARY.md          ← Vue d'ensemble complète
+3. DOCKER_README.md           ← Commandes de base
+4. DOCKER_GUIDE.md            ← Détails approfondis
+5. DOCKER_CHEATSHEET.md       ← Référence rapide
+
+═══════════════════════════════════════════════════════════════
+
+🚀 DÉMARRAGE RAPIDE
+
+Option 1 (Script automatique):
+  $ ./docker-build.sh
+
+Option 2 (Docker Compose):
+  $ docker-compose up -d
+
+Option 3 (Commandes manuelles):
+  $ docker build -t ccapp:latest .
+  $ docker run -d -p 8080:80 --name ccapp-container ccapp:latest
+
+Accès: http://localhost:8080
+
+═══════════════════════════════════════════════════════════════
+
+✨ CARACTÉRISTIQUES
+
+✅ Multi-stage build (image légère de ~25MB)
+✅ Configuration Nginx optimisée pour Angular SPA
+✅ Support des routes Angular
+✅ Compression gzip activée
+✅ Cache intelligent des assets
+✅ Headers de sécurité HTTP
+✅ Health check intégré
+✅ Scripts d'automatisation
+✅ Documentation complète
+
+═══════════════════════════════════════════════════════════════

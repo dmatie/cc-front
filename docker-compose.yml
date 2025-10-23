@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  ccapp:
+    # Nom du service
+    container_name: ccapp-container
+
+    # Build configuration
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # Port mapping: port_hote:port_conteneur
+    ports:
+      - "8080:80"
+
+    # Variables d'environnement (optionnel)
+    environment:
+      - NODE_ENV=production
+
+    # Politique de redémarrage
+    restart: unless-stopped
+
+    # Healthcheck
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+    # Logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
