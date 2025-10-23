@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
@@ -12,7 +12,7 @@ import { Project } from '../../models/project.model';
 @Component({
   selector: 'app-access-request-summary',
   standalone: true,
-  imports: [CommonModule, AuthenticatedNavbarComponent],
+  imports: [CommonModule, AuthenticatedNavbarComponent, RouterLink],
   templateUrl: './access-request-summary.component.html',
   styleUrls: ['./access-request-summary.component.css']
 })
@@ -80,7 +80,7 @@ export class AccessRequestSummaryComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/external/home']);
+    this.router.navigate(['/client/home']);
   }
 
   getStatusClass(status: StatusEnum): string {

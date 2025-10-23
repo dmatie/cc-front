@@ -32,8 +32,8 @@ export const routes: Routes = [
     path: 'register/success',
     loadComponent: () => import('./components/register/registration-success.component').then(m => m.RegistrationSuccessComponent)
   },
-access-request-summary.component.html
-   // Routes pour le processus d'amendement
+
+  // Routes pour le processus d'amendement
   { 
     path: 'register/amend', 
     loadComponent: () => import('./components/register/amend-email.component').then(m => m.AmendEmailComponent)
@@ -63,6 +63,11 @@ access-request-summary.component.html
   {
     path: 'client/home',
     loadComponent: () => import('./components/external-client/external-client-home.component').then(m => m.ExternalClientHomeComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+  {
+    path: 'client/access-request',
+    loadComponent: () => import('./components/external-client/access-request-summary.component').then(m => m.AccessRequestSummaryComponent),
     canActivate: [() => inject(ExternalUserGuard).canActivate()]
   },
   {
