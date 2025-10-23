@@ -32,7 +32,7 @@ export const routes: Routes = [
     path: 'register/success',
     loadComponent: () => import('./components/register/registration-success.component').then(m => m.RegistrationSuccessComponent)
   },
-
+access-request-summary.component.html
    // Routes pour le processus d'amendement
   { 
     path: 'register/amend', 
