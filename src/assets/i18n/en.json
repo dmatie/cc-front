@@ -8,7 +8,8 @@
     "admin": "Administration",
     "register": "Register",
     "login": "Login",
-    "logout": "Logout"
+    "logout": "Logout",
+    "myAccessRequest": "My Access Request"
   },
   "common": {
     "required": "is required",
@@ -16,6 +17,7 @@
     "manage": "Manage",
     "form_error": "Please correct the errors in the form above.",
     "loading": "Loading...",
+    "loadingData": "Loading data...",
     "save": "Save",
     "cancel": "Cancel",
     "submit": "Submit",
@@ -25,7 +27,9 @@
     "no": "No",
     "actions": "Actions",
     "by": "by",
-    "error": "An error occurred"
+    "error": "An error occurred",
+    "active": "Active",
+    "quickActions": "Quick Actions"
   },
   "home": {
     "title": "AfDB Client Portal",
@@ -424,7 +428,54 @@
     "settings": "Settings",
     "logout": "Logout"
   },
+  "projects": {
+    "sapCode": "SAP Code",
+    "country": "Country"
+  },
+  "registration": {
+    "form": {
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "function": "Function",
+      "country": "Country",
+      "businessProfile": "Business Profile",
+      "financingType": "Financing Type"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "abandoned": "Abandoned",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "unknown": "Unknown"
+    }
+  },
+  "accessRequest": {
+    "summary": {
+      "title": "My Access Request",
+      "status": "Request Status",
+      "personalInfo": "Personal Information",
+      "professionalInfo": "Professional Information",
+      "projects": "Associated Projects",
+      "noProjects": "No projects associated",
+      "processingComments": "Processing Comments",
+      "timeline": "Timeline",
+      "additionalInfo": "Additional Information",
+      "submittedOn": "Submitted on",
+      "processedOn": "Processed on"
+    },
+    "timeline": {
+      "submitted": "Submitted",
+      "requestCreated": "Request created",
+      "processed": "Processed by administrator"
+    }
+  },
   "errors": {
+    "noUserEmail": "No user email found",
+    "noAccessRequest": "No access request found",
+    "loadingError": "Error loading data",
     "reference_data_not_exist": "Reference data not found",
     "invalid_email_format": "Invalid email format",
     "email_already_exists": "This email already exists",
