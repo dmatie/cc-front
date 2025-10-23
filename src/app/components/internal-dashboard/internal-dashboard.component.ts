@@ -37,46 +37,40 @@ export class InternalDashboardComponent implements OnInit {
     private router: Router,
     public i18n: I18nService
   ) {
-    console.log('🏢 InternalDashboardComponent constructor called');
   }
 
   ngOnInit(): void {
-    console.log('🔄 InternalDashboardComponent ngOnInit called');
     this.checkAuthAndLoadData();
   }
 
   private checkAuthAndLoadData(): void {
-    console.log('🔍 Checking authentication and loading internal user data...');
     
     this.currentUser = this.authService.getCurrentUser();
 
     if (!this.currentUser) {
-      console.warn('⚠️ No authenticated user found');
+      console.warn('No authenticated user found');
       return;
     }
 
     this.isLoading = false;
-    console.log('✅ Internal user data loaded successfully:', this.currentUser.firstName, this.currentUser.lastName);
   }
 
   // Actions rapides
   manageAccessRequests(): void {
-    console.log('📝 Managing access requests...');
     this.router.navigate(['/admin/accessrequests']);
   }
 
   manageClaims(): void {
-    console.log('📞 Managing claims...');
     this.router.navigate(['/admin/claims']);
   }
 
   manageDisbursements(): void {
-    console.log('💰 Managing disbursements...');
+    console.log('Managing disbursements...');
     // Rediriger vers la gestion des décaissements
   }
 
   manageUsers(): void {
-    console.log('👥 Managing users...');
+    console.log('Managing users...');
     // Rediriger vers la gestion des utilisateurs
   }
 }

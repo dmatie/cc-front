@@ -60,8 +60,7 @@ export class AmendOtpComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Erreur lors de la vérification:', error);
-          this.errorMessage = this.i18n.t('amend.otp.verification_error');
+          this.errorMessage = error.message || this.i18n.t('amend.otp.verification_error');
           this.isSubmitting = false;
         }
       });
@@ -78,7 +77,7 @@ export class AmendOtpComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Erreur lors du renvoi:', error);
+        this.errorMessage = error.message || this.i18n.t('amend.otp.resend_error');
       }
     });
   }

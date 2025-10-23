@@ -56,8 +56,7 @@ export class AccessRequestDetailComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        console.error('❌ Erreur lors du chargement:', error);
-        this.errorMessage = this.i18n.t('admin.access_request_detail.load_error');
+        this.errorMessage = error.message || this.i18n.t('admin.access_request_detail.load_error');
         this.isLoading = false;
       }
     });
@@ -87,7 +86,6 @@ export class AccessRequestDetailComponent implements OnInit {
         }, 2000);
       },
       error: (error) => {
-        console.error('❌ Erreur lors de l\'approbation:', error);
         this.errorMessage = error.message || this.i18n.t('admin.access_request_detail.approve_error');
         this.isProcessing = false;
       }
@@ -127,14 +125,7 @@ export class AccessRequestDetailComponent implements OnInit {
         }, 2000);
       },
       error: (error) => {
-        console.error('❌ Erreur lors du rejet:', error);
-        if(error !== null && error.message) {
-          this.errorMessage = error.message || this.i18n.t('admin.access_request_detail.reject_error');
-        }
-        if(error !== null && error.status === 400) {
-          this.errorMessage = error.title || this.i18n.t('admin.access_request_detail.reject_error');
-        }
-
+        this.errorMessage = error.message || this.i18n.t('admin.access_request_detail.reject_error');
         this.isProcessing = false;
       }
     });

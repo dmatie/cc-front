@@ -66,11 +66,6 @@ export const routes: Routes = [
     canActivate: [() => inject(ExternalUserGuard).canActivate()]
   },
   {
-    path: 'client/access-request',
-    loadComponent: () => import('./components/external-client/access-request-summary.component').then(m => m.AccessRequestSummaryComponent),
-    canActivate: [() => inject(ExternalUserGuard).canActivate()]
-  },
-  {
     path: 'internal/dashboard',
     loadComponent: () => import('./components/internal-dashboard/internal-dashboard.component').then(m => m.InternalDashboardComponent),
     canActivate: [() => inject(InternalUserGuard).canActivate()]

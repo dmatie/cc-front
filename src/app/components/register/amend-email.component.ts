@@ -55,8 +55,7 @@ export class AmendEmailComponent {
           }
         },
         error: (error) => {
-          console.error('Erreur lors de la recherche:', error);
-          this.errorMessage = this.i18n.t('amend.email.search_error');
+          this.errorMessage = error.message || this.i18n.t('amend.email.search_error');
           this.isSubmitting = false;
         }
       });
@@ -76,8 +75,7 @@ export class AmendEmailComponent {
         }
       },
       error: (error) => {
-        console.error('Erreur lors de l\'envoi du code:', error);
-        this.errorMessage = this.i18n.t('amend.email.send_code_error');
+        this.errorMessage = error.message || this.i18n.t('amend.email.send_code_error');
         this.isSubmitting = false;
       }
     });

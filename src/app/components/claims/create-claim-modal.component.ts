@@ -72,7 +72,6 @@ export class CreateClaimModalComponent implements OnInit {
         this.claimCreated.emit();
       },
       error: (error) => {
-        console.error('Error creating claim:', error);
         this.loading = false;
         this.errorMessage = error?.message || this.i18n.t('common.error');
       }

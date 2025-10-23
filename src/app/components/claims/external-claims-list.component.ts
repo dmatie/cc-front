@@ -44,9 +44,8 @@ export class ExternalClaimsListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading claims:', error);
         this.loading = false;
-        this.errorMessage = error.message;
+        this.errorMessage = error.message || this.i18n.t('claims.loadError'); 
 
         if (error.validationErrors?.length) {
           this.errorMessage = error.validationErrors[0].error;

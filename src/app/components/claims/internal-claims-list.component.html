@@ -1,6 +1,4 @@
-<app-authenticated-navbar
-  [title]="i18n.t('internal.nav.title')"
-  [userType]="'internal'">
+<app-authenticated-navbar [title]="i18n.t('internal.nav.title')" [userType]="'internal'">
 </app-authenticated-navbar>
 
 
@@ -15,124 +13,127 @@
           </button>
         </div>
 
- <div class="card-body">
-
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <div class="card border-primary">
         <div class="card-body">
-          <h5 class="card-title text-primary">
-            <i class="bi bi-hourglass-split me-2"></i>
-            {{ i18n.t('claims.status.submitted') }}
-          </h5>
-          <h2 class="mb-0">{{ getStatusCount(1) }}</h2>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card border-info">
-        <div class="card-body">
-          <h5 class="card-title text-info">
-            <i class="bi bi-arrow-repeat me-2"></i>
-            {{ i18n.t('claims.status.inprogress') }}
-          </h5>
-          <h2 class="mb-0">{{ getStatusCount(2) }}</h2>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="card border-secondary">
-        <div class="card-body">
-          <h5 class="card-title text-secondary">
-            <i class="bi bi-check-circle me-2"></i>
-            {{ i18n.t('claims.status.closed') }}
-          </h5>
-          <h2 class="mb-0">{{ getStatusCount(3) }}</h2>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="row mb-3">
-    <div class="col-md-3">
-      <label class="form-label">{{ i18n.t('claims.filterByStatus') }}</label>
-      <select
-        class="form-select"
-        [(ngModel)]="selectedStatus"
-        (change)="onStatusFilterChange()">
-        <option *ngFor="let option of statusOptions" [value]="option.value">
-          {{ option.value === 'ALL' ? i18n.t('claims.status.all') : getStatusLabel(option.value) }}
-        </option>
-      </select>
-    </div>
-  </div>
-
-  <div *ngIf="loading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
-    </div>
-  </div>
-
-  <div *ngIf="!loading && filteredClaims.length === 0" class="alert alert-info">
-    <i class="bi bi-info-circle me-2"></i>
-    {{ i18n.t('claims.noClaims') }}
-  </div>
-
-  <div *ngIf="!loading && filteredClaims.length > 0" class="row">
-    <div class="col-12">
-      <div class="card shadow-sm">
-        <div class="card-body p-0">
-          <div class="table-responsive">
-            <table class="table table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>{{ i18n.t('claims.claimType') }}</th>
-                  <th>{{ i18n.t('claims.user') }}</th>
-                  <th>{{ i18n.t('claims.country') }}</th>
-                  <th>{{ i18n.t('claims.statusField') }}</th>
-                  <th>{{ i18n.t('claims.createdAt') }}</th>
-                  <th class="text-end">{{ i18n.t('common.actions') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let claim of filteredClaims" style="cursor: pointer;">
-                  <td (click)="viewClaimDetail(claim.id)">
-                    <strong>{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName }}</strong>
-                    <div class="text-muted small text-truncate" style="max-width: 300px;">
-                      {{ claim.comment }}
-                    </div>
-                  </td>
-                  <td (click)="viewClaimDetail(claim.id)">{{ claim.userFullName }}</td>
-                  <td (click)="viewClaimDetail(claim.id)">{{ claim.countryName }}</td>
-                  <td (click)="viewClaimDetail(claim.id)">
-                    <span [class]="getStatusClass(claim.status)">
-                      {{ getStatusLabel(claim.status) }}
-                    </span>
-                  </td>
-                  <td (click)="viewClaimDetail(claim.id)">
-                    {{ claim.createdAt | date: 'short' }}
-                  </td>
-                  <td class="text-end">
-                    <button
-                      class="btn btn-sm btn-outline-primary"
-                      (click)="viewClaimDetail(claim.id)">
-                      <i class="bi bi-eye me-1"></i>
-                      {{ i18n.t('common.view') }}
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="row mb-4">
+            <div class="col-md-4">
+              <div class="card border-primary">
+                <div class="card-body">
+                  <h5 class="card-title text-primary">
+                    <i class="bi bi-hourglass-split me-2"></i>
+                    {{ i18n.t('claims.status.submitted') }}
+                  </h5>
+                  <h2 class="mb-0">{{ getStatusCount(1) }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-info">
+                <div class="card-body">
+                  <h5 class="card-title text-info">
+                    <i class="bi bi-arrow-repeat me-2"></i>
+                    {{ i18n.t('claims.status.inprogress') }}
+                  </h5>
+                  <h2 class="mb-0">{{ getStatusCount(2) }}</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="card border-secondary">
+                <div class="card-body">
+                  <h5 class="card-title text-secondary">
+                    <i class="bi bi-check-circle me-2"></i>
+                    {{ i18n.t('claims.status.closed') }}
+                  </h5>
+                  <h2 class="mb-0">{{ getStatusCount(3) }}</h2>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  </div>
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label class="form-label">{{ i18n.t('claims.filterByStatus') }}</label>
+              <select class="form-select" [(ngModel)]="selectedStatus" (change)="onStatusFilterChange()">
+                <option *ngFor="let option of statusOptions" [value]="option.value">
+                  {{ option.value === 'ALL' ? i18n.t('claims.status.all') : getStatusLabel(option.value) }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+              <div class="alert alert-danger">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ errorMessage }}
+              </div>
+            }
+
+
+          <div *ngIf="!loading && filteredClaims.length === 0" class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            {{ i18n.t('claims.noClaims') }}
+          </div>
+
+          <div *ngIf="!loading && filteredClaims.length > 0" class="row">
+            <div class="col-12">
+              <div class="card shadow-sm">
+                <div class="card-body p-0">
+                  <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th>{{ i18n.t('claims.claimType') }}</th>
+                          <th>{{ i18n.t('claims.user') }}</th>
+                          <th>{{ i18n.t('claims.country') }}</th>
+                          <th>{{ i18n.t('claims.statusField') }}</th>
+                          <th>{{ i18n.t('claims.createdAt') }}</th>
+                          <th class="text-end">{{ i18n.t('common.actions') }}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let claim of filteredClaims" style="cursor: pointer;">
+                          <td (click)="viewClaimDetail(claim.id)">
+                            <strong>{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName
+                              }}</strong>
+                            <div class="text-muted small text-truncate" style="max-width: 300px;">
+                              {{ claim.comment }}
+                            </div>
+                          </td>
+                          <td (click)="viewClaimDetail(claim.id)">{{ claim.userFullName }}</td>
+                          <td (click)="viewClaimDetail(claim.id)">{{ claim.countryName }}</td>
+                          <td (click)="viewClaimDetail(claim.id)">
+                            <span [class]="getStatusClass(claim.status)">
+                              {{ getStatusLabel(claim.status) }}
+                            </span>
+                          </td>
+                          <td (click)="viewClaimDetail(claim.id)">
+                            {{ claim.createdAt | date: 'short' }}
+                          </td>
+                          <td class="text-end">
+                            <button class="btn btn-sm btn-outline-primary" (click)="viewClaimDetail(claim.id)">
+                              <i class="bi bi-eye me-1"></i>
+                              {{ i18n.t('common.view') }}
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
       </div>
     </div>
   </div>
 </div>
-

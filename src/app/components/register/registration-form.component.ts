@@ -84,9 +84,8 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     console.log('🔄 Component destroyed');
   }
 
-  // 📋 CHARGER LES DONNÉES DES LISTES DÉROULANTES
+  // CHARGER LES DONNÉES DES LISTES DÉROULANTES
   private loadDropdownData(): void {
-    console.log('📋 Loading dropdown data...');
 
     // Charger les pays
     this.loadCountries();
@@ -109,7 +108,6 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log('🏗️ Loading projects for country:', selectedCountry.code);
     this.isLoadingProjects = true;
     this.projects = [];
     this.selectedProjectCodes = [];
@@ -118,11 +116,10 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     this.projectsService.getProjectsByCountry(selectedCountry.code).subscribe({
       next: (response: ProjectsResponse) => {
         this.projects = response.projects;
-        console.log('✅ Projects loaded:', this.projects.length);
         this.isLoadingProjects = false;
       },
       error: (error) => {
-        console.error('❌ Error loading projects:', error);
+          console.error('Error loading projects:', error);
         this.isLoadingProjects = false;
         this.projects = [];
       }
@@ -135,14 +132,13 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response.success) {
           this.countries = response.data;
-          console.log('✅ Countries loaded:', this.countries.length);
         } else {
-          console.error('❌ Failed to load countries:', response.message);
+          console.error('Failed to load countries:', response.message);
         }
         this.isLoadingCountries = false;
       },
       error: (error) => {
-        console.error('❌ Error loading countries:', error);
+        console.error('Error loading countries:', error);
         this.isLoadingCountries = false;
       }
     });
@@ -154,14 +150,13 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response.success) {
           this.functions = response.data;
-          console.log('✅ Functions loaded:', this.functions.length);
         } else {
-          console.error('❌ Failed to load functions:', response.message);
+          console.error('Failed to load functions:', response.message);
         }
         this.isLoadingFunctions = false;
       },
       error: (error) => {
-        console.error('❌ Error loading functions:', error);
+        console.error('Error loading functions:', error);
         this.isLoadingFunctions = false;
       }
     });
@@ -173,14 +168,13 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response.success) {
           this.businessProfiles = response.data;
-          console.log('✅ Business profiles loaded:', this.businessProfiles.length);
         } else {
-          console.error('❌ Failed to load business profiles:', response.message);
+          console.error('Failed to load business profiles:', response.message);
         }
         this.isLoadingBusinessProfiles = false;
       },
       error: (error) => {
-        console.error('❌ Error loading business profiles:', error);
+        console.error('Error loading business profiles:', error);
         this.isLoadingBusinessProfiles = false;
       }
     });
@@ -192,14 +186,13 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       next: (response) => {
         if (response.success) {
           this.financingTypes = response.data;
-          console.log('✅ Financing types loaded:', this.financingTypes.length);
         } else {
-          console.error('❌ Failed to load financing types:', response.message);
+          console.error('Failed to load financing types:', response.message);
         }
         this.isLoadingFinancingTypes = false;
       },
       error: (error) => {
-        console.error('❌ Error loading financing types:', error);
+        console.error('Error loading financing types:', error);
         this.isLoadingFinancingTypes = false;
       }
     });
@@ -238,8 +231,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('❌ Erreur lors de l\'envoi du code:', error);
-          this.submitError = this.i18n.t('registration_form.send_code_error');
+          this.submitError = error.message || this.i18n.t('registration_form.send_code_error');
           this.isSubmitting = false;
         }
       });
@@ -260,9 +252,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       }
     }
 
-    // Mettre à jour le FormControl
     this.registrationForm.patchValue({ selectedProjectCodes: this.selectedProjectCodes });
-    console.log('📋 Selected projects:', this.selectedProjectCodes);
   }
 
   isProjectSelected(projectCode: string): boolean {
@@ -310,13 +300,11 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     return Object.values(this.fieldErrors);
   }
 
-  // Exemple de méthode pour récupérer le label
   getCountryName(id: string): string {
     const country = this.countries.find(c => c.id === id);
     return country ? country.name : '';
   }
 
-  // Idem pour businessProfile, financingType, function, etc.
   getBusinessProfileName(id: string): string {
     const bp = this.businessProfiles.find(b => b.id === id);
     return bp ? bp.name : '';

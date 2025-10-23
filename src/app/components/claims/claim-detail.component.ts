@@ -50,7 +50,6 @@ export class ClaimDetailComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading claim:', error);
         this.loading = false;
         this.router.navigate(['/claims']);
       }

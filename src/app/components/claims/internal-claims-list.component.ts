@@ -19,6 +19,7 @@ export class InternalClaimsListComponent implements OnInit {
   filteredClaims: Claim[] = [];
   loading = false;
   selectedStatus: ClaimStatus | 'ALL' = 'ALL';
+  errorMessage = '';
 
   statusOptions = [
     { value: 'ALL' as const, label: 'All Status' },
@@ -51,7 +52,7 @@ export class InternalClaimsListComponent implements OnInit {
         this.loading = false;
       },
       error: (error) => {
-        console.error('Error loading claims:', error);
+        this.errorMessage = error.message || this.i18n.t('claims.loadError');
         this.loading = false;
       }
     });

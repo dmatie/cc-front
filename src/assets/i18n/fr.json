@@ -8,8 +8,7 @@
     "admin": "Administration",
     "register": "S'enregistrer",
     "login": "Se connecter",
-    "logout": "Se déconnecter",
-    "myAccessRequest": "Ma Demande d'Accès"
+    "logout": "Se déconnecter"
   },
   "common": {
     "required": "est requis",
@@ -17,7 +16,6 @@
     "manage": "Gérer",
     "form_error": "Veuillez corriger les erreurs dans le formulaire ci-dessus.",
     "loading": "Chargement...",
-    "loadingData": "Chargement des données...",
     "save": "Enregistrer",
     "cancel": "Annuler",
     "submit": "Soumettre",
@@ -27,9 +25,7 @@
     "no": "Non",
     "actions": "Actions",
     "by": "par",
-    "error": "Une erreur s'est produite",
-    "active": "Actif",
-    "quickActions": "Actions Rapides"
+    "error": "Une erreur s'est produite"
   },
   "home": {
     "title": "Portail Client AfDB",
@@ -421,54 +417,7 @@
     "settings": "Paramètres",
     "logout": "Se déconnecter"
   },
-  "projects": {
-    "sapCode": "Code SAP",
-    "country": "Pays"
-  },
-  "registration": {
-    "form": {
-      "firstName": "Prénom",
-      "lastName": "Nom",
-      "email": "Adresse Email",
-      "function": "Fonction",
-      "country": "Pays",
-      "businessProfile": "Profil d'Entreprise",
-      "financingType": "Type de Financement"
-    },
-    "status": {
-      "pending": "En Attente",
-      "approved": "Approuvé",
-      "rejected": "Rejeté",
-      "abandoned": "Abandonné",
-      "completed": "Complété",
-      "cancelled": "Annulé",
-      "unknown": "Inconnu"
-    }
-  },
-  "accessRequest": {
-    "summary": {
-      "title": "Ma Demande d'Accès",
-      "status": "Statut de la Demande",
-      "personalInfo": "Informations Personnelles",
-      "professionalInfo": "Informations Professionnelles",
-      "projects": "Projets Associés",
-      "noProjects": "Aucun projet associé",
-      "processingComments": "Commentaires de Traitement",
-      "timeline": "Chronologie",
-      "additionalInfo": "Informations Supplémentaires",
-      "submittedOn": "Soumise le",
-      "processedOn": "Traitée le"
-    },
-    "timeline": {
-      "submitted": "Soumise",
-      "requestCreated": "Demande créée",
-      "processed": "Traitée par l'administrateur"
-    }
-  },
   "errors": {
-    "noUserEmail": "Aucun email utilisateur trouvé",
-    "noAccessRequest": "Aucune demande d'accès trouvée",
-    "loadingError": "Erreur lors du chargement des données",
     "reference_data_not_exist": "Données de référence non trouvées",
     "invalid_email_format": "Format d'email invalide",
     "email_already_exists": "Cet email existe déjà",

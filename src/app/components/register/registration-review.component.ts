@@ -52,7 +52,6 @@ export class RegistrationReviewComponent implements OnInit {
 
         this.isLoading = false;
       } catch (error) {
-        console.error('❌ Erreur lors du parsing des données:', error);
         this.errorMessage = this.i18n.t('registration_review.missing_data');
         this.isLoading = false;
         // Rediriger vers le formulaire après 3 secondes
@@ -91,8 +90,7 @@ export class RegistrationReviewComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Erreur lors de la vérification:', error);
-          this.errorMessage = this.i18n.t('amend.otp.verification_error');
+          this.errorMessage = error.message || this.i18n.t('amend.otp.verification_error');
           this.isSubmitting = false;
         }
       });
@@ -138,7 +136,6 @@ export class RegistrationReviewComponent implements OnInit {
 
     this.registrationService.submitRegistration(registrationRequest).subscribe({
       next: (response) => {
-        console.log('✅ Demande soumise avec succès:', response);
         this.isSubmitting = false;
 
         sessionStorage.setItem('registrationRequestId', response.accessRequest.id);
@@ -148,19 +145,7 @@ export class RegistrationReviewComponent implements OnInit {
         this.router.navigate(['/register/success']);
       },
       error: (errorResponse) => {
-        console.error('❌ Erreur lors de la soumission:', errorResponse);
-
-        // Gérer différents types d'erreurs
-        if (errorResponse?.error?.message) {
-          this.errorMessage = errorResponse.error.message;
-        } else if (errorResponse?.message) {
-          this.errorMessage = errorResponse.message;
-        } else if (typeof errorResponse === 'string') {
-          this.errorMessage = errorResponse;
-        } else {
-          this.errorMessage = this.i18n.t('amend.otp.submission_error');
-        }
-
+        this.errorMessage = errorResponse.message || this.i18n.t('amend.otp.submission_error');
         this.isSubmitting = false;
       }
     });
@@ -176,7 +161,7 @@ export class RegistrationReviewComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Erreur lors du renvoi:', error);
+        this.errorMessage = error.message || this.i18n.t('amend.otp.resend_error');
       }
     });
   }

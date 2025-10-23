@@ -37,11 +37,9 @@ export class AccessRequestListComponent implements OnInit {
       next: (requestResponse) => {
         this.requestResponse = requestResponse;
         this.isLoading = false;
-        console.log('✅ Demandes chargées avec succès:', this.requestResponse);
       },
       error: (error) => {
-        console.error('❌ Erreur lors du chargement des demandes:', error);
-        this.errorMessage = this.i18n.t('admin.access_requests.load_error');
+        this.errorMessage = error.message || this.i18n.t('admin.access_requests.load_error');
         this.isLoading = false;
       }
     });

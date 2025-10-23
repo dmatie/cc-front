@@ -59,7 +59,6 @@ export class ClaimResponseModalComponent {
         this.responseCreated.emit();
       },
       error: (error) => {
-        console.error('Error creating response:', error);
         this.loading = false;
         this.errorMessage = error?.message || this.i18n.t('common.error');
       }
