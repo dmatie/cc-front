@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 import { AbstractDropdownService } from '../../services/abstract/dropdown-service.abstract';
+import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
+import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import {
   CreateDisbursementCommand,
@@ -32,6 +34,7 @@ export class CreateDisbursementWizardComponent implements OnInit {
   disbursementTypes: DisbursementTypeDto[] = [];
   currencies: CurrencyDto[] = [];
   countries: Country[] = [];
+  sapCodes: string[] = [];
 
   command: CreateDisbursementCommand = {
     sapCodeProject: '',
@@ -46,12 +49,34 @@ export class CreateDisbursementWizardComponent implements OnInit {
   constructor(
     private disbursementService: DisbursementService,
     private dropdownService: AbstractDropdownService,
+    private registrationService: AbstractRegistrationService,
+    private authService: AuthService,
     private router: Router,
     public i18n: I18nService
   ) {}
 
   ngOnInit(): void {
     this.loadDropdowns();
+    this.loadSapCodes();
+  }
+
+  loadSapCodes(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser || !currentUser.email) {
+      this.errorMessage = 'User not found';
+      return;
+    }
+
+    this.registrationService.getRegistrationByEmail(currentUser.email).subscribe({
+      next: (response) => {
+        if (response?.accessRequest?.selectedProjectCodes) {
+          this.sapCodes = response.accessRequest.selectedProjectCodes;
+        }
+      },
+      error: (error) => {
+        console.error('Error loading SAP codes:', error);
+      }
+    });
   }
 
   loadDropdowns(): void {
@@ -241,8 +266,68 @@ export class CreateDisbursementWizardComponent implements OnInit {
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.selectedFiles = Array.from(input.files);
+      this.addFiles(Array.from(input.files));
     }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (event.dataTransfer && event.dataTransfer.files.length > 0) {
+      this.addFiles(Array.from(event.dataTransfer.files));
+    }
+  }
+
+  addFiles(files: File[]): void {
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    ];
+
+    const validFiles = files.filter(file => allowedTypes.includes(file.type));
+    this.selectedFiles = [...this.selectedFiles, ...validFiles];
+  }
+
+  removeFile(index: number): void {
+    this.selectedFiles.splice(index, 1);
+  }
+
+  clearFiles(): void {
+    this.selectedFiles = [];
+  }
+
+  getFileIcon(file: File): string {
+    if (file.type === 'application/pdf') return 'bi-file-pdf';
+    if (file.type.includes('word')) return 'bi-file-word';
+    if (file.type.includes('excel') || file.type.includes('spreadsheet')) return 'bi-file-excel';
+    return 'bi-file-earmark';
+  }
+
+  getFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+  }
+
+  getCurrencyCode(): string {
+    const currency = this.currencies.find(c => c.id === this.command.currencyId);
+    return currency?.code || '—';
+  }
+
+  getCountryName(countryId: string): string {
+    const country = this.countries.find(c => c.id === countryId);
+    return country?.name || '—';
   }
 
   submitDisbursement(): void {
