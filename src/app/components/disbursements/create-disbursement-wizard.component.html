@@ -8,7 +8,7 @@
         <div class="card-header bg-primary text-white">
           <h4 class="mb-0">
             <i class="bi bi-plus-circle me-2"></i>
-            {{ i18n.getCurrentLocale() === 'fr' ? 'Nouvelle Demande de Décaissement' : 'New Disbursement Request' }}
+            {{ i18n.t('disbursements.wizard.title') }}
           </h4>
         </div>
 
@@ -19,7 +19,7 @@
                 <div class="step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
                   <div class="step-number">1</div>
                   <div class="step-title">
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'Informations Générales' : 'General Information' }}
+                    {{ i18n.t('disbursements.wizard.step1') }}
                   </div>
                 </div>
               </div>
@@ -27,7 +27,7 @@
                 <div class="step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
                   <div class="step-number">2</div>
                   <div class="step-title">
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'Détails Spécifiques' : 'Specific Details' }}
+                    {{ i18n.t('disbursements.wizard.step2') }}
                   </div>
                 </div>
               </div>
@@ -35,7 +35,7 @@
                 <div class="step" [class.active]="currentStep === 3" [class.completed]="currentStep > 3">
                   <div class="step-number">3</div>
                   <div class="step-title">
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'Documents & Révision' : 'Documents & Review' }}
+                    {{ i18n.t('disbursements.wizard.step3') }}
                   </div>
                 </div>
               </div>
@@ -51,29 +51,29 @@
 
           <div *ngIf="currentStep === 1" class="step-content">
             <h5 class="mb-4">
-              {{ i18n.getCurrentLocale() === 'fr' ? 'Étape 1: Informations Générales' : 'Step 1: General Information' }}
+              {{ i18n.t('disbursements.wizard.step1') }}
             </h5>
 
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label">
-                  {{ i18n.getCurrentLocale() === 'fr' ? 'Code Projet SAP' : 'SAP Project Code' }}
+                  {{ i18n.t('disbursements.sapCode') }}
                   <span class="text-danger">*</span>
                 </label>
                 <select class="form-select" [(ngModel)]="command.sapCodeProject">
-                  <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner un projet...' : 'Select a project...' }}</option>
+                  <option value="">{{ i18n.t('disbursements.selectSapCode') }}</option>
                   <option *ngFor="let code of sapCodes" [value]="code">
                     {{ code }}
                   </option>
                 </select>
                 <small class="text-muted" *ngIf="sapCodes.length === 0">
-                  {{ i18n.getCurrentLocale() === 'fr' ? 'Aucun projet trouvé' : 'No projects found' }}
+                  {{ i18n.t('disbursements.wizard.noFiles') }}
                 </small>
               </div>
 
               <div class="col-md-6 mb-3">
                 <label class="form-label">
-                  {{ i18n.getCurrentLocale() === 'fr' ? 'Numéro Prêt/Don' : 'Loan/Grant Number' }}
+                  {{ i18n.t('disbursements.loanGrantNumber') }}
                   <span class="text-danger">*</span>
                 </label>
                 <input type="text" class="form-control" [(ngModel)]="command.loanGrantNumber" />
@@ -81,11 +81,11 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label">
-                  {{ i18n.getCurrentLocale() === 'fr' ? 'Type de Décaissement' : 'Disbursement Type' }}
+                  {{ i18n.t('disbursements.disbursementType') }}
                   <span class="text-danger">*</span>
                 </label>
                 <select class="form-select" [(ngModel)]="command.disbursementTypeId">
-                  <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner...' : 'Select...' }}</option>
+                  <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
                   <option *ngFor="let type of disbursementTypes" [value]="type.id">
                     {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}
                   </option>
@@ -94,11 +94,11 @@
 
               <div class="col-md-6 mb-3">
                 <label class="form-label">
-                  {{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}
+                  {{ i18n.t('disbursements.currency') }}
                   <span class="text-danger">*</span>
                 </label>
                 <select class="form-select" [(ngModel)]="command.currencyId">
-                  <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner...' : 'Select...' }}</option>
+                  <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
                   <option *ngFor="let currency of currencies" [value]="currency.id">
                     {{ currency.code }} - {{ currency.name }}
                   </option>
@@ -108,10 +108,10 @@
 
             <div class="d-flex justify-content-between mt-4">
               <button type="button" class="btn btn-secondary" (click)="cancel()">
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
+                {{ i18n.t('common.cancel') }}
               </button>
               <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep1()">
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Suivant' : 'Next' }}
+                {{ i18n.t('disbursements.wizard.next') }}
                 <i class="bi bi-arrow-right ms-2"></i>
               </button>
             </div>
@@ -119,42 +119,42 @@
 
           <div *ngIf="currentStep === 2" class="step-content">
             <h5 class="mb-4">
-              {{ i18n.getCurrentLocale() === 'fr' ? 'Étape 2: Détails Spécifiques' : 'Step 2: Specific Details' }}
+              {{ i18n.t('disbursements.wizard.step2') }}
             </h5>
 
             <div *ngIf="getSelectedTypeCode() === 'A1' && command.disbursementA1" class="type-details">
-              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Paiement Direct (A1)' : 'Direct Payment (A1)' }}</h6>
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA1.title') }}</h6>
 
               <div class="row">
                 <div class="col-12 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Objet du paiement' : 'Payment Purpose' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.paymentPurpose') }} <span class="text-danger">*</span></label>
                   <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementA1.paymentPurpose"></textarea>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Nom du bénéficiaire' : 'Beneficiary Name' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Email du bénéficiaire' : 'Beneficiary Email' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }} <span class="text-danger">*</span></label>
                   <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'N° BP' : 'BP Number' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryBpNumber" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Adresse' : 'Address' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryAddress" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Pays' : 'Country' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryCountry') }}</label>
                   <select class="form-select" [(ngModel)]="command.disbursementA1.beneficiaryCountryId">
-                    <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner...' : 'Select...' }}</option>
+                    <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
                       {{ country.name }}
                     </option>
@@ -162,139 +162,139 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant' : 'Amount' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.amount') }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementA1.amount" min="0" step="0.01" />
                 </div>
 
                 <div class="col-12 mt-3">
-                  <h6 class="text-primary">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque Correspondante' : 'Correspondent Bank' }}</h6>
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</h6>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Nom de la banque' : 'Bank Name' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankName') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Code SWIFT' : 'SWIFT Code' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankSwiftCode" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Numéro de compte' : 'Account Number' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondantAccountNumber" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Adresse' : 'Address' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankAddress" />
                 </div>
               </div>
             </div>
 
             <div *ngIf="getSelectedTypeCode() === 'A2' && command.disbursementA2" class="type-details">
-              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Remboursement (A2)' : 'Reimbursement (A2)' }}</h6>
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA2.title') }}</h6>
 
               <div class="row">
                 <div class="col-12 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Objet du remboursement' : 'Reimbursement Purpose' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }} <span class="text-danger">*</span></label>
                   <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementA2.reimbursementPurpose"></textarea>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Contractant' : 'Contractor' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractor') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.contractor" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodDescription') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.goodDescription" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Référence facture' : 'Invoice Reference' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceRef') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.invoiceRef" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant facture' : 'Invoice Amount' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceAmount') }}</label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementA2.invoiceAmount" min="0" step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Date facture' : 'Invoice Date' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceDate') }}</label>
                   <input type="date" class="form-control" [value]="command.disbursementA2.invoiceDate | date:'yyyy-MM-dd'" (change)="command.disbursementA2!.invoiceDate = $any($event.target).value" />
                 </div>
               </div>
             </div>
 
             <div *ngIf="getSelectedTypeCode() === 'A3' && command.disbursementA3" class="type-details">
-              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Engagement Spécial (A3)' : 'Special Commitment (A3)' }}</h6>
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA3.title') }}</h6>
 
               <div class="row">
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Période d\'utilisation' : 'Period for Utilization' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.periodForUtilization') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA3.periodForUtilization" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodDescription') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA3.goodDescription" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Quantité' : 'Quantity' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodQuantity') }}</label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.goodQuantity" min="0" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Budget annuel' : 'Annual Budget' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.annualBudget') }}</label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.annualBudget" min="0" step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Part de la Banque' : 'Bank Share' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.bankShare') }}</label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.bankShare" min="0" step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Avance demandée' : 'Advance Requested' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.advanceRequested') }} <span class="text-danger">*</span></label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.advanceRequested" min="0" step="0.01" />
                 </div>
               </div>
             </div>
 
             <div *ngIf="getSelectedTypeCode() === 'B1' && command.disbursementB1" class="type-details">
-              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Lettre de Crédit (B1)' : 'Letter of Credit (B1)' }}</h6>
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeB1.title') }}</h6>
 
               <div class="row">
                 <div class="col-12 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la garantie' : 'Guarantee Details' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }} <span class="text-danger">*</span></label>
                   <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementB1.guaranteeDetails"></textarea>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque émettrice' : 'Issuing Bank' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.issuingBank') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.issuingBankName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant de la garantie' : 'Guarantee Amount' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeAmount') }}</label>
                   <input type="number" class="form-control" [(ngModel)]="command.disbursementB1.guaranteeAmount" min="0" step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Date d\'expiration' : 'Expiry Date' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.expiryDate') }}</label>
                   <input type="date" class="form-control" [value]="command.disbursementB1.expiryDate | date:'yyyy-MM-dd'" (change)="command.disbursementB1!.expiryDate = $any($event.target).value" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Nom du bénéficiaire' : 'Beneficiary Name' }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.beneficiaryName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'N° BP' : 'BP Number' }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.beneficiaryBPNumber" />
                 </div>
               </div>
@@ -303,10 +303,10 @@
             <div class="d-flex justify-content-between mt-4">
               <button type="button" class="btn btn-secondary" (click)="previousStep()">
                 <i class="bi bi-arrow-left me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Précédent' : 'Previous' }}
+                {{ i18n.t('disbursements.wizard.previous') }}
               </button>
               <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep2()">
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Suivant' : 'Next' }}
+                {{ i18n.t('disbursements.wizard.next') }}
                 <i class="bi bi-arrow-right ms-2"></i>
               </button>
             </div>
@@ -314,90 +314,90 @@
 
           <div *ngIf="currentStep === 3" class="step-content">
             <h5 class="mb-4">
-              {{ i18n.getCurrentLocale() === 'fr' ? 'Étape 3: Documents & Révision' : 'Step 3: Documents & Review' }}
+              {{ i18n.t('disbursements.wizard.step3') }}
             </h5>
 
             <div class="card shadow-sm mb-4">
               <div class="card-header bg-primary text-white">
                 <h6 class="mb-0">
                   <i class="bi bi-clipboard-check me-2"></i>
-                  {{ i18n.getCurrentLocale() === 'fr' ? 'Résumé de votre demande' : 'Request Summary' }}
+                  {{ i18n.t('disbursements.wizard.reviewData') }}
                 </h6>
               </div>
               <div class="card-body">
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Code Projet SAP' : 'SAP Project Code' }}</label>
+                    <label class="text-muted small">{{ i18n.t('disbursements.sapCode') }}</label>
                     <div><strong>{{ command.sapCodeProject || '—' }}</strong></div>
                   </div>
                   <div class="col-md-6">
-                    <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'N° Prêt/Don' : 'Loan/Grant Number' }}</label>
+                    <label class="text-muted small">{{ i18n.t('disbursements.loanGrantNumber') }}</label>
                     <div><strong>{{ command.loanGrantNumber || '—' }}</strong></div>
                   </div>
                 </div>
 
                 <div class="row mb-3">
                   <div class="col-md-6">
-                    <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Type de décaissement' : 'Disbursement Type' }}</label>
+                    <label class="text-muted small">{{ i18n.t('disbursements.disbursementType') }}</label>
                     <div>{{ getSelectedType() ? (i18n.getCurrentLocale() === 'fr' ? getSelectedType()?.nameFr : getSelectedType()?.name) : '—' }}</div>
                   </div>
                   <div class="col-md-6">
-                    <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}</label>
+                    <label class="text-muted small">{{ i18n.t('disbursements.currency') }}</label>
                     <div>{{ getCurrencyCode() }}</div>
                   </div>
                 </div>
 
                 <div *ngIf="command.disbursementA1" class="mt-4">
-                  <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Paiement Direct (A1)' : 'Direct Payment (A1)' }}</h6>
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA1.title') }}</h6>
                   <div class="row">
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Bénéficiaire' : 'Beneficiary' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
                       <div>{{ command.disbursementA1.beneficiaryName || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant' : 'Amount' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.amount') }}</label>
                       <div class="text-success"><strong>{{ command.disbursementA1.amount | number: '1.2-2' }}</strong></div>
                     </div>
                   </div>
                 </div>
 
                 <div *ngIf="command.disbursementA2" class="mt-4">
-                  <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Remboursement (A2)' : 'Reimbursement (A2)' }}</h6>
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA2.title') }}</h6>
                   <div class="row">
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Contractant' : 'Contractor' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractor') }}</label>
                       <div>{{ command.disbursementA2.contractor || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Référence facture' : 'Invoice Reference' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceRef') }}</label>
                       <div>{{ command.disbursementA2.invoiceRef || '—' }}</div>
                     </div>
                   </div>
                 </div>
 
                 <div *ngIf="command.disbursementA3" class="mt-4">
-                  <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Engagement Spécial (A3)' : 'Special Commitment (A3)' }}</h6>
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA3.title') }}</h6>
                   <div class="row">
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.goodDescription') }}</label>
                       <div>{{ command.disbursementA3.goodDescription || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Avance demandée' : 'Advance Requested' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.advanceRequested') }}</label>
                       <div class="text-success"><strong>{{ command.disbursementA3.advanceRequested | number: '1.2-2' }}</strong></div>
                     </div>
                   </div>
                 </div>
 
                 <div *ngIf="command.disbursementB1" class="mt-4">
-                  <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Lettre de Crédit (B1)' : 'Letter of Credit (B1)' }}</h6>
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeB1.title') }}</h6>
                   <div class="row">
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque émettrice' : 'Issuing Bank' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBank') }}</label>
                       <div>{{ command.disbursementB1.issuingBankName || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Bénéficiaire' : 'Beneficiary' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
                       <div>{{ command.disbursementB1.beneficiaryName || '—' }}</div>
                     </div>
                   </div>
@@ -408,18 +408,18 @@
             <div class="mb-4">
               <label class="form-label">
                 <i class="bi bi-paperclip me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Documents Justificatifs (optionnel)' : 'Supporting Documents (optional)' }}
+                {{ i18n.t('disbursements.wizard.supportingDocs') }}
               </label>
 
               <div class="file-upload-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
                 <div class="text-center py-4">
                   <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-3"></i>
                   <p class="mb-2">
-                    <strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Cliquez pour sélectionner' : 'Click to select' }}</strong>
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'ou glissez-déposez vos fichiers ici' : 'or drag and drop your files here' }}
+                    <strong>{{ i18n.t('disbursements.wizard.clickToSelect') }}</strong>
+                    {{ i18n.t('disbursements.wizard.orDragDrop') }}
                   </p>
                   <small class="text-muted">
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'PDF, Word, Excel (Max 10MB par fichier)' : 'PDF, Word, Excel (Max 10MB per file)' }}
+                    {{ i18n.t('disbursements.wizard.fileTypes') }}
                   </small>
                 </div>
                 <input #fileInput type="file" class="d-none" multiple (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx" />
@@ -429,11 +429,11 @@
                 <div class="d-flex justify-content-between align-items-center mb-2">
                   <p class="text-success mb-0">
                     <i class="bi bi-check-circle me-2"></i>
-                    <strong>{{ selectedFiles.length }}</strong> {{ i18n.getCurrentLocale() === 'fr' ? 'fichier(s) sélectionné(s)' : 'file(s) selected' }}
+                    <strong>{{ selectedFiles.length }}</strong> {{ i18n.t('disbursements.wizard.filesSelected') }}
                   </p>
                   <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearFiles()">
                     <i class="bi bi-trash me-1"></i>
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'Tout supprimer' : 'Clear all' }}
+                    {{ i18n.t('disbursements.wizard.clearAll') }}
                   </button>
                 </div>
                 <div class="list-group">
@@ -455,19 +455,17 @@
 
             <div class="alert alert-info">
               <i class="bi bi-info-circle me-2"></i>
-              {{ i18n.getCurrentLocale() === 'fr' ?
-                'Veuillez vérifier toutes les informations avant de soumettre. Cette demande sera envoyée en tant que brouillon et vous pourrez la soumettre plus tard.' :
-                'Please review all information before submitting. This request will be saved as draft and you can submit it later.' }}
+              {{ i18n.t('disbursements.wizard.reviewNote') }}
             </div>
 
             <div class="d-flex justify-content-between mt-4">
               <button type="button" class="btn btn-secondary" (click)="previousStep()">
                 <i class="bi bi-arrow-left me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Précédent' : 'Previous' }}
+                {{ i18n.t('disbursements.wizard.previous') }}
               </button>
               <button type="button" class="btn btn-success" (click)="submitDisbursement()" [disabled]="loading">
                 <i class="bi bi-check-circle me-2"></i>
-                {{ loading ? (i18n.getCurrentLocale() === 'fr' ? 'Création...' : 'Creating...') : (i18n.getCurrentLocale() === 'fr' ? 'Créer la demande' : 'Create Request') }}
+                {{ loading ? (i18n.t('disbursements.wizard.creating')) : (i18n.t('disbursements.wizard.submit')) }}
               </button>
             </div>
           </div>
