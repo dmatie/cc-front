@@ -47,7 +47,7 @@
           <h5 class="card-title">{{ i18n.t('external.stats.disbursements') }}</h5>
           <h3 class="text-success mb-2">{{ clientStats.activeDisbursementRequests }}</h3>
           <p class="text-muted mb-3">{{ i18n.t('external.stats.disbursements_desc') }}</p>
-          <a href="#" class="btn btn-outline-success">
+          <a routerLink="/disbursements" class="btn btn-outline-success">
             <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
           </a>
         </div>
@@ -96,7 +96,7 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-3">
-              <a href="#" class="btn btn-outline-success w-100" (click)="requestDisbursement()">
+              <a routerLink="/disbursements/create" class="btn btn-outline-success w-100">
                 <i class="bi bi-cash-coin me-2"></i>
                 {{ i18n.t('external.actions.request_disbursement') }}
               </a>

@@ -65,8 +65,7 @@ export class InternalDashboardComponent implements OnInit {
   }
 
   manageDisbursements(): void {
-    console.log('Managing disbursements...');
-    // Rediriger vers la gestion des décaissements
+    this.router.navigate(['/admin/disbursements']);
   }
 
   manageUsers(): void {
