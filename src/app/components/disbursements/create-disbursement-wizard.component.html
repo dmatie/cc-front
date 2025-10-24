@@ -60,13 +60,14 @@
                   {{ i18n.t('disbursements.sapCode') }}
                   <span class="text-danger">*</span>
                 </label>
-                <select class="form-select" [(ngModel)]="command.sapCodeProject">
-                  <option value="">{{ i18n.t('disbursements.selectSapCode') }}</option>
+                <select class="form-select" [(ngModel)]="command.sapCodeProject" [disabled]="loadingProjects">
+                  <option value="" *ngIf="!loadingProjects">{{ i18n.t('disbursements.selectSapCode') }}</option>
+                  <option value="" *ngIf="loadingProjects">{{ i18n.t('disbursements.loadingProjects') }}</option>
                   <option *ngFor="let code of sapCodes" [value]="code">
                     {{ code }}
                   </option>
                 </select>
-                <small class="text-muted" *ngIf="sapCodes.length === 0">
+                <small class="text-muted" *ngIf="!loadingProjects && sapCodes.length === 0">
                   {{ i18n.t('disbursements.wizard.noFiles') }}
                 </small>
               </div>
@@ -84,8 +85,9 @@
                   {{ i18n.t('disbursements.disbursementType') }}
                   <span class="text-danger">*</span>
                 </label>
-                <select class="form-select" [(ngModel)]="command.disbursementTypeId">
-                  <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
+                <select class="form-select" [(ngModel)]="command.disbursementTypeId" [disabled]="loadingTypes">
+                  <option value="" *ngIf="!loadingTypes">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
+                  <option value="" *ngIf="loadingTypes">{{ i18n.t('disbursements.loadingTypes') }}</option>
                   <option *ngFor="let type of disbursementTypes" [value]="type.id">
                     {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}
                   </option>
@@ -97,8 +99,9 @@
                   {{ i18n.t('disbursements.currency') }}
                   <span class="text-danger">*</span>
                 </label>
-                <select class="form-select" [(ngModel)]="command.currencyId">
-                  <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
+                <select class="form-select" [(ngModel)]="command.currencyId" [disabled]="loadingCurrencies">
+                  <option value="" *ngIf="!loadingCurrencies">{{ i18n.t('disbursements.selectCurrency') }}</option>
+                  <option value="" *ngIf="loadingCurrencies">{{ i18n.t('disbursements.loadingCurrencies') }}</option>
                   <option *ngFor="let currency of currencies" [value]="currency.id">
                     {{ currency.code }} - {{ currency.name }}
                   </option>
@@ -138,7 +141,10 @@
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }} <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail" />
+                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail" #beneficiaryEmail="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" [class.is-invalid]="beneficiaryEmail.invalid && beneficiaryEmail.touched" required />
+                  <div *ngIf="beneficiaryEmail.invalid && beneficiaryEmail.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_email_format') }}
+                  </div>
                 </div>
 
                 <div class="col-md-6 mb-3">

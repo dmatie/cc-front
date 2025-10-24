@@ -19,7 +19,7 @@
           <div class="d-flex justify-content-end align-items-center mb-4">
             <button class="btn btn-primary" (click)="createDisbursement()">
               <i class="bi bi-plus-circle me-2"></i>
-              {{ i18n.getCurrentLocale() === 'fr' ? 'Nouvelle Demande' : 'New Request' }}
+              {{ i18n.t('disbursements.createDisbursement') }}
             </button>
           </div>
 
@@ -49,9 +49,9 @@
                   <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Type' : 'Type' }}</th>
                   <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Projet' : 'Project' }}</th>
                   <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Prêt/Don' : 'Loan/Grant' }}</th>
-                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}</th>
-                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Statut' : 'Status' }}</th>
-                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Date de création' : 'Created At' }}</th>
+                  <th>{{ i18n.t('disbursements.currency') }}</th>
+                  <th>{{ i18n.t('disbursements.status') }}</th>
+                  <th>{{ i18n.t('disbursements.createdAt') }}</th>
                   <th class="text-end">{{ i18n.t('common.actions') }}</th>
                 </tr>
               </thead>

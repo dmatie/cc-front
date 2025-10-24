@@ -10,7 +10,7 @@
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
           <h4 class="mb-0">
             <i class="bi bi-cash-coin me-2"></i>
-            {{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la Demande' : 'Disbursement Details' }}
+            {{ i18n.t('disbursements.requestDetails') }}
           </h4>
           <button class="btn btn-light btn-sm" (click)="goBack()">
             <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('admin.access_requests.back') }}
@@ -42,22 +42,22 @@
             <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
               <button *ngIf="canSubmit()" class="btn btn-primary" (click)="showSubmitConfirm = true" [disabled]="actionLoading">
                 <i class="bi bi-send me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Soumettre' : 'Submit' }}
+                {{ i18n.t('disbursements.submit') }}
               </button>
 
               <button *ngIf="canApprove()" class="btn btn-success" (click)="showApproveConfirm = true" [disabled]="actionLoading">
                 <i class="bi bi-check-circle me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Approuver' : 'Approve' }}
+                {{ i18n.t('disbursements.approve') }}
               </button>
 
               <button *ngIf="canReject()" class="btn btn-danger" (click)="showRejectModal = true" [disabled]="actionLoading">
                 <i class="bi bi-x-circle me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Rejeter' : 'Reject' }}
+                {{ i18n.t('disbursements.reject') }}
               </button>
 
               <button *ngIf="canBackToClient()" class="btn btn-warning" (click)="showBackToClientModal = true" [disabled]="actionLoading">
                 <i class="bi bi-arrow-return-left me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Retourner au client' : 'Return to Client' }}
+                {{ i18n.t('disbursements.returnToClient') }}
               </button>
             </div>
 
@@ -75,34 +75,34 @@
                   <div class="card-body">
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Type de décaissement' : 'Disbursement Type' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.disbursementType') }}</label>
                         <div><strong>{{ i18n.getCurrentLocale() === 'fr' ? disbursement.disbursementTypeNameFr : disbursement.disbursementTypeName }}</strong></div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.currency') }}</label>
                         <div><strong>{{ disbursement.currency }}</strong></div>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Code Projet SAP' : 'SAP Project Code' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.sapCode') }}</label>
                         <div>{{ disbursement.sapCodeProject }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'N° Prêt/Don' : 'Loan/Grant Number' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.loanGrantNumber') }}</label>
                         <div>{{ disbursement.loanGrantNumber }}</div>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Créé par' : 'Created By' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.createdBy') }}</label>
                         <div><strong>{{ disbursement.createdByUserName }}</strong></div>
                         <div class="text-muted small">{{ disbursement.createdByUserEmail }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Date de création' : 'Created At' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.createdAt') }}</label>
                         <div>{{ disbursement.createdAt | date: 'full' }}</div>
                       </div>
                     </div>
@@ -113,35 +113,35 @@
                   <div class="card-header bg-white">
                     <h5 class="mb-0">
                       <i class="bi bi-cash-stack me-2"></i>
-                      {{ i18n.getCurrentLocale() === 'fr' ? 'Paiement Direct (A1)' : 'Direct Payment (A1)' }}
+                      {{ i18n.t('disbursements.typeA1.title') }}
                     </h5>
                   </div>
                   <div class="card-body">
                     <div class="mb-3">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Objet du paiement' : 'Payment Purpose' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.paymentPurpose') }}</label>
                       <div class="bg-light p-3 rounded">{{ disbursement.disbursementA1.paymentPurpose }}</div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Bénéficiaire' : 'Beneficiary' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
                         <div><strong>{{ disbursement.disbursementA1.beneficiaryName }}</strong></div>
                         <div class="text-muted small">{{ disbursement.disbursementA1.beneficiaryEmail }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant' : 'Amount' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.amount') }}</label>
                         <div class="fs-5 text-success"><strong>{{ disbursement.disbursementA1.amount | number: '1.2-2' }} {{ disbursement.currency }}</strong></div>
                       </div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque Correspondante' : 'Correspondent Bank' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</label>
                         <div>{{ disbursement.disbursementA1.correspondentBankName }}</div>
                         <div class="text-muted small">{{ disbursement.disbursementA1.correspondentBankSwiftCode }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'N° Compte' : 'Account Number' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.accountNumber') }}</label>
                         <div>{{ disbursement.disbursementA1.correspondantAccountNumber }}</div>
                       </div>
                     </div>
@@ -152,33 +152,33 @@
                   <div class="card-header bg-white">
                     <h5 class="mb-0">
                       <i class="bi bi-receipt me-2"></i>
-                      {{ i18n.getCurrentLocale() === 'fr' ? 'Remboursement (A2)' : 'Reimbursement (A2)' }}
+                      {{ i18n.t('disbursements.typeA2.title') }}
                     </h5>
                   </div>
                   <div class="card-body">
                     <div class="mb-3">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Objet du remboursement' : 'Reimbursement Purpose' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }}</label>
                       <div class="bg-light p-3 rounded">{{ disbursement.disbursementA2.reimbursementPurpose }}</div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Contractant' : 'Contractor' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractor') }}</label>
                         <div>{{ disbursement.disbursementA2.contractor }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Référence facture' : 'Invoice Reference' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceRef') }}</label>
                         <div>{{ disbursement.disbursementA2.invoiceRef }}</div>
                       </div>
                     </div>
 
                     <div class="row">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant facture' : 'Invoice Amount' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceAmount') }}</label>
                         <div class="fs-5 text-success"><strong>{{ disbursement.disbursementA2.invoiceAmount | number: '1.2-2' }} {{ disbursement.currency }}</strong></div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Date facture' : 'Invoice Date' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceDate') }}</label>
                         <div>{{ disbursement.disbursementA2.invoiceDate | date: 'medium' }}</div>
                       </div>
                     </div>
@@ -189,7 +189,7 @@
                   <div class="card-header bg-white">
                     <h5 class="mb-0">
                       <i class="bi bi-building me-2"></i>
-                      {{ i18n.getCurrentLocale() === 'fr' ? 'Engagement Spécial (A3)' : 'Special Commitment (A3)' }}
+                      {{ i18n.t('disbursements.typeA3.title') }}
                     </h5>
                   </div>
                   <div class="card-body">
@@ -199,7 +199,7 @@
                         <div>{{ disbursement.disbursementA3.periodForUtilization }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA2.goodDescription') }}</label>
                         <div>{{ disbursement.disbursementA3.goodDescription }}</div>
                       </div>
                     </div>
@@ -214,7 +214,7 @@
                         <div>{{ disbursement.disbursementA3.bankShare | number: '1.2-2' }}</div>
                       </div>
                       <div class="col-md-4">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Avance demandée' : 'Advance Requested' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA3.advanceRequested') }}</label>
                         <div class="fs-5 text-success"><strong>{{ disbursement.disbursementA3.advanceRequested | number: '1.2-2' }} {{ disbursement.currency }}</strong></div>
                       </div>
                     </div>
@@ -230,13 +230,13 @@
                   </div>
                   <div class="card-body">
                     <div class="mb-3">
-                      <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la garantie' : 'Guarantee Details' }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }}</label>
                       <div class="bg-light p-3 rounded">{{ disbursement.disbursementB1.guaranteeDetails }}</div>
                     </div>
 
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque émettrice' : 'Issuing Bank' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBank') }}</label>
                         <div>{{ disbursement.disbursementB1.issuingBankName }}</div>
                       </div>
                       <div class="col-md-6">
@@ -247,7 +247,7 @@
 
                     <div class="row">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.getCurrentLocale() === 'fr' ? 'Bénéficiaire' : 'Beneficiary' }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
                         <div>{{ disbursement.disbursementB1.beneficiaryName }}</div>
                       </div>
                       <div class="col-md-6">
@@ -288,7 +288,7 @@
                   <div class="card-header bg-white">
                     <h5 class="mb-0">
                       <i class="bi bi-chat-left-text me-2"></i>
-                      {{ i18n.getCurrentLocale() === 'fr' ? 'Historique' : 'History' }} ({{ disbursement.processes.length }})
+                      {{ i18n.t('disbursements.history') }} ({{ disbursement.processes.length }})
                     </h5>
                   </div>
                   <div class="card-body">
@@ -325,7 +325,7 @@
               <div class="col-lg-4">
                 <div class="card shadow-sm">
                   <div class="card-header bg-white">
-                    <h5 class="mb-0">{{ i18n.getCurrentLocale() === 'fr' ? 'Chronologie' : 'Timeline' }}</h5>
+                    <h5 class="mb-0">{{ i18n.t('claims.timeline') }}</h5>
                   </div>
                   <div class="card-body">
                     <div class="timeline">
@@ -387,7 +387,7 @@
           {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
         </button>
         <button type="button" class="btn btn-primary" (click)="submitDisbursement()" [disabled]="actionLoading">
-          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Soumission...' : 'Submitting...') : (i18n.getCurrentLocale() === 'fr' ? 'Soumettre' : 'Submit') }}
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Soumission...' : 'Submitting...') : (i18n.t('disbursements.submit')) }}
         </button>
       </div>
     </div>
@@ -411,7 +411,7 @@
           {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
         </button>
         <button type="button" class="btn btn-success" (click)="approveDisbursement()" [disabled]="actionLoading">
-          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Approbation...' : 'Approving...') : (i18n.getCurrentLocale() === 'fr' ? 'Approuver' : 'Approve') }}
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Approbation...' : 'Approving...') : (i18n.t('disbursements.approve')) }}
         </button>
       </div>
     </div>
@@ -440,7 +440,7 @@
           {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
         </button>
         <button type="button" class="btn btn-danger" (click)="rejectDisbursement()" [disabled]="actionLoading || !rejectComment.trim()">
-          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Rejet...' : 'Rejecting...') : (i18n.getCurrentLocale() === 'fr' ? 'Rejeter' : 'Reject') }}
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Rejet...' : 'Rejecting...') : (i18n.t('disbursements.reject')) }}
         </button>
       </div>
     </div>
@@ -452,7 +452,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
-          {{ i18n.getCurrentLocale() === 'fr' ? 'Retourner au client' : 'Return to Client' }}
+          {{ i18n.t('disbursements.returnToClient') }}
         </h5>
         <button type="button" class="btn-close" (click)="showBackToClientModal = false"></button>
       </div>

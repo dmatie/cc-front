@@ -30,6 +30,9 @@ export class CreateDisbursementWizardComponent implements OnInit {
   currentStep = 1;
   loading = false;
   errorMessage = '';
+  loadingProjects = false;
+  loadingCurrencies = false;
+  loadingTypes = false;
 
   disbursementTypes: DisbursementTypeDto[] = [];
   currencies: CurrencyDto[] = [];
@@ -67,34 +70,43 @@ export class CreateDisbursementWizardComponent implements OnInit {
       return;
     }
 
+    this.loadingProjects = true;
     this.registrationService.getRegistrationByEmail(currentUser.email).subscribe({
       next: (response) => {
         if (response?.accessRequest?.selectedProjectCodes) {
           this.sapCodes = response.accessRequest.selectedProjectCodes;
         }
+        this.loadingProjects = false;
       },
       error: (error) => {
         console.error('Error loading SAP codes:', error);
+        this.loadingProjects = false;
       }
     });
   }
 
   loadDropdowns(): void {
+    this.loadingTypes = true;
     this.disbursementService.getDisbursementTypes().subscribe({
       next: (types) => {
         this.disbursementTypes = types;
+        this.loadingTypes = false;
       },
       error: (error) => {
         this.errorMessage = 'Error loading disbursement types';
+        this.loadingTypes = false;
       }
     });
 
+    this.loadingCurrencies = true;
     this.disbursementService.getCurrencies().subscribe({
       next: (currencies) => {
         this.currencies = currencies;
+        this.loadingCurrencies = false;
       },
       error: (error) => {
         this.errorMessage = 'Error loading currencies';
+        this.loadingCurrencies = false;
       }
     });
 
