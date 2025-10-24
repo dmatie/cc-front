@@ -1,0 +1,394 @@
+<app-authenticated-navbar
+  [title]="isInternalUser ? i18n.t('internal.nav.title') : i18n.t('nav.home')"
+  [userType]="isInternalUser ? 'internal' : 'external'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div *ngIf="loading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+    </div>
+  </div>
+
+  @if (errorMessage) {
+    <div class="alert alert-danger">
+      <i class="bi bi-exclamation-triangle me-2"></i>
+      {{ errorMessage }}
+    </div>
+  }
+
+  @if (successMessage) {
+    <div class="alert alert-success">
+      <i class="bi bi-check-circle me-2"></i>
+      {{ successMessage }}
+    </div>
+  }
+
+  <div *ngIf="!loading && disbursement" class="row">
+    <div class="col-12">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-cash-coin me-2"></i>
+            {{ disbursement.requestNumber }}
+          </h4>
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('admin.access_requests.back') }}
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="row mb-4">
+            <div class="col-md-6">
+              <h6 class="text-muted mb-3">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Informations Générales' : 'General Information' }}
+              </h6>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <th style="width: 40%;">{{ i18n.getCurrentLocale() === 'fr' ? 'Type' : 'Type' }}:</th>
+                    <td>{{ i18n.getCurrentLocale() === 'fr' ? disbursement.disbursementTypeNameFr : disbursement.disbursementTypeName }}</td>
+                  </tr>
+                  <tr>
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Projet SAP' : 'SAP Project' }}:</th>
+                    <td>{{ disbursement.sapCodeProject }}</td>
+                  </tr>
+                  <tr>
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'N° Prêt/Don' : 'Loan/Grant Number' }}:</th>
+                    <td>{{ disbursement.loanGrantNumber }}</td>
+                  </tr>
+                  <tr>
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}:</th>
+                    <td>{{ disbursement.currency }}</td>
+                  </tr>
+                  <tr>
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Statut' : 'Status' }}:</th>
+                    <td>
+                      <span [class]="getStatusClass(disbursement.status)">
+                        {{ getStatusLabel(disbursement.status) }}
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-md-6">
+              <h6 class="text-muted mb-3">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Informations Utilisateur' : 'User Information' }}
+              </h6>
+              <table class="table table-sm">
+                <tbody>
+                  <tr>
+                    <th style="width: 40%;">{{ i18n.getCurrentLocale() === 'fr' ? 'Créé par' : 'Created By' }}:</th>
+                    <td>{{ disbursement.createdByUserName }}</td>
+                  </tr>
+                  <tr>
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Email' : 'Email' }}:</th>
+                    <td>{{ disbursement.createdByUserEmail }}</td>
+                  </tr>
+                  <tr>
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Date de création' : 'Created At' }}:</th>
+                    <td>{{ disbursement.createdAt | date: 'medium' }}</td>
+                  </tr>
+                  <tr *ngIf="disbursement.submittedAt">
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Soumis le' : 'Submitted At' }}:</th>
+                    <td>{{ disbursement.submittedAt | date: 'medium' }}</td>
+                  </tr>
+                  <tr *ngIf="disbursement.processedAt">
+                    <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Traité le' : 'Processed At' }}:</th>
+                    <td>{{ disbursement.processedAt | date: 'medium' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mb-4">
+            <button *ngIf="canSubmit()" class="btn btn-primary" (click)="showSubmitConfirm = true" [disabled]="actionLoading">
+              <i class="bi bi-send me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Soumettre' : 'Submit' }}
+            </button>
+
+            <button *ngIf="canApprove()" class="btn btn-success" (click)="showApproveConfirm = true" [disabled]="actionLoading">
+              <i class="bi bi-check-circle me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Approuver' : 'Approve' }}
+            </button>
+
+            <button *ngIf="canReject()" class="btn btn-danger" (click)="showRejectModal = true" [disabled]="actionLoading">
+              <i class="bi bi-x-circle me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Rejeter' : 'Reject' }}
+            </button>
+
+            <button *ngIf="canBackToClient()" class="btn btn-warning" (click)="showBackToClientModal = true" [disabled]="actionLoading">
+              <i class="bi bi-arrow-return-left me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Retourner au client' : 'Return to Client' }}
+            </button>
+          </div>
+
+          <div *ngIf="disbursement.disbursementA1" class="card mb-3">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Détails du Paiement Direct (A1)' : 'Direct Payment Details (A1)' }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="text-primary">{{ i18n.getCurrentLocale() === 'fr' ? 'Bénéficiaire' : 'Beneficiary' }}</h6>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Nom' : 'Name' }}:</strong> {{ disbursement.disbursementA1.beneficiaryName }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'N° BP' : 'BP Number' }}:</strong> {{ disbursement.disbursementA1.beneficiaryBpNumber }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Email' : 'Email' }}:</strong> {{ disbursement.disbursementA1.beneficiaryEmail }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Adresse' : 'Address' }}:</strong> {{ disbursement.disbursementA1.beneficiaryAddress }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Montant' : 'Amount' }}:</strong> {{ disbursement.disbursementA1.amount | number: '1.2-2' }} {{ disbursement.currency }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-primary">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque Correspondante' : 'Correspondent Bank' }}</h6>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Nom' : 'Name' }}:</strong> {{ disbursement.disbursementA1.correspondentBankName }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Code SWIFT' : 'SWIFT Code' }}:</strong> {{ disbursement.disbursementA1.correspondentBankSwiftCode }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'N° Compte' : 'Account Number' }}:</strong> {{ disbursement.disbursementA1.correspondantAccountNumber }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="disbursement.disbursementA2" class="card mb-3">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Détails du Remboursement (A2)' : 'Reimbursement Details (A2)' }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Objet' : 'Purpose' }}:</strong> {{ disbursement.disbursementA2.reimbursementPurpose }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Contractant' : 'Contractor' }}:</strong> {{ disbursement.disbursementA2.contractor }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }}:</strong> {{ disbursement.disbursementA2.goodDescription }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Montant facture' : 'Invoice Amount' }}:</strong> {{ disbursement.disbursementA2.invoiceAmount | number: '1.2-2' }} {{ disbursement.currency }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Référence facture' : 'Invoice Reference' }}:</strong> {{ disbursement.disbursementA2.invoiceRef }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Date facture' : 'Invoice Date' }}:</strong> {{ disbursement.disbursementA2.invoiceDate | date: 'medium' }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="disbursement.disbursementA3" class="card mb-3">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Détails de l\'Engagement Spécial (A3)' : 'Special Commitment Details (A3)' }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Période d\'utilisation' : 'Period for Utilization' }}:</strong> {{ disbursement.disbursementA3.periodForUtilization }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }}:</strong> {{ disbursement.disbursementA3.goodDescription }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Quantité' : 'Quantity' }}:</strong> {{ disbursement.disbursementA3.goodQuantity }}</p>
+                </div>
+                <div class="col-md-6">
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Budget annuel' : 'Annual Budget' }}:</strong> {{ disbursement.disbursementA3.annualBudget | number: '1.2-2' }} {{ disbursement.currency }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Part de la Banque' : 'Bank Share' }}:</strong> {{ disbursement.disbursementA3.bankShare | number: '1.2-2' }} {{ disbursement.currency }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Avance demandée' : 'Advance Requested' }}:</strong> {{ disbursement.disbursementA3.advanceRequested | number: '1.2-2' }} {{ disbursement.currency }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="disbursement.disbursementB1" class="card mb-3">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la Lettre de Crédit (B1)' : 'Letter of Credit Details (B1)' }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-6">
+                  <h6 class="text-primary">{{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la Garantie' : 'Guarantee Details' }}</h6>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Détails' : 'Details' }}:</strong> {{ disbursement.disbursementB1.guaranteeDetails }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Banque émettrice' : 'Issuing Bank' }}:</strong> {{ disbursement.disbursementB1.issuingBankName }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Montant' : 'Amount' }}:</strong> {{ disbursement.disbursementB1.guaranteeAmount | number: '1.2-2' }} {{ disbursement.currency }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Date d\'expiration' : 'Expiry Date' }}:</strong> {{ disbursement.disbursementB1.expiryDate | date: 'medium' }}</p>
+                </div>
+                <div class="col-md-6">
+                  <h6 class="text-primary">{{ i18n.getCurrentLocale() === 'fr' ? 'Bénéficiaire' : 'Beneficiary' }}</h6>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Nom' : 'Name' }}:</strong> {{ disbursement.disbursementB1.beneficiaryName }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'N° BP' : 'BP Number' }}:</strong> {{ disbursement.disbursementB1.beneficiaryBPNumber }}</p>
+                  <p><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Ville' : 'City' }}:</strong> {{ disbursement.disbursementB1.beneficiaryCity }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="disbursement.documents.length > 0" class="card mb-3">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                <i class="bi bi-paperclip me-2"></i>
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Documents' : 'Documents' }} ({{ disbursement.documents.length }})
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <div *ngFor="let doc of disbursement.documents" class="list-group-item">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                      <strong>{{ doc.fileName }}</strong>
+                      <small class="text-muted ms-2">({{ (doc.fileSize / 1024).toFixed(2) }} KB)</small>
+                    </div>
+                    <a [href]="doc.fileUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                      <i class="bi bi-download me-1"></i>
+                      {{ i18n.getCurrentLocale() === 'fr' ? 'Télécharger' : 'Download' }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="disbursement.processes.length > 0" class="card">
+            <div class="card-header bg-light">
+              <h5 class="mb-0">
+                <i class="bi bi-clock-history me-2"></i>
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Historique' : 'History' }}
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="timeline">
+                <div *ngFor="let process of disbursement.processes" class="timeline-item mb-3">
+                  <div class="d-flex">
+                    <div class="me-3">
+                      <span [class]="getStatusClass(process.status)">
+                        {{ getStatusLabel(process.status) }}
+                      </span>
+                    </div>
+                    <div class="flex-grow-1">
+                      <p class="mb-1">
+                        <strong>{{ process.processedByUserName }}</strong>
+                        <small class="text-muted ms-2">{{ process.processedAt | date: 'medium' }}</small>
+                      </p>
+                      <p *ngIf="process.comment" class="mb-0 text-muted">{{ process.comment }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showSubmitConfirm" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Confirmer la soumission' : 'Confirm Submission' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="showSubmitConfirm = false"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ i18n.getCurrentLocale() === 'fr' ? 'Êtes-vous sûr de vouloir soumettre cette demande ?' : 'Are you sure you want to submit this request?' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showSubmitConfirm = false" [disabled]="actionLoading">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
+        </button>
+        <button type="button" class="btn btn-primary" (click)="submitDisbursement()" [disabled]="actionLoading">
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Soumission...' : 'Submitting...') : (i18n.getCurrentLocale() === 'fr' ? 'Soumettre' : 'Submit') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showApproveConfirm" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Confirmer l\'approbation' : 'Confirm Approval' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="showApproveConfirm = false"></button>
+      </div>
+      <div class="modal-body">
+        <p>{{ i18n.getCurrentLocale() === 'fr' ? 'Êtes-vous sûr de vouloir approuver cette demande ?' : 'Are you sure you want to approve this request?' }}</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showApproveConfirm = false" [disabled]="actionLoading">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
+        </button>
+        <button type="button" class="btn btn-success" (click)="approveDisbursement()" [disabled]="actionLoading">
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Approbation...' : 'Approving...') : (i18n.getCurrentLocale() === 'fr' ? 'Approuver' : 'Approve') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showRejectModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Rejeter la demande' : 'Reject Request' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="showRejectModal = false"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Raison du rejet' : 'Reason for Rejection' }}
+          </label>
+          <textarea class="form-control" rows="4" [(ngModel)]="rejectComment" [ngModelOptions]="{standalone: true}"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showRejectModal = false" [disabled]="actionLoading">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
+        </button>
+        <button type="button" class="btn btn-danger" (click)="rejectDisbursement()" [disabled]="actionLoading || !rejectComment.trim()">
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Rejet...' : 'Rejecting...') : (i18n.getCurrentLocale() === 'fr' ? 'Rejeter' : 'Reject') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showBackToClientModal" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Retourner au client' : 'Return to Client' }}
+        </h5>
+        <button type="button" class="btn-close" (click)="showBackToClientModal = false"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label class="form-label">
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Commentaire' : 'Comment' }}
+          </label>
+          <textarea class="form-control" rows="4" [(ngModel)]="backToClientComment" [ngModelOptions]="{standalone: true}"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Documents additionnels (optionnel)' : 'Additional Documents (optional)' }}
+          </label>
+          <input type="file" class="form-control" multiple (change)="onFileSelected($event, 'backToClient')" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="showBackToClientModal = false" [disabled]="actionLoading">
+          {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
+        </button>
+        <button type="button" class="btn btn-warning" (click)="backToClientDisbursement()" [disabled]="actionLoading || !backToClientComment.trim()">
+          {{ actionLoading ? (i18n.getCurrentLocale() === 'fr' ? 'Envoi...' : 'Sending...') : (i18n.getCurrentLocale() === 'fr' ? 'Envoyer' : 'Send') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

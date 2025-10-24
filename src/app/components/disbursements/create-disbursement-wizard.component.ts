@@ -1,0 +1,269 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
+import { AbstractDropdownService } from '../../services/abstract/dropdown-service.abstract';
+import { I18nService } from '../../services/i18n.service';
+import {
+  CreateDisbursementCommand,
+  CreateDisbursementA1Command,
+  CreateDisbursementA2Command,
+  CreateDisbursementA3Command,
+  CreateDisbursementB1Command,
+  DisbursementTypeDto,
+  CurrencyDto
+} from '../../models/disbursement.model';
+import { Country } from '../../models/dropdown.model';
+import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
+
+@Component({
+  selector: 'app-create-disbursement-wizard',
+  standalone: true,
+  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent],
+  templateUrl: './create-disbursement-wizard.component.html',
+  styleUrls: ['./create-disbursement-wizard.component.css']
+})
+export class CreateDisbursementWizardComponent implements OnInit {
+  currentStep = 1;
+  loading = false;
+  errorMessage = '';
+
+  disbursementTypes: DisbursementTypeDto[] = [];
+  currencies: CurrencyDto[] = [];
+  countries: Country[] = [];
+
+  command: CreateDisbursementCommand = {
+    sapCodeProject: '',
+    loanGrantNumber: '',
+    disbursementTypeId: '',
+    currencyId: '',
+    documents: []
+  };
+
+  selectedFiles: File[] = [];
+
+  constructor(
+    private disbursementService: DisbursementService,
+    private dropdownService: AbstractDropdownService,
+    private router: Router,
+    public i18n: I18nService
+  ) {}
+
+  ngOnInit(): void {
+    this.loadDropdowns();
+  }
+
+  loadDropdowns(): void {
+    this.disbursementService.getDisbursementTypes().subscribe({
+      next: (types) => {
+        this.disbursementTypes = types;
+      },
+      error: (error) => {
+        this.errorMessage = 'Error loading disbursement types';
+      }
+    });
+
+    this.disbursementService.getCurrencies().subscribe({
+      next: (currencies) => {
+        this.currencies = currencies;
+      },
+      error: (error) => {
+        this.errorMessage = 'Error loading currencies';
+      }
+    });
+
+    this.dropdownService.getCountries().subscribe({
+      next: (response) => {
+        this.countries = response.data;
+      },
+      error: (error) => {
+        this.errorMessage = 'Error loading countries';
+      }
+    });
+  }
+
+  getSelectedType(): DisbursementTypeDto | undefined {
+    return this.disbursementTypes.find(t => t.id === this.command.disbursementTypeId);
+  }
+
+  getSelectedTypeCode(): string {
+    return this.getSelectedType()?.code || '';
+  }
+
+  canProceedStep1(): boolean {
+    return !!(
+      this.command.sapCodeProject &&
+      this.command.loanGrantNumber &&
+      this.command.disbursementTypeId &&
+      this.command.currencyId
+    );
+  }
+
+  canProceedStep2(): boolean {
+    const typeCode = this.getSelectedTypeCode();
+
+    if (typeCode === 'A1' && this.command.disbursementA1) {
+      return !!(
+        this.command.disbursementA1.paymentPurpose &&
+        this.command.disbursementA1.beneficiaryName &&
+        this.command.disbursementA1.beneficiaryEmail &&
+        this.command.disbursementA1.correspondentBankName &&
+        this.command.disbursementA1.amount > 0
+      );
+    }
+
+    if (typeCode === 'A2' && this.command.disbursementA2) {
+      return !!(
+        this.command.disbursementA2.reimbursementPurpose &&
+        this.command.disbursementA2.contractor &&
+        this.command.disbursementA2.invoiceRef
+      );
+    }
+
+    if (typeCode === 'A3' && this.command.disbursementA3) {
+      return !!(
+        this.command.disbursementA3.periodForUtilization &&
+        this.command.disbursementA3.goodDescription &&
+        this.command.disbursementA3.advanceRequested > 0
+      );
+    }
+
+    if (typeCode === 'B1' && this.command.disbursementB1) {
+      return !!(
+        this.command.disbursementB1.guaranteeDetails &&
+        this.command.disbursementB1.issuingBankName &&
+        this.command.disbursementB1.beneficiaryName
+      );
+    }
+
+    return false;
+  }
+
+  nextStep(): void {
+    if (this.currentStep === 1 && this.canProceedStep1()) {
+      this.initializeTypeSpecificData();
+      this.currentStep = 2;
+    } else if (this.currentStep === 2 && this.canProceedStep2()) {
+      this.currentStep = 3;
+    }
+  }
+
+  previousStep(): void {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  initializeTypeSpecificData(): void {
+    const typeCode = this.getSelectedTypeCode();
+
+    if (typeCode === 'A1' && !this.command.disbursementA1) {
+      this.command.disbursementA1 = {
+        paymentPurpose: '',
+        beneficiaryBpNumber: '',
+        beneficiaryName: '',
+        beneficiaryContactPerson: '',
+        beneficiaryAddress: '',
+        beneficiaryCountryId: '',
+        beneficiaryEmail: '',
+        correspondentBankName: '',
+        correspondentBankAddress: '',
+        correspondentBankCountryId: '',
+        correspondantAccountNumber: '',
+        correspondentBankSwiftCode: '',
+        amount: 0,
+        signatoryName: '',
+        signatoryContactPerson: '',
+        signatoryAddress: '',
+        signatoryCountryId: '',
+        signatoryEmail: '',
+        signatoryPhone: '',
+        signatoryTitle: ''
+      };
+    } else if (typeCode === 'A2' && !this.command.disbursementA2) {
+      this.command.disbursementA2 = {
+        reimbursementPurpose: '',
+        contractor: '',
+        goodDescription: '',
+        goodOrginCountryId: '',
+        contractBorrowerReference: '',
+        contractAfDBReference: '',
+        contractValue: '',
+        contractBankShare: '',
+        contractAmountPreviouslyPaid: 0,
+        invoiceRef: '',
+        invoiceDate: new Date().toISOString(),
+        invoiceAmount: 0,
+        paymentDateOfPayment: new Date().toISOString(),
+        paymentAmountWithdrawn: 0,
+        paymentEvidenceOfPayment: ''
+      };
+    } else if (typeCode === 'A3' && !this.command.disbursementA3) {
+      this.command.disbursementA3 = {
+        periodForUtilization: '',
+        itemNumber: 0,
+        goodDescription: '',
+        goodOrginCountryId: '',
+        goodQuantity: 0,
+        annualBudget: 0,
+        bankShare: 0,
+        advanceRequested: 0,
+        dateOfApproval: new Date().toISOString()
+      };
+    } else if (typeCode === 'B1' && !this.command.disbursementB1) {
+      this.command.disbursementB1 = {
+        guaranteeDetails: '',
+        confirmingBank: '',
+        issuingBankName: '',
+        issuingBankAdress: '',
+        guaranteeAmount: 0,
+        expiryDate: new Date().toISOString(),
+        beneficiaryName: '',
+        beneficiaryBPNumber: '',
+        beneficiaryAFDBContract: '',
+        beneficiaryBankAddress: '',
+        beneficiaryCity: '',
+        beneficiaryCountryId: '',
+        goodDescription: '',
+        beneficiaryLcContractRef: '',
+        executingAgencyName: '',
+        executingAgencyContactPerson: '',
+        executingAgencyAddress: '',
+        executingAgencyCity: '',
+        executingAgencyCountryId: '',
+        executingAgencyEmail: '',
+        executingAgencyPhone: ''
+      };
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFiles = Array.from(input.files);
+    }
+  }
+
+  submitDisbursement(): void {
+    this.loading = true;
+    this.errorMessage = '';
+
+    this.command.documents = this.selectedFiles.length > 0 ? this.selectedFiles : undefined;
+
+    this.disbursementService.createDisbursement(this.command).subscribe({
+      next: (response) => {
+        this.loading = false;
+        this.router.navigate(['/disbursements', response.disbursement.id]);
+      },
+      error: (error) => {
+        this.loading = false;
+        this.errorMessage = error.message || 'Error creating disbursement';
+      }
+    });
+  }
+
+  cancel(): void {
+    this.router.navigate(['/disbursements']);
+  }
+}

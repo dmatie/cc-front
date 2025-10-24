@@ -1,0 +1,39 @@
+.table-sm th {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.5em 1em;
+}
+
+.timeline-item {
+  border-left: 2px solid #dee2e6;
+  padding-left: 1rem;
+}
+
+.timeline-item:last-child {
+  border-left-color: transparent;
+}
+
+.card {
+  border-radius: 0.5rem;
+}
+
+.card-header {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+
+.modal.show {
+  display: block;
+}
+
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

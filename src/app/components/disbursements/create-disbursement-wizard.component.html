@@ -1,0 +1,356 @@
+<app-authenticated-navbar [title]="i18n.t('nav.home')" [userType]="'external'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-plus-circle me-2"></i>
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Nouvelle Demande de Décaissement' : 'New Disbursement Request' }}
+          </h4>
+        </div>
+
+        <div class="card-body">
+          <div class="wizard-steps mb-4">
+            <div class="row text-center">
+              <div class="col-4">
+                <div class="step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+                  <div class="step-number">1</div>
+                  <div class="step-title">
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Informations Générales' : 'General Information' }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+                  <div class="step-number">2</div>
+                  <div class="step-title">
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Détails Spécifiques' : 'Specific Details' }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="step" [class.active]="currentStep === 3" [class.completed]="currentStep > 3">
+                  <div class="step-number">3</div>
+                  <div class="step-title">
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Documents & Révision' : 'Documents & Review' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div *ngIf="currentStep === 1" class="step-content">
+            <h5 class="mb-4">
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Étape 1: Informations Générales' : 'Step 1: General Information' }}
+            </h5>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.getCurrentLocale() === 'fr' ? 'Code Projet SAP' : 'SAP Project Code' }}
+                  <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="command.sapCodeProject" />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.getCurrentLocale() === 'fr' ? 'Numéro Prêt/Don' : 'Loan/Grant Number' }}
+                  <span class="text-danger">*</span>
+                </label>
+                <input type="text" class="form-control" [(ngModel)]="command.loanGrantNumber" />
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.getCurrentLocale() === 'fr' ? 'Type de Décaissement' : 'Disbursement Type' }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" [(ngModel)]="command.disbursementTypeId">
+                  <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner...' : 'Select...' }}</option>
+                  <option *ngFor="let type of disbursementTypes" [value]="type.id">
+                    {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" [(ngModel)]="command.currencyId">
+                  <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner...' : 'Select...' }}</option>
+                  <option *ngFor="let currency of currencies" [value]="currency.id">
+                    {{ currency.code }} - {{ currency.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="cancel()">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Annuler' : 'Cancel' }}
+              </button>
+              <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep1()">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Suivant' : 'Next' }}
+                <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 2" class="step-content">
+            <h5 class="mb-4">
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Étape 2: Détails Spécifiques' : 'Step 2: Specific Details' }}
+            </h5>
+
+            <div *ngIf="getSelectedTypeCode() === 'A1' && command.disbursementA1" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Paiement Direct (A1)' : 'Direct Payment (A1)' }}</h6>
+
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Objet du paiement' : 'Payment Purpose' }} <span class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementA1.paymentPurpose"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Nom du bénéficiaire' : 'Beneficiary Name' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Email du bénéficiaire' : 'Beneficiary Email' }} <span class="text-danger">*</span></label>
+                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'N° BP' : 'BP Number' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryBpNumber" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Adresse' : 'Address' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Pays' : 'Country' }}</label>
+                  <select class="form-select" [(ngModel)]="command.disbursementA1.beneficiaryCountryId">
+                    <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Sélectionner...' : 'Select...' }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant' : 'Amount' }} <span class="text-danger">*</span></label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA1.amount" min="0" step="0.01" />
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque Correspondante' : 'Correspondent Bank' }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Nom de la banque' : 'Bank Name' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Code SWIFT' : 'SWIFT Code' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankSwiftCode" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Numéro de compte' : 'Account Number' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondantAccountNumber" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Adresse' : 'Address' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankAddress" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="getSelectedTypeCode() === 'A2' && command.disbursementA2" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Remboursement (A2)' : 'Reimbursement (A2)' }}</h6>
+
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Objet du remboursement' : 'Reimbursement Purpose' }} <span class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementA2.reimbursementPurpose"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Contractant' : 'Contractor' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.contractor" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.goodDescription" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Référence facture' : 'Invoice Reference' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.invoiceRef" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant facture' : 'Invoice Amount' }}</label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA2.invoiceAmount" min="0" step="0.01" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Date facture' : 'Invoice Date' }}</label>
+                  <input type="date" class="form-control" [value]="command.disbursementA2.invoiceDate | date:'yyyy-MM-dd'" (change)="command.disbursementA2!.invoiceDate = $any($event.target).value" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="getSelectedTypeCode() === 'A3' && command.disbursementA3" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Engagement Spécial (A3)' : 'Special Commitment (A3)' }}</h6>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Période d\'utilisation' : 'Period for Utilization' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA3.periodForUtilization" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Description des biens' : 'Goods Description' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA3.goodDescription" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Quantité' : 'Quantity' }}</label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.goodQuantity" min="0" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Budget annuel' : 'Annual Budget' }}</label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.annualBudget" min="0" step="0.01" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Part de la Banque' : 'Bank Share' }}</label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.bankShare" min="0" step="0.01" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Avance demandée' : 'Advance Requested' }} <span class="text-danger">*</span></label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.advanceRequested" min="0" step="0.01" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="getSelectedTypeCode() === 'B1' && command.disbursementB1" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Lettre de Crédit (B1)' : 'Letter of Credit (B1)' }}</h6>
+
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la garantie' : 'Guarantee Details' }} <span class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementB1.guaranteeDetails"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Banque émettrice' : 'Issuing Bank' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.issuingBankName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Montant de la garantie' : 'Guarantee Amount' }}</label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementB1.guaranteeAmount" min="0" step="0.01" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Date d\'expiration' : 'Expiry Date' }}</label>
+                  <input type="date" class="form-control" [value]="command.disbursementB1.expiryDate | date:'yyyy-MM-dd'" (change)="command.disbursementB1!.expiryDate = $any($event.target).value" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'Nom du bénéficiaire' : 'Beneficiary Name' }} <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.beneficiaryName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.getCurrentLocale() === 'fr' ? 'N° BP' : 'BP Number' }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.beneficiaryBPNumber" />
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="previousStep()">
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Précédent' : 'Previous' }}
+              </button>
+              <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep2()">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Suivant' : 'Next' }}
+                <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 3" class="step-content">
+            <h5 class="mb-4">
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Étape 3: Documents & Révision' : 'Step 3: Documents & Review' }}
+            </h5>
+
+            <div class="mb-4">
+              <label class="form-label">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Documents (optionnel)' : 'Documents (optional)' }}
+              </label>
+              <input type="file" class="form-control" multiple (change)="onFileSelected($event)" />
+              <small class="text-muted">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Vous pouvez joindre des documents à votre demande' : 'You can attach documents to your request' }}
+              </small>
+
+              <div *ngIf="selectedFiles.length > 0" class="mt-2">
+                <p class="text-success">
+                  <i class="bi bi-check-circle me-2"></i>
+                  {{ selectedFiles.length }} {{ i18n.getCurrentLocale() === 'fr' ? 'fichier(s) sélectionné(s)' : 'file(s) selected' }}
+                </p>
+                <ul class="list-unstyled">
+                  <li *ngFor="let file of selectedFiles" class="text-muted">
+                    <i class="bi bi-file-earmark me-2"></i>{{ file.name }}
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr' ?
+                'Veuillez vérifier toutes les informations avant de soumettre. Cette demande sera envoyée en tant que brouillon et vous pourrez la soumettre plus tard.' :
+                'Please review all information before submitting. This request will be saved as draft and you can submit it later.' }}
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="previousStep()">
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Précédent' : 'Previous' }}
+              </button>
+              <button type="button" class="btn btn-success" (click)="submitDisbursement()" [disabled]="loading">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ loading ? (i18n.getCurrentLocale() === 'fr' ? 'Création...' : 'Creating...') : (i18n.getCurrentLocale() === 'fr' ? 'Créer la demande' : 'Create Request') }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

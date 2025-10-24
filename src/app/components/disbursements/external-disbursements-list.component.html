@@ -1,0 +1,97 @@
+<app-authenticated-navbar [title]="i18n.t('nav.home')" [userType]="'external'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-cash-coin me-2"></i>
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Mes Demandes de Décaissement' : 'My Disbursement Requests' }}
+          </h4>
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('admin.access_requests.back') }}
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="d-flex justify-content-end align-items-center mb-4">
+            <button class="btn btn-primary" (click)="createDisbursement()">
+              <i class="bi bi-plus-circle me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr' ? 'Nouvelle Demande' : 'New Request' }}
+            </button>
+          </div>
+
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div *ngIf="!loading && disbursements.length === 0 && !errorMessage" class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Aucune demande de décaissement trouvée' : 'No disbursement requests found' }}
+          </div>
+
+          <div *ngIf="!loading && disbursements.length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'N° Demande' : 'Request #' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Type' : 'Type' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Projet' : 'Project' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Prêt/Don' : 'Loan/Grant' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Statut' : 'Status' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Date de création' : 'Created At' }}</th>
+                  <th class="text-end">{{ i18n.t('common.actions') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let disbursement of disbursements" style="cursor: pointer;">
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    <strong>{{ disbursement.requestNumber }}</strong>
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ i18n.getCurrentLocale() === 'fr' ? disbursement.disbursementTypeNameFr : disbursement.disbursementTypeName }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.sapCodeProject }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.loanGrantNumber }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.currency }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    <span [class]="getStatusClass(disbursement.status)">
+                      {{ getStatusLabel(disbursement.status) }}
+                    </span>
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.createdAt | date: 'short' }}
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary" (click)="viewDisbursementDetail(disbursement.id)">
+                      <i class="bi bi-eye me-1"></i>
+                      {{ i18n.t('common.view') }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

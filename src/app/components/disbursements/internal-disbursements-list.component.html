@@ -1,0 +1,154 @@
+<app-authenticated-navbar [title]="i18n.t('internal.nav.title')" [userType]="'internal'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-cash-coin me-2"></i>
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Toutes les Demandes de Décaissement' : 'All Disbursement Requests' }}
+          </h4>
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('admin.access_requests.back') }}
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <div class="card border-secondary">
+                <div class="card-body">
+                  <h6 class="card-title text-secondary">
+                    <i class="bi bi-file-earmark me-2"></i>
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Brouillons' : 'Drafts' }}
+                  </h6>
+                  <h3 class="mb-0">{{ getStatusCount(1) }}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-warning">
+                <div class="card-body">
+                  <h6 class="card-title text-warning">
+                    <i class="bi bi-hourglass-split me-2"></i>
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Soumis' : 'Submitted' }}
+                  </h6>
+                  <h3 class="mb-0">{{ getStatusCount(2) }}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-success">
+                <div class="card-body">
+                  <h6 class="card-title text-success">
+                    <i class="bi bi-check-circle me-2"></i>
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Approuvés' : 'Approved' }}
+                  </h6>
+                  <h3 class="mb-0">{{ getStatusCount(3) }}</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card border-danger">
+                <div class="card-body">
+                  <h6 class="card-title text-danger">
+                    <i class="bi bi-x-circle me-2"></i>
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Rejetés' : 'Rejected' }}
+                  </h6>
+                  <h3 class="mb-0">{{ getStatusCount(4) }}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-3">
+              <label class="form-label">
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Filtrer par statut' : 'Filter by Status' }}
+              </label>
+              <select class="form-select" [(ngModel)]="selectedStatus" (change)="onStatusFilterChange()">
+                <option *ngFor="let option of statusOptions" [value]="option.value">
+                  {{ i18n.getCurrentLocale() === 'fr' ? option.labelFr : option.labelEn }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div *ngIf="!loading && filteredDisbursements.length === 0 && !errorMessage" class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Aucune demande de décaissement trouvée' : 'No disbursement requests found' }}
+          </div>
+
+          <div *ngIf="!loading && filteredDisbursements.length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'N° Demande' : 'Request #' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Type' : 'Type' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Projet' : 'Project' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Prêt/Don' : 'Loan/Grant' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Utilisateur' : 'User' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Devise' : 'Currency' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Statut' : 'Status' }}</th>
+                  <th>{{ i18n.getCurrentLocale() === 'fr' ? 'Date de création' : 'Created At' }}</th>
+                  <th class="text-end">{{ i18n.t('common.actions') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let disbursement of filteredDisbursements" style="cursor: pointer;">
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    <strong>{{ disbursement.requestNumber }}</strong>
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ i18n.getCurrentLocale() === 'fr' ? disbursement.disbursementTypeNameFr : disbursement.disbursementTypeName }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.sapCodeProject }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.loanGrantNumber }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.createdByUserName }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.currency }}
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    <span [class]="getStatusClass(disbursement.status)">
+                      {{ getStatusLabel(disbursement.status) }}
+                    </span>
+                  </td>
+                  <td (click)="viewDisbursementDetail(disbursement.id)">
+                    {{ disbursement.createdAt | date: 'short' }}
+                  </td>
+                  <td class="text-end">
+                    <button class="btn btn-sm btn-outline-primary" (click)="viewDisbursementDetail(disbursement.id)">
+                      <i class="bi bi-eye me-1"></i>
+                      {{ i18n.t('common.view') }}
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
