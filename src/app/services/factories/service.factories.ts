@@ -13,6 +13,9 @@ import { ApiProjectsService } from '../implementations/projects-service.api';
 import { ClaimService } from '../abstract/claim-service.abstract';
 import { ClaimServiceApi } from '../implementations/claim-service.api';
 import { ClaimServiceMock } from '../implementations/claim-service.mock';
+import { DisbursementService } from '../abstract/disbursement-service.abstract';
+import { DisbursementApiService } from '../implementations/disbursement-service.api';
+import { DisbursementMockService } from '../implementations/disbursement-service.mock';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 
@@ -69,6 +72,20 @@ export function claimServiceFactory(http: HttpClient, errorHandler: ErrorHandler
   } else {
     console.log('🔧 [FACTORY] Using API Claim Service');
     return new ClaimServiceApi(http, errorHandler);
+  }
+}
+
+/**
+ * Factory pour le service disbursement
+ * Retourne l'implémentation appropriée selon l'environnement
+ */
+export function disbursementServiceFactory(): DisbursementService {
+  if (environment.features.enableMockData) {
+    console.log('🔧 [FACTORY] Using MOCK Disbursement Service');
+    return new DisbursementMockService();
+  } else {
+    console.log('🔧 [FACTORY] Using API Disbursement Service');
+    return new DisbursementApiService();
   }
 }
 

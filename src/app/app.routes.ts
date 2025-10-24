@@ -117,6 +117,35 @@ export const routes: Routes = [
     canActivate: [() => inject(InternalUserGuard).canActivate()]
   },
 
+  // Disbursements - External users
+  {
+    path: 'disbursements',
+    loadComponent: () => import('./components/disbursements/external-disbursements-list.component').then(m => m.ExternalDisbursementsListComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+  {
+    path: 'disbursements/create',
+    loadComponent: () => import('./components/disbursements/create-disbursement-wizard.component').then(m => m.CreateDisbursementWizardComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+  {
+    path: 'disbursements/:id',
+    loadComponent: () => import('./components/disbursements/disbursement-detail.component').then(m => m.DisbursementDetailComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+
+  // Disbursements - Internal users
+  {
+    path: 'admin/disbursements',
+    loadComponent: () => import('./components/disbursements/internal-disbursements-list.component').then(m => m.InternalDisbursementsListComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
+  {
+    path: 'admin/disbursements/:id',
+    loadComponent: () => import('./components/disbursements/disbursement-detail.component').then(m => m.DisbursementDetailComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
+
   // Route par défaut (404)
   {
     path: '**',
