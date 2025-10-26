@@ -41,3 +41,12 @@ testem.log
 .DS_Store
 Thumbs.db
 .env
+
+# Files generated for release notes
+CLAIMS_IMPLEMENTATION_SUMMARY.md
+DOCKER_CHEATSHEET.md
+DOCKER_GUIDE.md
+DOCKER_README.md
+DOCKER_SUMMARY.md
+ERROR_HANDLING_GUIDE.md
+START_HERE_DOCKER.md

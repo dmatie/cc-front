@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilter, FinancingType } from '../../models/dropdown.model';
 import { ClaimTypesResponse } from '../../models/claim.model';
+import { CurrenciesResponse, DisbursementTypesResponse } from '../../models/disbursement.model';
 
 /**
  * Service abstrait pour la gestion des listes déroulantes
@@ -61,4 +62,16 @@ export abstract class AbstractDropdownService {
    * @returns Observable avec le profil ou null si non trouvé
    */
   abstract getBusinessProfileById(id: string): Observable<BusinessProfile | null>;
+  
+  /**
+   * obtient la liste des types de décaissement
+   * @returns Observable avec la réponse contenant les types de décaissement
+  */
+  abstract getDisbursementTypes(): Observable<DisbursementTypesResponse>;
+
+  /**
+   * obtient la liste des devises
+   * @returns Observable avec la réponse contenant les devises
+   */
+  abstract getCurrencies(): Observable<CurrenciesResponse>;
 }

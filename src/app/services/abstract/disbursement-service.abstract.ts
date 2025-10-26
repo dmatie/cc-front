@@ -17,6 +17,8 @@ import {
 
 export abstract class DisbursementService {
   abstract getAllDisbursements(): Observable<DisbursementDto[]>;
+  
+  abstract getAllUserDisbursements(): Observable<DisbursementDto[]>;
 
   abstract getDisbursementById(id: string): Observable<DisbursementDto>;
 

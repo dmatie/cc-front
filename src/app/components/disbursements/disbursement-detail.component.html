@@ -13,7 +13,7 @@
             {{ i18n.t('disbursements.requestDetails') }}
           </h4>
           <button class="btn btn-light btn-sm" (click)="goBack()">
-            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('admin.access_requests.back') }}
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('disbursements.backToList') }}
           </button>
         </div>
 
@@ -338,22 +338,10 @@
                         </div>
                       </div>
 
-                      <div *ngIf="disbursement.submittedAt" class="timeline-item">
-                        <div class="timeline-marker bg-warning"></div>
-                        <div class="timeline-content">
-                          <div class="small text-muted">{{ disbursement.submittedAt | date: 'short' }}</div>
-                          <div><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Soumise' : 'Submitted' }}</strong></div>
-                        </div>
-                      </div>
-
                       <div *ngFor="let process of disbursement.processes" class="timeline-item">
-                        <div class="timeline-marker"
-                          [class.bg-success]="process.status === 3"
-                          [class.bg-danger]="process.status === 4"
-                          [class.bg-info]="process.status === 10"
-                          [class.bg-warning]="process.status === 2"></div>
+                        <div class="timeline-marker" [class]="getTimelineStatusClass(process.status)"></div>
                         <div class="timeline-content">
-                          <div class="small text-muted">{{ process.processedAt | date: 'short' }}</div>
+                          <div class="small text-muted">{{ process.createdAt | date: 'short' }}</div>
                           <div><strong>{{ getStatusLabel(process.status) }}</strong></div>
                           <div class="small">{{ i18n.getCurrentLocale() === 'fr' ? 'Par' : 'By' }} {{ process.processedByUserName }}</div>
                         </div>

@@ -12,6 +12,7 @@
     "myAccessRequest": "My Access Request"
   },
   "common": {
+    "required_field": "is a required field",
     "required": "is required",
     "view": "View",
     "manage": "Manage",
@@ -29,7 +30,8 @@
     "by": "by",
     "error": "An error occurred",
     "active": "Active",
-    "quickActions": "Quick Actions"
+    "quickActions": "Quick Actions",
+    "browse": "Browse"
   },
   "home": {
     "title": "AfDB Client Portal",
@@ -611,6 +613,7 @@
     "selectSapCode": "Select SAP Code",
     "selectDisbursementType": "Select disbursement type",
     "selectCurrency": "Select currency",
+    "selectCountry": "Select country",
     "loadingProjects": "Loading projects...",
     "loadingCurrencies": "Loading currencies...",
     "loadingTypes": "Loading types...",
@@ -620,6 +623,16 @@
     "returnToClient": "Return to Client",
     "accountNumber": "Account Number",
     "requestDetails": "Request Details",
+    "submitted_success": "Disbursement request submitted successfully",
+    "created_success": "Disbursement created successfully",
+    "approved_success": "Disbursement approved successfully",
+    "rejected_success": "Disbursement rejected",
+    "backed_to_client_success": "Disbursement returned to client successfully",
+    "updated_success": "Disbursement updated successfully",
+    "validation_errors": {
+      "loanGrantNumber_invalid": "The loan/grant number is invalid",
+      "beneficiaryBpNumber_invalid": "The beneficiary BP number is invalid"
+    },
     "wizard": {
       "title": "Create Disbursement Request",
       "step1": "General Information",
@@ -654,6 +667,7 @@
       "beneficiaryBpNumber": "BP Number",
       "beneficiaryAddress": "Address",
       "beneficiaryCountry": "Country",
+      "beneficiaryContactPerson": "Contact Person",
       "correspondentBank": "Correspondent Bank",
       "correspondentBankName": "Bank Name",
       "correspondentBankAddress": "Bank Address",
@@ -664,7 +678,10 @@
       "signatoryName": "Signatory Name",
       "signatoryTitle": "Title",
       "signatoryEmail": "Email",
-      "signatoryPhone": "Phone"
+      "signatoryPhone": "Phone",
+      "signatoryAddress": "Address",
+      "signatoryCountry": "Country",
+      "signatoryContactPerson": "Contact Person"
     },
     "typeA2": {
       "title": "Reimbursement (A2)",
@@ -688,7 +705,8 @@
       "goodOriginCountry": "Origin Country",
       "advanceRequested": "Advance Requested",
       "annualBudget": "Annual Budget",
-      "bankShare": "Bank Share"
+      "bankShare": "Bank Share",
+      "goodQuantity": "Quantity"
     },
     "typeB1": {
       "title": "Letter of Guarantee (B1)",
@@ -702,12 +720,6 @@
       "executingAgencyEmail": "Email",
       "guaranteeAmount": "Guarantee Amount",
       "expiryDate": "Expiry Date"
-    },
-    "typeA3": {
-      "goodQuantity": "Quantity"
     }
-  },
-  "common": {
-    "browse": "Browse"
   }
 }

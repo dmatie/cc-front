@@ -32,7 +32,7 @@ export class ExternalDisbursementsListComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
-    this.disbursementService.getAllDisbursements().subscribe({
+    this.disbursementService.getAllUserDisbursements().subscribe({
       next: (disbursements) => {
         this.disbursements = disbursements;
         this.loading = false;

@@ -43,10 +43,10 @@
           </div>
 
           @if (errorMessage) {
-            <div class="alert alert-danger">
-              <i class="bi bi-exclamation-triangle me-2"></i>
-              {{ errorMessage }}
-            </div>
+          <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+          </div>
           }
 
           <div *ngIf="currentStep === 1" class="step-content">
@@ -60,16 +60,14 @@
                   {{ i18n.t('disbursements.sapCode') }}
                   <span class="text-danger">*</span>
                 </label>
-                <select class="form-select" [(ngModel)]="command.sapCodeProject" [disabled]="loadingProjects">
-                  <option value="" *ngIf="!loadingProjects">{{ i18n.t('disbursements.selectSapCode') }}</option>
-                  <option value="" *ngIf="loadingProjects">{{ i18n.t('disbursements.loadingProjects') }}</option>
-                  <option *ngFor="let code of sapCodes" [value]="code">
-                    {{ code }}
-                  </option>
+                <select class="form-select" [(ngModel)]="command.sapCodeProject" name="sapCodeProject"
+                  #sapCode="ngModel" required [disabled]="loadingProjects">
+                  <option value="">{{ i18n.t('disbursements.selectSapCode') }}</option>
+                  <option *ngFor="let code of sapCodes" [value]="code">{{ code }}</option>
                 </select>
-                <small class="text-muted" *ngIf="!loadingProjects && sapCodes.length === 0">
-                  {{ i18n.t('disbursements.wizard.noFiles') }}
-                </small>
+                <div *ngIf="sapCode.invalid && sapCode.touched" class="invalid-feedback d-block">
+                  {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                </div>
               </div>
 
               <div class="col-md-6 mb-3">
@@ -77,7 +75,21 @@
                   {{ i18n.t('disbursements.loanGrantNumber') }}
                   <span class="text-danger">*</span>
                 </label>
-                <input type="text" class="form-control" [(ngModel)]="command.loanGrantNumber" />
+
+                <!-- Champ validé : uniquement digits, exactement 13 caractères -->
+                <input type="text" class="form-control" name="loanGrantNumber" [(ngModel)]="command.loanGrantNumber"
+                  #loanGrantNumber="ngModel" required minlength="13" maxlength="13" pattern="^\d{13}$"
+                  [class.is-invalid]="loanGrantNumber.invalid && loanGrantNumber.touched" />
+
+                <div *ngIf="loanGrantNumber.invalid && loanGrantNumber.touched" class="invalid-feedback">
+                  <div *ngIf="loanGrantNumber.errors?.['required']">
+                    {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                  </div>
+                  <div
+                    *ngIf="loanGrantNumber.errors?.['pattern'] || loanGrantNumber.errors?.['minlength'] || loanGrantNumber.errors?.['maxlength']">
+                    {{ i18n.t('disbursements.validation_errors.loanGrantNumber_invalid') || 'Le numéro doit contenir exactement 13 chiffres.' }}
+                  </div>
+                </div>
               </div>
 
               <div class="col-md-6 mb-3">
@@ -85,13 +97,16 @@
                   {{ i18n.t('disbursements.disbursementType') }}
                   <span class="text-danger">*</span>
                 </label>
-                <select class="form-select" [(ngModel)]="command.disbursementTypeId" [disabled]="loadingTypes">
-                  <option value="" *ngIf="!loadingTypes">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
-                  <option value="" *ngIf="loadingTypes">{{ i18n.t('disbursements.loadingTypes') }}</option>
+                <select class="form-select" [(ngModel)]="command.disbursementTypeId" name="disbursementTypeId"
+                  #disbursementType="ngModel" required [disabled]="loadingTypes">
+                  <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
                   <option *ngFor="let type of disbursementTypes" [value]="type.id">
                     {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}
                   </option>
                 </select>
+                <div *ngIf="disbursementType.invalid && disbursementType.touched" class="invalid-feedback d-block">
+                  {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                </div>
               </div>
 
               <div class="col-md-6 mb-3">
@@ -99,13 +114,16 @@
                   {{ i18n.t('disbursements.currency') }}
                   <span class="text-danger">*</span>
                 </label>
-                <select class="form-select" [(ngModel)]="command.currencyId" [disabled]="loadingCurrencies">
-                  <option value="" *ngIf="!loadingCurrencies">{{ i18n.t('disbursements.selectCurrency') }}</option>
-                  <option value="" *ngIf="loadingCurrencies">{{ i18n.t('disbursements.loadingCurrencies') }}</option>
+                <select class="form-select" [(ngModel)]="command.currencyId" name="currencyId" #currency="ngModel"
+                  required [disabled]="loadingCurrencies">
+                  <option value="">{{ i18n.t('disbursements.selectCurrency') }}</option>
                   <option *ngFor="let currency of currencies" [value]="currency.id">
                     {{ currency.code }} - {{ currency.name }}
                   </option>
                 </select>
+                <div *ngIf="currency.invalid && currency.touched" class="invalid-feedback d-block">
+                  {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                </div>
               </div>
             </div>
 
@@ -130,18 +148,29 @@
 
               <div class="row">
                 <div class="col-12 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.paymentPurpose') }} <span class="text-danger">*</span></label>
-                  <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementA1.paymentPurpose"></textarea>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.paymentPurpose') }} <span
+                      class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3"
+                    [(ngModel)]="command.disbursementA1.paymentPurpose"></textarea>
                 </div>
 
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.beneficiary') }}</h6>
+                </div>
+
+
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }} <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail" #beneficiaryEmail="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" [class.is-invalid]="beneficiaryEmail.invalid && beneficiaryEmail.touched" required />
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail"
+                    #beneficiaryEmail="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    [class.is-invalid]="beneficiaryEmail.invalid && beneficiaryEmail.touched" required />
                   <div *ngIf="beneficiaryEmail.invalid && beneficiaryEmail.touched" class="invalid-feedback">
                     {{ i18n.t('errors.invalid_email_format') }}
                   </div>
@@ -149,8 +178,28 @@
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryBpNumber" />
+                  <input required
+                    name="beneficiaryBpNumber"  pattern="^\d{13}$"
+                    minlength="13"
+                    maxlength="13" #beneficiaryBpNumber="ngModel"
+                    type="text" 
+                    class="form-control"
+                    [class.is-invalid]="beneficiaryBpNumber.invalid && beneficiaryBpNumber.touched"
+                    [(ngModel)]="command.disbursementA1.beneficiaryBpNumber" />
+                    
+
+                  <div *ngIf="beneficiaryBpNumber.invalid && beneficiaryBpNumber.touched" class="invalid-feedback">
+                  <div *ngIf="beneficiaryBpNumber.errors?.['required']">
+                    {{ i18n.t('errors.required_field') || 'Ce champ est requis.' }}
+                  </div>
+                  <div *ngIf="beneficiaryBpNumber.errors?.['pattern'] || beneficiaryBpNumber.errors?.['minlength'] || beneficiaryBpNumber.errors?.['maxlength']">
+                    {{ i18n.t('disbursements.valvalidation_errors.beneficiaryBpNumber_invalid') || 'Le numéro doit contenir exactement 13 chiffres.' }}
+                  </div>
                 </div>
+
+                </div>
+
+
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
@@ -160,7 +209,7 @@
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryCountry') }}</label>
                   <select class="form-select" [(ngModel)]="command.disbursementA1.beneficiaryCountryId">
-                    <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
                       {{ country.name }}
                     </option>
@@ -168,33 +217,114 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.amount') }} <span class="text-danger">*</span></label>
-                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA1.amount" min="0" step="0.01" />
+                  <label class="form-label">{{ i18n.t('disbursements.amount') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA1.amount" min="0"
+                    step="0.01" />
                 </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryContactPerson') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.beneficiaryContactPerson" />
+                </div>
+
 
                 <div class="col-12 mt-3">
                   <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</h6>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankName') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankName') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankSwiftCode" />
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.correspondentBankSwiftCode" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondantAccountNumber" />
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.correspondantAccountNumber" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
-                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankAddress" />
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }}</label>
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.correspondentBankAddress" />
                 </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankCountry') }}</label>
+                  <select class="form-select" [(ngModel)]="command.disbursementA1.correspondentBankCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.signatory') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryEmail') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.signatoryEmail"
+                    #signatoryEmail="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    [class.is-invalid]="signatoryEmail.invalid && signatoryEmail.touched" required />
+                  <div *ngIf="signatoryEmail.invalid && signatoryEmail.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_email_format') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryCountry') }}</label>
+                  <select class="form-select" [(ngModel)]="command.disbursementA1.signatoryCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryAddress') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryPhone') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryPhone" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryContactPerson') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryContactPerson" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryTitle') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryTitle" />
+                </div>
+
+
               </div>
             </div>
 
@@ -203,12 +333,15 @@
 
               <div class="row">
                 <div class="col-12 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }} <span class="text-danger">*</span></label>
-                  <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementA2.reimbursementPurpose"></textarea>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }} <span
+                      class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3"
+                    [(ngModel)]="command.disbursementA2.reimbursementPurpose"></textarea>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractor') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractor') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.contractor" />
                 </div>
 
@@ -218,18 +351,22 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceRef') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceRef') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA2.invoiceRef" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceAmount') }}</label>
-                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA2.invoiceAmount" min="0" step="0.01" />
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA2.invoiceAmount" min="0"
+                    step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceDate') }}</label>
-                  <input type="date" class="form-control" [value]="command.disbursementA2.invoiceDate | date:'yyyy-MM-dd'" (change)="command.disbursementA2!.invoiceDate = $any($event.target).value" />
+                  <input type="date" class="form-control"
+                    [value]="command.disbursementA2.invoiceDate | date:'yyyy-MM-dd'"
+                    (change)="command.disbursementA2!.invoiceDate = $any($event.target).value" />
                 </div>
               </div>
             </div>
@@ -239,12 +376,14 @@
 
               <div class="row">
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA3.periodForUtilization') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.periodForUtilization') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA3.periodForUtilization" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodDescription') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodDescription') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA3.goodDescription" />
                 </div>
 
@@ -255,17 +394,21 @@
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA3.annualBudget') }}</label>
-                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.annualBudget" min="0" step="0.01" />
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.annualBudget" min="0"
+                    step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA3.bankShare') }}</label>
-                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.bankShare" min="0" step="0.01" />
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.bankShare" min="0"
+                    step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA3.advanceRequested') }} <span class="text-danger">*</span></label>
-                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.advanceRequested" min="0" step="0.01" />
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.advanceRequested') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA3.advanceRequested"
+                    min="0" step="0.01" />
                 </div>
               </div>
             </div>
@@ -275,27 +418,34 @@
 
               <div class="row">
                 <div class="col-12 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }} <span class="text-danger">*</span></label>
-                  <textarea class="form-control" rows="3" [(ngModel)]="command.disbursementB1.guaranteeDetails"></textarea>
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }} <span
+                      class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3"
+                    [(ngModel)]="command.disbursementB1.guaranteeDetails"></textarea>
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeB1.issuingBank') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.issuingBank') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.issuingBankName" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeAmount') }}</label>
-                  <input type="number" class="form-control" [(ngModel)]="command.disbursementB1.guaranteeAmount" min="0" step="0.01" />
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementB1.guaranteeAmount" min="0"
+                    step="0.01" />
                 </div>
 
                 <div class="col-md-6 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeB1.expiryDate') }}</label>
-                  <input type="date" class="form-control" [value]="command.disbursementB1.expiryDate | date:'yyyy-MM-dd'" (change)="command.disbursementB1!.expiryDate = $any($event.target).value" />
+                  <input type="date" class="form-control"
+                    [value]="command.disbursementB1.expiryDate | date:'yyyy-MM-dd'"
+                    (change)="command.disbursementB1!.expiryDate = $any($event.target).value" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span class="text-danger">*</span></label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementB1.beneficiaryName" />
                 </div>
 
@@ -345,7 +495,8 @@
                 <div class="row mb-3">
                   <div class="col-md-6">
                     <label class="text-muted small">{{ i18n.t('disbursements.disbursementType') }}</label>
-                    <div>{{ getSelectedType() ? (i18n.getCurrentLocale() === 'fr' ? getSelectedType()?.nameFr : getSelectedType()?.name) : '—' }}</div>
+                    <div>{{ getSelectedType() ? (i18n.getCurrentLocale() === 'fr' ? getSelectedType()?.nameFr :
+                      getSelectedType()?.name) : '—' }}</div>
                   </div>
                   <div class="col-md-6">
                     <label class="text-muted small">{{ i18n.t('disbursements.currency') }}</label>
@@ -362,7 +513,8 @@
                     </div>
                     <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.amount') }}</label>
-                      <div class="text-success"><strong>{{ command.disbursementA1.amount | number: '1.2-2' }}</strong></div>
+                      <div class="text-success"><strong>{{ command.disbursementA1.amount | number: '1.2-2' }}</strong>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -390,7 +542,8 @@
                     </div>
                     <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.typeA3.advanceRequested') }}</label>
-                      <div class="text-success"><strong>{{ command.disbursementA3.advanceRequested | number: '1.2-2' }}</strong></div>
+                      <div class="text-success"><strong>{{ command.disbursementA3.advanceRequested | number: '1.2-2'
+                          }}</strong></div>
                     </div>
                   </div>
                 </div>
@@ -417,7 +570,8 @@
                 {{ i18n.t('disbursements.wizard.supportingDocs') }}
               </label>
 
-              <div class="file-upload-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+              <div class="file-upload-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)"
+                (drop)="onDrop($event)">
                 <div class="text-center py-4">
                   <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-3"></i>
                   <p class="mb-2">
@@ -428,7 +582,8 @@
                     {{ i18n.t('disbursements.wizard.fileTypes') }}
                   </small>
                 </div>
-                <input #fileInput type="file" class="d-none" multiple (change)="onFileSelected($event)" accept=".pdf,.doc,.docx,.xls,.xlsx" />
+                <input #fileInput type="file" class="d-none" multiple (change)="onFileSelected($event)"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx" />
               </div>
 
               <div *ngIf="selectedFiles.length > 0" class="mt-3">
@@ -443,11 +598,14 @@
                   </button>
                 </div>
                 <div class="list-group">
-                  <div *ngFor="let file of selectedFiles; let i = index" class="list-group-item d-flex justify-content-between align-items-center">
+                  <div *ngFor="let file of selectedFiles; let i = index"
+                    class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
                       <i class="bi bi-file-earmark-pdf text-danger me-2" *ngIf="file.name.endsWith('.pdf')"></i>
-                      <i class="bi bi-file-earmark-word text-primary me-2" *ngIf="file.name.endsWith('.doc') || file.name.endsWith('.docx')"></i>
-                      <i class="bi bi-file-earmark-excel text-success me-2" *ngIf="file.name.endsWith('.xls') || file.name.endsWith('.xlsx')"></i>
+                      <i class="bi bi-file-earmark-word text-primary me-2"
+                        *ngIf="file.name.endsWith('.doc') || file.name.endsWith('.docx')"></i>
+                      <i class="bi bi-file-earmark-excel text-success me-2"
+                        *ngIf="file.name.endsWith('.xls') || file.name.endsWith('.xlsx')"></i>
                       <strong>{{ file.name }}</strong>
                       <small class="text-muted ms-2">({{ (file.size / 1024).toFixed(2) }} KB)</small>
                     </div>

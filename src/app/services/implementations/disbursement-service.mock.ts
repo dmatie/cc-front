@@ -174,6 +174,10 @@ export class DisbursementMockService extends DisbursementService {
     return of(this.mockDisbursements).pipe(delay(500));
   }
 
+  override getAllUserDisbursements(): Observable<DisbursementDto[]> {
+    return of(this.mockDisbursements).pipe(delay(500));
+  }
+
   override getDisbursementById(id: string): Observable<DisbursementDto> {
     const disbursement = this.mockDisbursements.find((d) => d.id === id);
     if (!disbursement) {

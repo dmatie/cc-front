@@ -39,7 +39,7 @@ export class CreateDisbursementWizardComponent implements OnInit {
   countries: Country[] = [];
   sapCodes: string[] = [];
 
-  command: CreateDisbursementCommand = {
+  command: any = {
     sapCodeProject: '',
     loanGrantNumber: '',
     disbursementTypeId: '',
@@ -87,9 +87,9 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
   loadDropdowns(): void {
     this.loadingTypes = true;
-    this.disbursementService.getDisbursementTypes().subscribe({
-      next: (types) => {
-        this.disbursementTypes = types;
+    this.dropdownService.getDisbursementTypes().subscribe({
+      next: (response) => {
+        this.disbursementTypes = response.disbursementTypes;
         this.loadingTypes = false;
       },
       error: (error) => {
@@ -99,9 +99,9 @@ export class CreateDisbursementWizardComponent implements OnInit {
     });
 
     this.loadingCurrencies = true;
-    this.disbursementService.getCurrencies().subscribe({
-      next: (currencies) => {
-        this.currencies = currencies;
+    this.dropdownService.getCurrencies().subscribe({
+      next: (response) => {
+        this.currencies = response.currencies;
         this.loadingCurrencies = false;
       },
       error: (error) => {
@@ -129,12 +129,14 @@ export class CreateDisbursementWizardComponent implements OnInit {
   }
 
   canProceedStep1(): boolean {
-    return !!(
-      this.command.sapCodeProject &&
-      this.command.loanGrantNumber &&
-      this.command.disbursementTypeId &&
-      this.command.currencyId
-    );
+    const sapSelected = !!this.command.sapCodeProject;
+    const disbTypeSelected = !!this.command.disbursementTypeId;
+    const currencySelected = !!this.command.currencyId;
+
+    const loan = (this.command.loanGrantNumber || '').toString().trim();
+    const loanValid = /^\d{13}$/.test(loan); // exactly 13 digits
+
+    return sapSelected && disbTypeSelected && currencySelected && loanValid;
   }
 
   canProceedStep2(): boolean {

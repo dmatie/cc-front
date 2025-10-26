@@ -12,6 +12,7 @@
     "myAccessRequest": "Ma Demande d'Accès"
   },
   "common": {
+    "required_field": "Champ obligatoire",
     "required": "est requis",
     "view": "Voir",
     "manage": "Gérer",
@@ -29,7 +30,8 @@
     "by": "par",
     "error": "Une erreur s'est produite",
     "active": "Actif",
-    "quickActions": "Actions Rapides"
+    "quickActions": "Actions Rapides",
+    "browse": "Parcourir"
   },
   "home": {
     "title": "Portail Client AfDB",
@@ -604,6 +606,7 @@
     "selectSapCode": "Sélectionner le code SAP",
     "selectDisbursementType": "Sélectionner le type de décaissement",
     "selectCurrency": "Sélectionner la devise",
+    "selectCountry": "Sélectionner le pays",
     "loadingProjects": "Chargement des projets...",
     "loadingCurrencies": "Chargement des devises...",
     "loadingTypes": "Chargement des types...",
@@ -613,6 +616,16 @@
     "returnToClient": "Retourner au client",
     "accountNumber": "N° Compte",
     "requestDetails": "Détails de la Demande",
+    "submitted_success": "La demande de décaissement a été soumise avec succès",
+    "created_success": "Le décaissement a été créé avec succès",
+    "approved_success": "Le décaissement a été approuvé avec succès",
+    "rejected_success": "Le décaissement a été rejeté",
+    "backed_to_client_success": "Le décaissement a été renvoyé au client avec succès",
+    "updated_success": "Le décaissement a été mis à jour avec succès",
+    "validation_errors": {
+      "loanGrantNumber_invalid": "Le numéro de prêt/subvention est invalide",
+      "beneficiaryBpNumber_invalid": "Le numéro BP du bénéficiaire est invalide"
+    },
     "wizard": {
       "title": "Créer une Demande de Décaissement",
       "step1": "Informations Générales",
@@ -647,6 +660,7 @@
       "beneficiaryBpNumber": "Numéro BP",
       "beneficiaryAddress": "Adresse",
       "beneficiaryCountry": "Pays",
+      "beneficiaryContactPerson": "Personne à Contacter",
       "correspondentBank": "Banque Correspondante",
       "correspondentBankName": "Nom de la Banque",
       "correspondentBankAddress": "Adresse de la Banque",
@@ -657,7 +671,10 @@
       "signatoryName": "Nom du Signataire",
       "signatoryTitle": "Titre",
       "signatoryEmail": "Email",
-      "signatoryPhone": "Téléphone"
+      "signatoryPhone": "Téléphone",
+      "signatoryAddress": "Adresse",
+      "signatoryCountry": "Pays",
+      "signatoryContactPerson": "Personne à Contacter"
     },
     "typeA2": {
       "title": "Remboursement (A2)",
@@ -679,6 +696,7 @@
       "periodForUtilization": "Période d'Utilisation",
       "goodDescription": "Description des Biens",
       "goodOriginCountry": "Pays d'Origine",
+      "goodQuantity": "Quantité",
       "advanceRequested": "Avance Demandée",
       "annualBudget": "Budget Annuel",
       "bankShare": "Part de la Banque"
@@ -695,12 +713,6 @@
       "executingAgencyEmail": "Email",
       "guaranteeAmount": "Montant de la Garantie",
       "expiryDate": "Date d'Expiration"
-    },
-    "typeA3": {
-      "goodQuantity": "Quantité"
     }
-  },
-  "common": {
-    "browse": "Parcourir"
   }
 }

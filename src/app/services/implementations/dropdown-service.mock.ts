@@ -4,6 +4,7 @@ import { delay, map, catchError } from 'rxjs/operators';
 import { AbstractDropdownService } from '../abstract/dropdown-service.abstract';
 import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilter, FinancingType } from '../../models/dropdown.model';
 import { ClaimTypesResponse, ClaimType } from '../../models/claim.model';
+import { CurrenciesResponse, CurrencyDto, DisbursementTypeDto, DisbursementTypesResponse } from '../../models/disbursement.model';
 
 /**
  * Implémentation mock du service dropdown
@@ -279,6 +280,45 @@ export class MockDropdownService extends AbstractDropdownService {
     }
   ];
 
+    private mockDisbursementTypes: DisbursementTypeDto[] = [
+      {
+        id: '1',
+        code: 'A1',
+        name: 'Direct Payment',
+        nameFr: 'Paiement Direct',
+        description: 'Direct payment to beneficiary',
+      },
+      {
+        id: '2',
+        code: 'A2',
+        name: 'Reimbursement',
+        nameFr: 'Remboursement',
+        description: 'Reimbursement of expenses',
+      },
+      {
+        id: '3',
+        code: 'A3',
+        name: 'Special Commitment',
+        nameFr: 'Engagement Spécial',
+        description: 'Special commitment procedure',
+      },
+      {
+        id: '4',
+        code: 'B1',
+        name: 'Letter of Credit',
+        nameFr: 'Lettre de Crédit',
+        description: 'Letter of credit issuance',
+      },
+    ];
+  
+    private mockCurrencies: CurrencyDto[] = [
+      { id: '1', code: 'USD', name: 'US Dollar', symbol: '$' },
+      { id: '2', code: 'EUR', name: 'Euro', symbol: '€' },
+      { id: '3', code: 'GBP', name: 'British Pound', symbol: '£' },
+      { id: '4', code: 'XOF', name: 'West African CFA Franc', symbol: 'CFA' },
+    ];
+  
+
   getCountries(filter?: DropdownFilter): Observable<DropdownResponse<Country>> {
     console.log('[MOCK] Fetching countries with filter:', filter);
     return this.simulateCountriesResponse(filter);
@@ -373,6 +413,22 @@ export class MockDropdownService extends AbstractDropdownService {
         }
       ],
       totalCount: 5
+    }).pipe(delay(300));
+  }
+
+  getCurrencies(): Observable<CurrenciesResponse> {
+    console.log('[MOCK] Fetching currencies');
+    return of({
+      currencies: this.mockCurrencies,
+      totalCount: this.mockCurrencies.length
+    }).pipe(delay(300));
+  }
+
+  getDisbursementTypes(): Observable<DisbursementTypesResponse> {
+    console.log('[MOCK] Fetching disbursement types');
+    return of({
+      disbursementTypes: this.mockDisbursementTypes,
+      totalCount: this.mockDisbursementTypes.length
     }).pipe(delay(300));
   }
 

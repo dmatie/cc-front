@@ -14,6 +14,12 @@ export interface CountryDto {
   nameFr: string;
 }
 
+export interface CurrenciesResponse {
+  currencies: CurrencyDto[];
+  totalCount: number;
+}
+
+
 export interface CurrencyDto {
   id: string;
   code: string;
@@ -27,6 +33,11 @@ export interface DisbursementTypeDto {
   name: string;
   nameFr: string;
   description?: string;
+}
+
+export interface DisbursementTypesResponse {
+  disbursementTypes: DisbursementTypeDto[];
+  totalCount: number;
 }
 
 export interface DisbursementA1Dto {

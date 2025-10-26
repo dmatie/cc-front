@@ -7,6 +7,7 @@ import { Country, UserFunction, BusinessProfile, DropdownResponse, DropdownFilte
 import { ClaimTypesResponse } from '../../models/claim.model';
 import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../error-handler.service';
+import { CurrenciesResponse, DisbursementTypesResponse } from '../../models/disbursement.model';
 
 /**
  * Implémentation API du service dropdown
@@ -157,6 +158,28 @@ export class ApiDropdownService extends AbstractDropdownService {
       })
     );
   }
+
+  getCurrencies(): Observable<CurrenciesResponse> {
+    console.log('[API] Fetching currencies');
+
+    return this.http.get<CurrenciesResponse>(`${this.apiUrl}/currencies`).pipe(
+      timeout(this.timeout),
+      retry(2),
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
+    );
+  }
+
+  getDisbursementTypes(): Observable<DisbursementTypesResponse> {
+    console.log('[API] Fetching disbursement types');
+
+    return this.http.get<DisbursementTypesResponse>(`${this.apiUrl}/disbursement-types`).pipe(
+      timeout(this.timeout),
+      retry(2),
+      catchError(this.errorHandler.handleApiErrorRx('DropdownService'))
+    );
+  }
+
+
 
   // MÉTHODES PRIVÉES
 

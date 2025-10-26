@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DisbursementService } from '../abstract/disbursement-service.abstract';
 import {
@@ -18,25 +18,41 @@ import {
   DisbursementTypeDto,
   CurrencyDto,
 } from '../../models/disbursement.model';
+import { ErrorHandlerService } from '../error-handler.service';
 
 @Injectable()
 export class DisbursementApiService extends DisbursementService {
   private readonly http = inject(HttpClient);
+  private errorHandler = inject(ErrorHandlerService);
+  
   private readonly baseUrl = `${environment.apiUrl}/Disbursements`;
 
   override getAllDisbursements(): Observable<DisbursementDto[]> {
-    return this.http.get<DisbursementDto[]>(this.baseUrl);
+    return this.http.get<DisbursementDto[]>(this.baseUrl).pipe(
+          catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+        );
   }
 
+  override getAllUserDisbursements(): Observable<DisbursementDto[]> {
+    return this.http.get<DisbursementDto[]>(`${this.baseUrl}/by-user`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+
   override getDisbursementById(id: string): Observable<DisbursementDto> {
-    return this.http.get<DisbursementDto>(`${this.baseUrl}/${id}`);
+    return this.http.get<DisbursementDto>(`${this.baseUrl}/${id}`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
   }
 
   override createDisbursement(
     command: CreateDisbursementCommand
   ): Observable<CreateDisbursementResponse> {
     const formData = this.buildCreateDisbursementFormData(command);
-    return this.http.post<CreateDisbursementResponse>(this.baseUrl, formData);
+    return this.http.post<CreateDisbursementResponse>(this.baseUrl, formData).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
   }
 
   override submitDisbursement(
@@ -53,6 +69,8 @@ export class DisbursementApiService extends DisbursementService {
     return this.http.post<SubmitDisbursementResponse>(
       `${this.baseUrl}/${command.disbursementId}/submit`,
       formData
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
 
@@ -62,6 +80,8 @@ export class DisbursementApiService extends DisbursementService {
     return this.http.post<ApproveDisbursementResponse>(
       `${this.baseUrl}/${command.disbursementId}/approve`,
       {}
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
 
@@ -71,6 +91,8 @@ export class DisbursementApiService extends DisbursementService {
     return this.http.post<RejectDisbursementResponse>(
       `${this.baseUrl}/${command.disbursementId}/reject`,
       { comment: command.comment }
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
 
@@ -89,15 +111,21 @@ export class DisbursementApiService extends DisbursementService {
     return this.http.post<BackToClientDisbursementResponse>(
       `${this.baseUrl}/${command.disbursementId}/back-to-client`,
       formData
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
 
   override getDisbursementTypes(): Observable<DisbursementTypeDto[]> {
-    return this.http.get<DisbursementTypeDto[]>(`${environment.apiUrl}/DisbursementTypes`);
+    return this.http.get<DisbursementTypeDto[]>(`${environment.apiUrl}/DisbursementTypes`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
   }
 
   override getCurrencies(): Observable<CurrencyDto[]> {
-    return this.http.get<CurrencyDto[]>(`${environment.apiUrl}/Currencies`);
+    return this.http.get<CurrencyDto[]>(`${environment.apiUrl}/Currencies`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
   }
 
   private buildCreateDisbursementFormData(command: CreateDisbursementCommand): FormData {

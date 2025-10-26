@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { DisbursementDto, DisbursementStatus } from '../../models/disbursement.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
+import { BackendMessageTranslationService } from '../../services/backend-message-translation.service';
 
 @Component({
   selector: 'app-disbursement-detail',
@@ -37,6 +38,7 @@ export class DisbursementDetailComponent implements OnInit {
     private router: Router,
     private disbursementService: DisbursementService,
     private authService: AuthService,
+    private messageTranslationService: BackendMessageTranslationService,
     public i18n: I18nService
   ) {}
 
@@ -97,7 +99,7 @@ export class DisbursementDetailComponent implements OnInit {
       additionalDocuments: this.additionalDocuments.length > 0 ? this.additionalDocuments : undefined
     }).subscribe({
       next: (response) => {
-        this.successMessage = response.message;
+        this.successMessage = this.messageTranslationService.translateMessage(response.message);
         this.actionLoading = false;
         this.showSubmitConfirm = false;
         this.loadDisbursementDetail(this.disbursement!.id);
@@ -190,6 +192,25 @@ export class DisbursementDetailComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.additionalDocuments = Array.from(input.files);
+    }
+  }
+
+  getTimelineStatusClass(status: DisbursementStatus): string {
+    switch (status) {
+      case DisbursementStatus.Draft:
+        return 'bg-secondary';
+      case DisbursementStatus.Submitted:
+        return 'bg-warning';
+      case DisbursementStatus.Approved:
+        return 'bg-success';
+      case DisbursementStatus.Rejected:
+        return 'bg-danger';
+      case DisbursementStatus.Completed:
+        return 'bg-primary';
+      case DisbursementStatus.BackedToClient:
+        return 'bg-info';
+      default:
+        return 'bg-light text-dark';
     }
   }
 
