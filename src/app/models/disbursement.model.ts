@@ -361,3 +361,14 @@ export interface BackToClientDisbursementResponse {
   disbursement: DisbursementDto;
   message: string;
 }
+
+export interface ReSubmitDisbursementCommand {
+  disbursementId: string;
+  comment: string;
+  additionalDocuments?: File[];
+}
+
+export interface ReSubmitDisbursementResponse {
+  disbursement: DisbursementDto;
+  message: string;
+}

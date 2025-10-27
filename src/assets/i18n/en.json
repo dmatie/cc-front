@@ -26,6 +26,7 @@
     "continue": "Continue",
     "yes": "Yes",
     "no": "No",
+    "optional": "Optional",
     "actions": "Actions",
     "by": "by",
     "error": "An error occurred",
@@ -632,6 +633,22 @@
     "validation_errors": {
       "loanGrantNumber_invalid": "The loan/grant number is invalid",
       "beneficiaryBpNumber_invalid": "The beneficiary BP number is invalid"
+    },
+    "resubmit": {
+      "button": "Resubmit Request",
+      "title": "Resubmit Disbursement Request",
+      "instruction": "Please provide additional information or corrections requested by the internal team.",
+      "comment": "Comment",
+      "commentPlaceholder": "Explain the changes or additions you've made...",
+      "commentHelp": "This comment will be visible to the internal team reviewing your request.",
+      "commentRequired": "Comment is required",
+      "attachments": "Additional Documents",
+      "allowedFiles": "Allowed files: PDF, Word, Excel, Images (Max 10MB per file)",
+      "selectedFiles": "Selected Files",
+      "submit": "Resubmit Request",
+      "submitting": "Submitting...",
+      "success": "Disbursement request resubmitted successfully",
+      "error": "Error resubmitting disbursement request"
     },
     "wizard": {
       "title": "Create Disbursement Request",

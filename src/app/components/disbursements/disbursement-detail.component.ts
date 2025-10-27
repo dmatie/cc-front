@@ -8,11 +8,12 @@ import { I18nService } from '../../services/i18n.service';
 import { DisbursementDto, DisbursementStatus } from '../../models/disbursement.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { BackendMessageTranslationService } from '../../services/backend-message-translation.service';
+import { ResubmitDisbursementModalComponent } from './resubmit-disbursement-modal.component';
 
 @Component({
   selector: 'app-disbursement-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent],
+  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent, ResubmitDisbursementModalComponent],
   templateUrl: './disbursement-detail.component.html',
   styleUrls: ['./disbursement-detail.component.css']
 })
@@ -28,6 +29,7 @@ export class DisbursementDetailComponent implements OnInit {
   showApproveConfirm = false;
   showRejectModal = false;
   showBackToClientModal = false;
+  showResubmitModal = false;
 
   rejectComment = '';
   backToClientComment = '';
@@ -85,6 +87,18 @@ export class DisbursementDetailComponent implements OnInit {
   canBackToClient(): boolean {
     return this.isInternalUser &&
            this.disbursement?.status === DisbursementStatus.Submitted;
+  }
+
+  canResubmit(): boolean {
+    return !this.isInternalUser &&
+           this.disbursement?.status === DisbursementStatus.BackedToClient;
+  }
+
+  onResubmitSuccess(): void {
+    this.successMessage = this.i18n.t('disbursements.resubmit.success');
+    if (this.disbursement) {
+      this.loadDisbursementDetail(this.disbursement.id);
+    }
   }
 
   submitDisbursement(): void {

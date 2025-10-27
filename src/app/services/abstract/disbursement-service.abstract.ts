@@ -11,6 +11,8 @@ import {
   RejectDisbursementResponse,
   BackToClientDisbursementCommand,
   BackToClientDisbursementResponse,
+  ReSubmitDisbursementCommand,
+  ReSubmitDisbursementResponse,
   DisbursementTypeDto,
   CurrencyDto,
 } from '../../models/disbursement.model';
@@ -41,6 +43,10 @@ export abstract class DisbursementService {
   abstract backToClientDisbursement(
     command: BackToClientDisbursementCommand
   ): Observable<BackToClientDisbursementResponse>;
+
+  abstract resubmitDisbursement(
+    command: ReSubmitDisbursementCommand
+  ): Observable<ReSubmitDisbursementResponse>;
 
   abstract getDisbursementTypes(): Observable<DisbursementTypeDto[]>;
 

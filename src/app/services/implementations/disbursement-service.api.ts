@@ -15,6 +15,8 @@ import {
   RejectDisbursementResponse,
   BackToClientDisbursementCommand,
   BackToClientDisbursementResponse,
+  ReSubmitDisbursementCommand,
+  ReSubmitDisbursementResponse,
   DisbursementTypeDto,
   CurrencyDto,
 } from '../../models/disbursement.model';
@@ -110,6 +112,26 @@ export class DisbursementApiService extends DisbursementService {
 
     return this.http.post<BackToClientDisbursementResponse>(
       `${this.baseUrl}/${command.disbursementId}/back-to-client`,
+      formData
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+  override resubmitDisbursement(
+    command: ReSubmitDisbursementCommand
+  ): Observable<ReSubmitDisbursementResponse> {
+    const formData = new FormData();
+    formData.append('comment', command.comment);
+
+    if (command.additionalDocuments && command.additionalDocuments.length > 0) {
+      command.additionalDocuments.forEach((file) => {
+        formData.append('additionalDocuments', file, file.name);
+      });
+    }
+
+    return this.http.post<ReSubmitDisbursementResponse>(
+      `${this.baseUrl}/${command.disbursementId}/resubmit`,
       formData
     ).pipe(
       catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))

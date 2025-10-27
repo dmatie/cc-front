@@ -13,6 +13,8 @@ import {
   RejectDisbursementResponse,
   BackToClientDisbursementCommand,
   BackToClientDisbursementResponse,
+  ReSubmitDisbursementCommand,
+  ReSubmitDisbursementResponse,
   DisbursementTypeDto,
   CurrencyDto,
   DisbursementStatus,
@@ -331,6 +333,38 @@ export class DisbursementMockService extends DisbursementService {
     const response: BackToClientDisbursementResponse = {
       disbursement,
       message: 'Disbursement sent back to client successfully',
+    };
+
+    return of(response).pipe(delay(500));
+  }
+
+  override resubmitDisbursement(
+    command: ReSubmitDisbursementCommand
+  ): Observable<ReSubmitDisbursementResponse> {
+    const disbursement = this.mockDisbursements.find((d) => d.id === command.disbursementId);
+    if (!disbursement) {
+      return throwError(() => new Error('Disbursement not found'));
+    }
+
+    disbursement.status = DisbursementStatus.Submitted;
+    disbursement.processedAt = new Date().toISOString();
+
+    disbursement.processes.push({
+      id: (disbursement.processes.length + 1).toString(),
+      disbursementId: disbursement.id,
+      status: DisbursementStatus.Submitted,
+      processedByUserId: disbursement.createdByUserId,
+      processedByUserName: disbursement.createdByUserName,
+      processedByUserEmail: disbursement.createdByUserEmail,
+      comment: command.comment,
+      processedAt: new Date().toISOString(),
+      createdBy: disbursement.createdByUserEmail,
+      createdAt: new Date().toISOString(),
+    });
+
+    const response: ReSubmitDisbursementResponse = {
+      disbursement,
+      message: 'Disbursement resubmitted successfully',
     };
 
     return of(response).pipe(delay(500));

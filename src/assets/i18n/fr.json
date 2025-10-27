@@ -26,6 +26,7 @@
     "continue": "Continuer",
     "yes": "Oui",
     "no": "Non",
+    "optional": "Optionnel",
     "actions": "Actions",
     "by": "par",
     "error": "Une erreur s'est produite",
@@ -625,6 +626,22 @@
     "validation_errors": {
       "loanGrantNumber_invalid": "Le numéro de prêt/subvention est invalide",
       "beneficiaryBpNumber_invalid": "Le numéro BP du bénéficiaire est invalide"
+    },
+    "resubmit": {
+      "button": "Resoumettre la Demande",
+      "title": "Resoumettre la Demande de Décaissement",
+      "instruction": "Veuillez fournir les informations supplémentaires ou les corrections demandées par l'équipe interne.",
+      "comment": "Commentaire",
+      "commentPlaceholder": "Expliquez les modifications ou ajouts que vous avez effectués...",
+      "commentHelp": "Ce commentaire sera visible par l'équipe interne qui examine votre demande.",
+      "commentRequired": "Le commentaire est obligatoire",
+      "attachments": "Documents Additionnels",
+      "allowedFiles": "Fichiers autorisés : PDF, Word, Excel, Images (Max 10 Mo par fichier)",
+      "selectedFiles": "Fichiers Sélectionnés",
+      "submit": "Resoumettre la Demande",
+      "submitting": "Envoi en cours...",
+      "success": "Demande de décaissement resoumise avec succès",
+      "error": "Erreur lors de la resoumission de la demande"
     },
     "wizard": {
       "title": "Créer une Demande de Décaissement",
