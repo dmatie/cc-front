@@ -780,29 +780,165 @@
 
                 <div *ngIf="command.disbursementA1" class="mt-4">
                   <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA1.title') }}</h6>
+
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.paymentPurpose') }}</label>
+                      <div>{{ command.disbursementA1.paymentPurpose || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.beneficiary') }}</h6>
                   <div class="row">
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryName') }}</label>
                       <div>{{ command.disbursementA1.beneficiaryName || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryEmail || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryBpNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryAddress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryContactPerson') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryContactPerson || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.amount') }}</label>
-                      <div class="text-success"><strong>{{ command.disbursementA1.amount | number: '1.2-2' }}</strong>
-                      </div>
+                      <div class="text-success"><strong>{{ command.disbursementA1.amount | number: '1.2-2' }}</strong></div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankName') }}</label>
+                      <div>{{ command.disbursementA1.correspondentBankName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
+                      <div>{{ command.disbursementA1.correspondentBankSwiftCode || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
+                      <div>{{ command.disbursementA1.correspondantAccountNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }}</label>
+                      <div>{{ command.disbursementA1.correspondentBankAddress || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.signatory') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryName') }}</label>
+                      <div>{{ command.disbursementA1.signatoryName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryEmail') }}</label>
+                      <div>{{ command.disbursementA1.signatoryEmail || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryPhone') }}</label>
+                      <div>{{ command.disbursementA1.signatoryPhone || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryContactPerson') }}</label>
+                      <div>{{ command.disbursementA1.signatoryContactPerson || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryTitle') }}</label>
+                      <div>{{ command.disbursementA1.signatoryTitle || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryAddress') }}</label>
+                      <div>{{ command.disbursementA1.signatoryAddress || '—' }}</div>
                     </div>
                   </div>
                 </div>
 
                 <div *ngIf="command.disbursementA2" class="mt-4">
                   <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA2.title') }}</h6>
+
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }}</label>
+                      <div>{{ command.disbursementA2.reimbursementPurpose || '—' }}</div>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractor') }}</label>
                       <div>{{ command.disbursementA2.contractor || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.goodDescription') }}</label>
+                      <div>{{ command.disbursementA2.goodDescription || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA2.contractSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractBorrowerReference') }}</label>
+                      <div>{{ command.disbursementA2.contractBorrowerReference || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractAfDBReference') }}</label>
+                      <div>{{ command.disbursementA2.contractAfDBReference || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractValue') }}</label>
+                      <div>{{ command.disbursementA2.contractValue || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractBankShare') }}</label>
+                      <div>{{ command.disbursementA2.contractBankShare || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractAmountPreviouslyPaid') }}</label>
+                      <div>{{ command.disbursementA2.contractAmountPreviouslyPaid | number: '1.2-2' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA2.invoiceSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceRef') }}</label>
                       <div>{{ command.disbursementA2.invoiceRef || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceDate') }}</label>
+                      <div>{{ command.disbursementA2.invoiceDate || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceAmount') }}</label>
+                      <div class="text-success"><strong>{{ command.disbursementA2.invoiceAmount | number: '1.2-2' }}</strong></div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA2.paymentSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.paymentDateOfPayment') }}</label>
+                      <div>{{ command.disbursementA2.paymentDateOfPayment || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.paymentAmountWithdrawn') }}</label>
+                      <div>{{ command.disbursementA2.paymentAmountWithdrawn | number: '1.2-2' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.paymentEvidenceOfPayment') }}</label>
+                      <div>{{ command.disbursementA2.paymentEvidenceOfPayment || '—' }}</div>
                     </div>
                   </div>
                 </div>
@@ -811,27 +947,134 @@
                   <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA3.title') }}</h6>
                   <div class="row">
                     <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.periodForUtilization') }}</label>
+                      <div>{{ command.disbursementA3.periodForUtilization || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.itemNumber') }}</label>
+                      <div>{{ command.disbursementA3.itemNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.typeA3.goodDescription') }}</label>
                       <div>{{ command.disbursementA3.goodDescription || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.goodQuantity') }}</label>
+                      <div>{{ command.disbursementA3.goodQuantity || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.annualBudget') }}</label>
+                      <div>{{ command.disbursementA3.annualBudget | number: '1.2-2' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.bankShare') }}</label>
+                      <div>{{ command.disbursementA3.bankShare | number: '1.2-2' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
                       <label class="text-muted small">{{ i18n.t('disbursements.typeA3.advanceRequested') }}</label>
-                      <div class="text-success"><strong>{{ command.disbursementA3.advanceRequested | number: '1.2-2'
-                          }}</strong></div>
+                      <div class="text-success"><strong>{{ command.disbursementA3.advanceRequested | number: '1.2-2' }}</strong></div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.dateOfApproval') }}</label>
+                      <div>{{ command.disbursementA3.dateOfApproval || '—' }}</div>
                     </div>
                   </div>
                 </div>
 
                 <div *ngIf="command.disbursementB1" class="mt-4">
                   <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeB1.title') }}</h6>
+
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }}</label>
+                      <div>{{ command.disbursementB1.guaranteeDetails || '—' }}</div>
+                    </div>
+                  </div>
+
                   <div class="row">
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBank') }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.confirmingBank') }}</label>
+                      <div>{{ command.disbursementB1.confirmingBank || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeB1.issuingBankSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBankName') }}</label>
                       <div>{{ command.disbursementB1.issuingBankName || '—' }}</div>
                     </div>
                     <div class="col-md-6 mb-2">
-                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBankAddress') }}</label>
+                      <div>{{ command.disbursementB1.issuingBankAdress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.guaranteeAmount') }}</label>
+                      <div class="text-success"><strong>{{ command.disbursementB1.guaranteeAmount | number: '1.2-2' }}</strong></div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.expiryDate') }}</label>
+                      <div>{{ command.disbursementB1.expiryDate || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeB1.beneficiarySection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryName') }}</label>
                       <div>{{ command.disbursementB1.beneficiaryName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryBPNumber') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryBPNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryAFDBContract') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryAFDBContract || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryBankAddress') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryBankAddress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryCity') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryCity || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.goodDescription') }}</label>
+                      <div>{{ command.disbursementB1.goodDescription || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryLcContractRef') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryLcContractRef || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeB1.executingAgencySection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyName') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyContactPerson') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyContactPerson || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyEmail') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyEmail || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyPhone') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyPhone || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyAddress') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyAddress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyCity') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyCity || '—' }}</div>
                     </div>
                   </div>
                 </div>

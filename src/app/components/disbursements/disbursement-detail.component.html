@@ -127,11 +127,27 @@
                       <div class="bg-light p-3 rounded">{{ disbursement.disbursementA1.paymentPurpose }}</div>
                     </div>
 
+                    <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.beneficiary') }}</h6>
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiary') }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryName') }}</label>
                         <div><strong>{{ disbursement.disbursementA1.beneficiaryName }}</strong></div>
-                        <div class="text-muted small">{{ disbursement.disbursementA1.beneficiaryEmail }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }}</label>
+                        <div>{{ disbursement.disbursementA1.beneficiaryEmail }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
+                        <div>{{ disbursement.disbursementA1.beneficiaryBpNumber }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
+                        <div>{{ disbursement.disbursementA1.beneficiaryAddress }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryContactPerson') }}</label>
+                        <div>{{ disbursement.disbursementA1.beneficiaryContactPerson }}</div>
                       </div>
                       <div class="col-md-6">
                         <label class="text-muted small">{{ i18n.t('disbursements.amount') }}</label>
@@ -139,15 +155,51 @@
                       </div>
                     </div>
 
+                    <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</h6>
                     <div class="row mb-3">
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankName') }}</label>
                         <div>{{ disbursement.disbursementA1.correspondentBankName }}</div>
-                        <div class="text-muted small">{{ disbursement.disbursementA1.correspondentBankSwiftCode }}</div>
                       </div>
                       <div class="col-md-6">
-                        <label class="text-muted small">{{ i18n.t('disbursements.accountNumber') }}</label>
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
+                        <div>{{ disbursement.disbursementA1.correspondentBankSwiftCode }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
                         <div>{{ disbursement.disbursementA1.correspondantAccountNumber }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }}</label>
+                        <div>{{ disbursement.disbursementA1.correspondentBankAddress }}</div>
+                      </div>
+                    </div>
+
+                    <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.signatory') }}</h6>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryName') }}</label>
+                        <div>{{ disbursement.disbursementA1.signatoryName }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryEmail') }}</label>
+                        <div>{{ disbursement.disbursementA1.signatoryEmail }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryPhone') }}</label>
+                        <div>{{ disbursement.disbursementA1.signatoryPhone }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryContactPerson') }}</label>
+                        <div>{{ disbursement.disbursementA1.signatoryContactPerson }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryTitle') }}</label>
+                        <div>{{ disbursement.disbursementA1.signatoryTitle }}</div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryAddress') }}</label>
+                        <div>{{ disbursement.disbursementA1.signatoryAddress }}</div>
                       </div>
                     </div>
                   </div>
