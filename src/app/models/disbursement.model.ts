@@ -372,3 +372,114 @@ export interface ReSubmitDisbursementResponse {
   disbursement: DisbursementDto;
   message: string;
 }
+
+export interface EditDisbursementA1Command {
+  paymentPurpose: string;
+
+  beneficiaryBpNumber: string;
+  beneficiaryName: string;
+  beneficiaryContactPerson: string;
+  beneficiaryAddress: string;
+  beneficiaryCountryId: string;
+  beneficiaryEmail: string;
+
+  correspondentBankName: string;
+  correspondentBankAddress: string;
+  correspondentBankCountryId: string;
+  correspondantAccountNumber: string;
+  correspondentBankSwiftCode: string;
+
+  amount: number;
+
+  signatoryName: string;
+  signatoryContactPerson: string;
+  signatoryAddress: string;
+  signatoryCountryId: string;
+  signatoryEmail: string;
+  signatoryPhone: string;
+  signatoryTitle: string;
+}
+
+export interface EditDisbursementA2Command {
+  reimbursementPurpose: string;
+  contractor: string;
+
+  goodDescription: string;
+  goodOrginCountryId: string;
+
+  contractBorrowerReference: string;
+  contractAfDBReference: string;
+  contractValue: string;
+  contractBankShare: string;
+  contractAmountPreviouslyPaid: number;
+
+  invoiceRef: string;
+  invoiceDate: string;
+  invoiceAmount: number;
+
+  paymentDateOfPayment: string;
+  paymentAmountWithdrawn: number;
+  paymentEvidenceOfPayment: string;
+}
+
+export interface EditDisbursementA3Command {
+  periodForUtilization: string;
+  itemNumber: number;
+
+  goodDescription: string;
+  goodOrginCountryId: string;
+  goodQuantity: number;
+
+  annualBudget: number;
+  bankShare: number;
+  advanceRequested: number;
+
+  dateOfApproval: string;
+}
+
+export interface EditDisbursementB1Command {
+  guaranteeDetails: string;
+  confirmingBank: string;
+
+  issuingBankName: string;
+  issuingBankAdress: string;
+  guaranteeAmount: number;
+  expiryDate: string;
+
+  beneficiaryName: string;
+  beneficiaryBPNumber: string;
+  beneficiaryAFDBContract: string;
+  beneficiaryBankAddress: string;
+  beneficiaryCity: string;
+  beneficiaryCountryId: string;
+  goodDescription: string;
+  beneficiaryLcContractRef: string;
+
+  executingAgencyName: string;
+  executingAgencyContactPerson: string;
+  executingAgencyAddress: string;
+  executingAgencyCity: string;
+  executingAgencyCountryId: string;
+  executingAgencyEmail: string;
+  executingAgencyPhone: string;
+}
+
+export interface EditDisbursementCommand {
+  id: string;
+  sapCodeProject: string;
+  loanGrantNumber: string;
+  disbursementTypeId: string;
+  currencyId: string;
+
+  disbursementA1?: EditDisbursementA1Command;
+  disbursementA2?: EditDisbursementA2Command;
+  disbursementA3?: EditDisbursementA3Command;
+  disbursementB1?: EditDisbursementB1Command;
+
+  documents?: File[];
+}
+
+export interface EditDisbursementResponse {
+  disbursement: DisbursementDto;
+  message: string;
+}

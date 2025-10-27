@@ -129,6 +129,11 @@ export const routes: Routes = [
     canActivate: [() => inject(ExternalUserGuard).canActivate()]
   },
   {
+    path: 'disbursements/:id/edit',
+    loadComponent: () => import('./components/disbursements/edit-disbursement-wizard.component').then(m => m.EditDisbursementWizardComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+  {
     path: 'disbursements/:id',
     loadComponent: () => import('./components/disbursements/disbursement-detail.component').then(m => m.DisbursementDetailComponent),
     canActivate: [() => inject(ExternalUserGuard).canActivate()]

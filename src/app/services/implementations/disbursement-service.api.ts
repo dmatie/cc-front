@@ -7,6 +7,8 @@ import {
   DisbursementDto,
   CreateDisbursementCommand,
   CreateDisbursementResponse,
+  EditDisbursementCommand,
+  EditDisbursementResponse,
   SubmitDisbursementCommand,
   SubmitDisbursementResponse,
   ApproveDisbursementCommand,
@@ -53,6 +55,15 @@ export class DisbursementApiService extends DisbursementService {
   ): Observable<CreateDisbursementResponse> {
     const formData = this.buildCreateDisbursementFormData(command);
     return this.http.post<CreateDisbursementResponse>(this.baseUrl, formData).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+  override editDisbursement(
+    command: EditDisbursementCommand
+  ): Observable<EditDisbursementResponse> {
+    const formData = this.buildEditDisbursementFormData(command);
+    return this.http.put<EditDisbursementResponse>(`${this.baseUrl}/${command.id}`, formData).pipe(
       catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
@@ -153,6 +164,56 @@ export class DisbursementApiService extends DisbursementService {
   private buildCreateDisbursementFormData(command: CreateDisbursementCommand): FormData {
     const formData = new FormData();
 
+    formData.append('sapCodeProject', command.sapCodeProject);
+    formData.append('loanGrantNumber', command.loanGrantNumber);
+    formData.append('disbursementTypeId', command.disbursementTypeId);
+    formData.append('currencyId', command.currencyId);
+
+    if (command.disbursementA1) {
+      Object.entries(command.disbursementA1).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(`disbursementA1.${key}`, value.toString());
+        }
+      });
+    }
+
+    if (command.disbursementA2) {
+      Object.entries(command.disbursementA2).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(`disbursementA2.${key}`, value.toString());
+        }
+      });
+    }
+
+    if (command.disbursementA3) {
+      Object.entries(command.disbursementA3).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(`disbursementA3.${key}`, value.toString());
+        }
+      });
+    }
+
+    if (command.disbursementB1) {
+      Object.entries(command.disbursementB1).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          formData.append(`disbursementB1.${key}`, value.toString());
+        }
+      });
+    }
+
+    if (command.documents && command.documents.length > 0) {
+      command.documents.forEach((file) => {
+        formData.append('documents', file, file.name);
+      });
+    }
+
+    return formData;
+  }
+
+  private buildEditDisbursementFormData(command: EditDisbursementCommand): FormData {
+    const formData = new FormData();
+
+    formData.append('id', command.id);
     formData.append('sapCodeProject', command.sapCodeProject);
     formData.append('loanGrantNumber', command.loanGrantNumber);
     formData.append('disbursementTypeId', command.disbursementTypeId);

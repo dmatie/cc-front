@@ -643,6 +643,14 @@
       "success": "Demande de décaissement resoumise avec succès",
       "error": "Erreur lors de la resoumission de la demande"
     },
+    "edit": {
+      "button": "Modifier",
+      "title": "Modifier la Demande de Décaissement",
+      "update": "Mettre à Jour la Demande",
+      "updating": "Mise à jour en cours...",
+      "success": "Demande de décaissement mise à jour avec succès",
+      "error": "Erreur lors de la mise à jour de la demande"
+    },
     "wizard": {
       "title": "Créer une Demande de Décaissement",
       "step1": "Informations Générales",

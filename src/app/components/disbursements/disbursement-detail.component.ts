@@ -94,6 +94,17 @@ export class DisbursementDetailComponent implements OnInit {
            this.disbursement?.status === DisbursementStatus.BackedToClient;
   }
 
+  canEdit(): boolean {
+    return !this.isInternalUser &&
+           this.disbursement?.status === DisbursementStatus.Draft;
+  }
+
+  editDisbursement(): void {
+    if (this.disbursement) {
+      this.router.navigate(['/disbursements', this.disbursement.id, 'edit']);
+    }
+  }
+
   onResubmitSuccess(): void {
     this.successMessage = this.i18n.t('disbursements.resubmit.success');
     if (this.disbursement) {

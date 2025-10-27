@@ -5,6 +5,8 @@ import {
   DisbursementDto,
   CreateDisbursementCommand,
   CreateDisbursementResponse,
+  EditDisbursementCommand,
+  EditDisbursementResponse,
   SubmitDisbursementCommand,
   SubmitDisbursementResponse,
   ApproveDisbursementCommand,
@@ -222,6 +224,71 @@ export class DisbursementMockService extends DisbursementService {
     const response: CreateDisbursementResponse = {
       disbursement: newDisbursement,
       message: 'Disbursement created successfully',
+    };
+
+    return of(response).pipe(delay(500));
+  }
+
+  override editDisbursement(
+    command: EditDisbursementCommand
+  ): Observable<EditDisbursementResponse> {
+    const disbursement = this.mockDisbursements.find((d) => d.id === command.id);
+    if (!disbursement) {
+      return throwError(() => new Error('Disbursement not found'));
+    }
+
+    disbursement.sapCodeProject = command.sapCodeProject;
+    disbursement.loanGrantNumber = command.loanGrantNumber;
+    disbursement.disbursementTypeId = command.disbursementTypeId;
+    disbursement.currencyId = command.currencyId;
+    disbursement.currency =
+      this.mockCurrencies.find((c) => c.id === command.currencyId)?.code || 'USD';
+    disbursement.disbursementTypeCode =
+      this.mockDisbursementTypes.find((t) => t.id === command.disbursementTypeId)?.code || 'A1';
+    disbursement.disbursementTypeName =
+      this.mockDisbursementTypes.find((t) => t.id === command.disbursementTypeId)?.name ||
+      'Direct Payment';
+    disbursement.disbursementTypeNameFr =
+      this.mockDisbursementTypes.find((t) => t.id === command.disbursementTypeId)?.nameFr ||
+      'Paiement Direct';
+    disbursement.updatedAt = new Date().toISOString();
+    disbursement.updatedBy = 'current.user@example.com';
+
+    if (command.disbursementA1) {
+      disbursement.disbursementA1 = {
+        id: disbursement.disbursementA1?.id || '1',
+        disbursementId: disbursement.id,
+        ...command.disbursementA1,
+      };
+    }
+
+    if (command.disbursementA2) {
+      disbursement.disbursementA2 = {
+        id: disbursement.disbursementA2?.id || '1',
+        disbursementId: disbursement.id,
+        ...command.disbursementA2,
+      };
+    }
+
+    if (command.disbursementA3) {
+      disbursement.disbursementA3 = {
+        id: disbursement.disbursementA3?.id || '1',
+        disbursementId: disbursement.id,
+        ...command.disbursementA3,
+      };
+    }
+
+    if (command.disbursementB1) {
+      disbursement.disbursementB1 = {
+        id: disbursement.disbursementB1?.id || '1',
+        disbursementId: disbursement.id,
+        ...command.disbursementB1,
+      };
+    }
+
+    const response: EditDisbursementResponse = {
+      disbursement,
+      message: 'Disbursement updated successfully',
     };
 
     return of(response).pipe(delay(500));

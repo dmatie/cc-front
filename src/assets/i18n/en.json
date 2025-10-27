@@ -650,6 +650,14 @@
       "success": "Disbursement request resubmitted successfully",
       "error": "Error resubmitting disbursement request"
     },
+    "edit": {
+      "button": "Edit",
+      "title": "Edit Disbursement Request",
+      "update": "Update Request",
+      "updating": "Updating...",
+      "success": "Disbursement updated successfully",
+      "error": "Error updating disbursement"
+    },
     "wizard": {
       "title": "Create Disbursement Request",
       "step1": "General Information",

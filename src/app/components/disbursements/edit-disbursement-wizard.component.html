@@ -1,0 +1,1163 @@
+<app-authenticated-navbar [title]="i18n.t('nav.home')" [userType]="'external'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-10">
+      <div *ngIf="loadingDisbursement" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+        </div>
+      </div>
+
+      <div *ngIf="!loadingDisbursement" class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-pencil-square me-2"></i>
+            {{ i18n.t('disbursements.edit.title') }}
+          </h4>
+        </div>
+
+        <div class="card-body">
+          <div class="wizard-steps mb-4">
+            <div class="row text-center">
+              <div class="col-4">
+                <div class="step" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+                  <div class="step-number">1</div>
+                  <div class="step-title">
+                    {{ i18n.t('disbursements.wizard.step1') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="step" [class.active]="currentStep === 2" [class.completed]="currentStep > 2">
+                  <div class="step-number">2</div>
+                  <div class="step-title">
+                    {{ i18n.t('disbursements.wizard.step2') }}
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="step" [class.active]="currentStep === 3" [class.completed]="currentStep > 3">
+                  <div class="step-number">3</div>
+                  <div class="step-title">
+                    {{ i18n.t('disbursements.wizard.step3') }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+          <div class="alert alert-danger">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+          </div>
+          }
+
+          <div *ngIf="currentStep === 1" class="step-content">
+            <h5 class="mb-4">
+              {{ i18n.t('disbursements.wizard.step1') }}
+            </h5>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.t('disbursements.sapCode') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" [(ngModel)]="command.sapCodeProject" name="sapCodeProject"
+                  #sapCode="ngModel" required [disabled]="loadingProjects">
+                  <option value="">{{ i18n.t('disbursements.selectSapCode') }}</option>
+                  <option *ngFor="let code of sapCodes" [value]="code">{{ code }}</option>
+                </select>
+                <div *ngIf="sapCode.invalid && sapCode.touched" class="invalid-feedback d-block">
+                  {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.t('disbursements.loanGrantNumber') }}
+                  <span class="text-danger">*</span>
+                </label>
+
+                <!-- Champ validé : uniquement digits, exactement 13 caractères -->
+                <input type="text" class="form-control" name="loanGrantNumber" [(ngModel)]="command.loanGrantNumber"
+                  #loanGrantNumber="ngModel" required minlength="13" maxlength="13" pattern="^\d{13}$"
+                  [class.is-invalid]="loanGrantNumber.invalid && loanGrantNumber.touched" />
+
+                <div *ngIf="loanGrantNumber.invalid && loanGrantNumber.touched" class="invalid-feedback">
+                  <div *ngIf="loanGrantNumber.errors?.['required']">
+                    {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                  </div>
+                  <div
+                    *ngIf="loanGrantNumber.errors?.['pattern'] || loanGrantNumber.errors?.['minlength'] || loanGrantNumber.errors?.['maxlength']">
+                    {{ i18n.t('disbursements.validation_errors.loanGrantNumber_invalid') || 'Le numéro doit contenir exactement 13 chiffres.' }}
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.t('disbursements.disbursementType') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" [(ngModel)]="command.disbursementTypeId" name="disbursementTypeId"
+                  #disbursementType="ngModel" required [disabled]="loadingTypes">
+                  <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
+                  <option *ngFor="let type of disbursementTypes" [value]="type.id">
+                    {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}
+                  </option>
+                </select>
+                <div *ngIf="disbursementType.invalid && disbursementType.touched" class="invalid-feedback d-block">
+                  {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <label class="form-label">
+                  {{ i18n.t('disbursements.currency') }}
+                  <span class="text-danger">*</span>
+                </label>
+                <select class="form-select" [(ngModel)]="command.currencyId" name="currencyId" #currency="ngModel"
+                  required [disabled]="loadingCurrencies">
+                  <option value="">{{ i18n.t('disbursements.selectCurrency') }}</option>
+                  <option *ngFor="let currency of currencies" [value]="currency.id">
+                    {{ currency.code }} - {{ currency.name }}
+                  </option>
+                </select>
+                <div *ngIf="currency.invalid && currency.touched" class="invalid-feedback d-block">
+                  {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="cancel()">
+                {{ i18n.t('common.cancel') }}
+              </button>
+              <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep1()">
+                {{ i18n.t('disbursements.wizard.next') }}
+                <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 2" class="step-content">
+            <h5 class="mb-4">
+              {{ i18n.t('disbursements.wizard.step2') }}
+            </h5>
+
+            <div *ngIf="getSelectedTypeCode() === 'A1' && command.disbursementA1" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA1.title') }}</h6>
+
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.paymentPurpose') }} <span
+                      class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3"
+                    [(ngModel)]="command.disbursementA1.paymentPurpose"></textarea>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.beneficiary') }}</h6>
+                </div>
+
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryEmail"
+                    #beneficiaryEmail="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    [class.is-invalid]="beneficiaryEmail.invalid && beneficiaryEmail.touched" required />
+                  <div *ngIf="beneficiaryEmail.invalid && beneficiaryEmail.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_email_format') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
+                  <input required
+                    name="beneficiaryBpNumber"  pattern="^\d{13}$"
+                    minlength="13"
+                    maxlength="13" #beneficiaryBpNumber="ngModel"
+                    type="text" 
+                    class="form-control"
+                    [class.is-invalid]="beneficiaryBpNumber.invalid && beneficiaryBpNumber.touched"
+                    [(ngModel)]="command.disbursementA1.beneficiaryBpNumber" />
+                    
+
+                  <div *ngIf="beneficiaryBpNumber.invalid && beneficiaryBpNumber.touched" class="invalid-feedback">
+                  <div *ngIf="beneficiaryBpNumber.errors?.['required']">
+                    {{ i18n.t('errors.required_field') || 'Ce champ est requis.' }}
+                  </div>
+                  <div *ngIf="beneficiaryBpNumber.errors?.['pattern'] || beneficiaryBpNumber.errors?.['minlength'] || beneficiaryBpNumber.errors?.['maxlength']">
+                    {{ i18n.t('disbursements.valvalidation_errors.beneficiaryBpNumber_invalid') || 'Le numéro doit contenir exactement 13 chiffres.' }}
+                  </div>
+                </div>
+
+                </div>
+
+
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryCountry') }}</label>
+                  <select class="form-select" [(ngModel)]="command.disbursementA1.beneficiaryCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.amount') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" [(ngModel)]="command.disbursementA1.amount" min="0"
+                    step="0.01" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryContactPerson') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.beneficiaryContactPerson" />
+                </div>
+
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.correspondentBankName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.correspondentBankSwiftCode" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.correspondantAccountNumber" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }}</label>
+                  <input type="text" class="form-control"
+                    [(ngModel)]="command.disbursementA1.correspondentBankAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankCountry') }}</label>
+                  <select class="form-select" [(ngModel)]="command.disbursementA1.correspondentBankCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA1.signatory') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryEmail') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="email" class="form-control" [(ngModel)]="command.disbursementA1.signatoryEmail"
+                    #signatoryEmail="ngModel" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    [class.is-invalid]="signatoryEmail.invalid && signatoryEmail.touched" required />
+                  <div *ngIf="signatoryEmail.invalid && signatoryEmail.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_email_format') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryCountry') }}</label>
+                  <select class="form-select" [(ngModel)]="command.disbursementA1.signatoryCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryAddress') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryPhone') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryPhone" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryContactPerson') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryContactPerson" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.signatoryTitle') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.signatoryTitle" />
+                </div>
+
+
+              </div>
+            </div>
+
+            <div *ngIf="getSelectedTypeCode() === 'A2' && command.disbursementA2" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA2.title') }}</h6>
+
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }} <span
+                      class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3" name="reimbursementPurpose" required
+                    [(ngModel)]="command.disbursementA2.reimbursementPurpose"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractor') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="contractor" required [(ngModel)]="command.disbursementA2.contractor" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.goodDescription') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="goodDescription" required [(ngModel)]="command.disbursementA2.goodDescription" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.goodOriginCountry') }} <span
+                      class="text-danger">*</span></label>
+                  <select class="form-select" name="goodOrginCountryId" required [(ngModel)]="command.disbursementA2.goodOrginCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA2.contractSection') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractBorrowerReference') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="contractBorrowerReference" required [(ngModel)]="command.disbursementA2.contractBorrowerReference" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractAfDBReference') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="contractAfDBReference" required [(ngModel)]="command.disbursementA2.contractAfDBReference" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractValue') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="contractValue" required [(ngModel)]="command.disbursementA2.contractValue" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractBankShare') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="contractBankShare" required [(ngModel)]="command.disbursementA2.contractBankShare" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.contractAmountPreviouslyPaid') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="contractAmountPreviouslyPaid" required min="0" step="0.01"
+                    #contractAmountPreviouslyPaid="ngModel"
+                    [class.is-invalid]="contractAmountPreviouslyPaid.invalid && contractAmountPreviouslyPaid.touched"
+                    [(ngModel)]="command.disbursementA2.contractAmountPreviouslyPaid" />
+                  <div *ngIf="contractAmountPreviouslyPaid.invalid && contractAmountPreviouslyPaid.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA2.invoiceSection') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceRef') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="invoiceRef" required [(ngModel)]="command.disbursementA2.invoiceRef" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceDate') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="date" class="form-control" name="invoiceDate" required
+                    [value]="command.disbursementA2.invoiceDate | date:'yyyy-MM-dd'"
+                    (change)="command.disbursementA2!.invoiceDate = $any($event.target).value" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.invoiceAmount') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="invoiceAmount" required min="0" step="0.01"
+                    #invoiceAmount="ngModel"
+                    [class.is-invalid]="invoiceAmount.invalid && invoiceAmount.touched"
+                    [(ngModel)]="command.disbursementA2.invoiceAmount" />
+                  <div *ngIf="invoiceAmount.invalid && invoiceAmount.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeA2.paymentSection') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.paymentDateOfPayment') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="date" class="form-control" name="paymentDateOfPayment" required
+                    [value]="command.disbursementA2.paymentDateOfPayment | date:'yyyy-MM-dd'"
+                    (change)="command.disbursementA2!.paymentDateOfPayment = $any($event.target).value" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.paymentAmountWithdrawn') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="paymentAmountWithdrawn" required min="0" step="0.01"
+                    #paymentAmountWithdrawn="ngModel"
+                    [class.is-invalid]="paymentAmountWithdrawn.invalid && paymentAmountWithdrawn.touched"
+                    [(ngModel)]="command.disbursementA2.paymentAmountWithdrawn" />
+                  <div *ngIf="paymentAmountWithdrawn.invalid && paymentAmountWithdrawn.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA2.paymentEvidenceOfPayment') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="paymentEvidenceOfPayment" required [(ngModel)]="command.disbursementA2.paymentEvidenceOfPayment" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="getSelectedTypeCode() === 'A3' && command.disbursementA3" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA3.title') }}</h6>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.periodForUtilization') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="periodForUtilization" required [(ngModel)]="command.disbursementA3.periodForUtilization" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.itemNumber') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="itemNumber" required min="0" [(ngModel)]="command.disbursementA3.itemNumber" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodDescription') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="goodDescription3" required [(ngModel)]="command.disbursementA3.goodDescription" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodOriginCountry') }} <span
+                      class="text-danger">*</span></label>
+                  <select class="form-select" name="goodOrginCountryId3" required [(ngModel)]="command.disbursementA3.goodOrginCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.goodQuantity') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="goodQuantity" required min="0" [(ngModel)]="command.disbursementA3.goodQuantity" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.annualBudget') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="annualBudget" required min="0" step="0.01"
+                    #annualBudget="ngModel"
+                    [class.is-invalid]="annualBudget.invalid && annualBudget.touched"
+                    [(ngModel)]="command.disbursementA3.annualBudget" />
+                  <div *ngIf="annualBudget.invalid && annualBudget.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.bankShare') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="bankShare" required min="0" step="0.01"
+                    #bankShare="ngModel"
+                    [class.is-invalid]="bankShare.invalid && bankShare.touched"
+                    [(ngModel)]="command.disbursementA3.bankShare" />
+                  <div *ngIf="bankShare.invalid && bankShare.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.advanceRequested') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="advanceRequested" required min="0" step="0.01"
+                    #advanceRequested="ngModel"
+                    [class.is-invalid]="advanceRequested.invalid && advanceRequested.touched"
+                    [(ngModel)]="command.disbursementA3.advanceRequested" />
+                  <div *ngIf="advanceRequested.invalid && advanceRequested.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeA3.dateOfApproval') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="date" class="form-control" name="dateOfApproval" required
+                    [value]="command.disbursementA3.dateOfApproval | date:'yyyy-MM-dd'"
+                    (change)="command.disbursementA3!.dateOfApproval = $any($event.target).value" />
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="getSelectedTypeCode() === 'B1' && command.disbursementB1" class="type-details">
+              <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeB1.title') }}</h6>
+
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }} <span
+                      class="text-danger">*</span></label>
+                  <textarea class="form-control" rows="3" name="guaranteeDetails" required
+                    [(ngModel)]="command.disbursementB1.guaranteeDetails"></textarea>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.confirmingBank') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="confirmingBank" required [(ngModel)]="command.disbursementB1.confirmingBank" />
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeB1.issuingBankSection') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.issuingBankName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="issuingBankName" required [(ngModel)]="command.disbursementB1.issuingBankName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.issuingBankAddress') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="issuingBankAdress" required [(ngModel)]="command.disbursementB1.issuingBankAdress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeAmount') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="number" class="form-control" name="guaranteeAmount" required min="0" step="0.01"
+                    #guaranteeAmount="ngModel"
+                    [class.is-invalid]="guaranteeAmount.invalid && guaranteeAmount.touched"
+                    [(ngModel)]="command.disbursementB1.guaranteeAmount" />
+                  <div *ngIf="guaranteeAmount.invalid && guaranteeAmount.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_amount') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.expiryDate') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="date" class="form-control" name="expiryDate" required
+                    [value]="command.disbursementB1.expiryDate | date:'yyyy-MM-dd'"
+                    (change)="command.disbursementB1!.expiryDate = $any($event.target).value" />
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeB1.beneficiarySection') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="beneficiaryNameB1" required [(ngModel)]="command.disbursementB1.beneficiaryName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryBPNumber') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="beneficiaryBPNumberB1" required pattern="^\d{13}$"
+                    minlength="13" maxlength="13" #beneficiaryBPNumberB1="ngModel"
+                    [class.is-invalid]="beneficiaryBPNumberB1.invalid && beneficiaryBPNumberB1.touched"
+                    [(ngModel)]="command.disbursementB1.beneficiaryBPNumber" />
+                  <div *ngIf="beneficiaryBPNumberB1.invalid && beneficiaryBPNumberB1.touched" class="invalid-feedback">
+                    <div *ngIf="beneficiaryBPNumberB1.errors?.['required']">
+                      {{ i18n.t('errors.required_field') || 'Ce champ est requis.' }}
+                    </div>
+                    <div *ngIf="beneficiaryBPNumberB1.errors?.['pattern'] || beneficiaryBPNumberB1.errors?.['minlength'] || beneficiaryBPNumberB1.errors?.['maxlength']">
+                      {{ i18n.t('disbursements.validation_errors.beneficiaryBpNumber_invalid') || 'Le numéro doit contenir exactement 13 chiffres.' }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryAFDBContract') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="beneficiaryAFDBContract" required [(ngModel)]="command.disbursementB1.beneficiaryAFDBContract" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryBankAddress') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="beneficiaryBankAddress" required [(ngModel)]="command.disbursementB1.beneficiaryBankAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryCity') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="beneficiaryCity" required [(ngModel)]="command.disbursementB1.beneficiaryCity" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryCountry') }} <span
+                      class="text-danger">*</span></label>
+                  <select class="form-select" name="beneficiaryCountryId" required [(ngModel)]="command.disbursementB1.beneficiaryCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.goodDescription') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="goodDescriptionB1" required [(ngModel)]="command.disbursementB1.goodDescription" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.beneficiaryLcContractRef') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="beneficiaryLcContractRef" required [(ngModel)]="command.disbursementB1.beneficiaryLcContractRef" />
+                </div>
+
+                <div class="col-12 mt-3">
+                  <h6 class="text-primary">{{ i18n.t('disbursements.typeB1.executingAgencySection') }}</h6>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyName') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="executingAgencyName" required [(ngModel)]="command.disbursementB1.executingAgencyName" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyContactPerson') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="executingAgencyContactPerson" required [(ngModel)]="command.disbursementB1.executingAgencyContactPerson" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyEmail') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="email" class="form-control" name="executingAgencyEmail" required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    #executingAgencyEmail="ngModel"
+                    [class.is-invalid]="executingAgencyEmail.invalid && executingAgencyEmail.touched"
+                    [(ngModel)]="command.disbursementB1.executingAgencyEmail" />
+                  <div *ngIf="executingAgencyEmail.invalid && executingAgencyEmail.touched" class="invalid-feedback">
+                    {{ i18n.t('errors.invalid_email_format') }}
+                  </div>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyPhone') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="executingAgencyPhone" required [(ngModel)]="command.disbursementB1.executingAgencyPhone" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyAddress') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="executingAgencyAddress" required [(ngModel)]="command.disbursementB1.executingAgencyAddress" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyCity') }} <span
+                      class="text-danger">*</span></label>
+                  <input type="text" class="form-control" name="executingAgencyCity" required [(ngModel)]="command.disbursementB1.executingAgencyCity" />
+                </div>
+
+                <div class="col-md-6 mb-3">
+                  <label class="form-label">{{ i18n.t('disbursements.typeB1.executingAgencyCountry') }} <span
+                      class="text-danger">*</span></label>
+                  <select class="form-select" name="executingAgencyCountryId" required [(ngModel)]="command.disbursementB1.executingAgencyCountryId">
+                    <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
+                    <option *ngFor="let country of countries" [value]="country.id">
+                      {{ country.name }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="previousStep()">
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.t('disbursements.wizard.previous') }}
+              </button>
+              <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep2()">
+                {{ i18n.t('disbursements.wizard.next') }}
+                <i class="bi bi-arrow-right ms-2"></i>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="currentStep === 3" class="step-content">
+            <h5 class="mb-4">
+              {{ i18n.t('disbursements.wizard.step3') }}
+            </h5>
+
+            <div class="card shadow-sm mb-4">
+              <div class="card-header bg-primary text-white">
+                <h6 class="mb-0">
+                  <i class="bi bi-clipboard-check me-2"></i>
+                  {{ i18n.t('disbursements.wizard.reviewData') }}
+                </h6>
+              </div>
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="text-muted small">{{ i18n.t('disbursements.sapCode') }}</label>
+                    <div><strong>{{ command.sapCodeProject || '—' }}</strong></div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="text-muted small">{{ i18n.t('disbursements.loanGrantNumber') }}</label>
+                    <div><strong>{{ command.loanGrantNumber || '—' }}</strong></div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="text-muted small">{{ i18n.t('disbursements.disbursementType') }}</label>
+                    <div>{{ getSelectedType() ? (i18n.getCurrentLocale() === 'fr' ? getSelectedType()?.nameFr :
+                      getSelectedType()?.name) : '—' }}</div>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="text-muted small">{{ i18n.t('disbursements.currency') }}</label>
+                    <div>{{ getCurrencyCode() }}</div>
+                  </div>
+                </div>
+
+                <div *ngIf="command.disbursementA1" class="mt-4">
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA1.title') }}</h6>
+
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.paymentPurpose') }}</label>
+                      <div>{{ command.disbursementA1.paymentPurpose || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.beneficiary') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryName') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryEmail') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryEmail || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryBpNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryAddress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.beneficiaryContactPerson') }}</label>
+                      <div>{{ command.disbursementA1.beneficiaryContactPerson || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.amount') }}</label>
+                      <div class="text-success"><strong>{{ command.disbursementA1.amount | number: '1.2-2' }}</strong></div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.correspondentBank') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankName') }}</label>
+                      <div>{{ command.disbursementA1.correspondentBankName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
+                      <div>{{ command.disbursementA1.correspondentBankSwiftCode || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
+                      <div>{{ command.disbursementA1.correspondantAccountNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }}</label>
+                      <div>{{ command.disbursementA1.correspondentBankAddress || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA1.signatory') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryName') }}</label>
+                      <div>{{ command.disbursementA1.signatoryName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryEmail') }}</label>
+                      <div>{{ command.disbursementA1.signatoryEmail || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryPhone') }}</label>
+                      <div>{{ command.disbursementA1.signatoryPhone || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryContactPerson') }}</label>
+                      <div>{{ command.disbursementA1.signatoryContactPerson || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryTitle') }}</label>
+                      <div>{{ command.disbursementA1.signatoryTitle || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA1.signatoryAddress') }}</label>
+                      <div>{{ command.disbursementA1.signatoryAddress || '—' }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="command.disbursementA2" class="mt-4">
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA2.title') }}</h6>
+
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }}</label>
+                      <div>{{ command.disbursementA2.reimbursementPurpose || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractor') }}</label>
+                      <div>{{ command.disbursementA2.contractor || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.goodDescription') }}</label>
+                      <div>{{ command.disbursementA2.goodDescription || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA2.contractSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractBorrowerReference') }}</label>
+                      <div>{{ command.disbursementA2.contractBorrowerReference || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractAfDBReference') }}</label>
+                      <div>{{ command.disbursementA2.contractAfDBReference || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractValue') }}</label>
+                      <div>{{ command.disbursementA2.contractValue || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractBankShare') }}</label>
+                      <div>{{ command.disbursementA2.contractBankShare || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.contractAmountPreviouslyPaid') }}</label>
+                      <div>{{ command.disbursementA2.contractAmountPreviouslyPaid | number: '1.2-2' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA2.invoiceSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceRef') }}</label>
+                      <div>{{ command.disbursementA2.invoiceRef || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceDate') }}</label>
+                      <div>{{ command.disbursementA2.invoiceDate || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.invoiceAmount') }}</label>
+                      <div class="text-success"><strong>{{ command.disbursementA2.invoiceAmount | number: '1.2-2' }}</strong></div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeA2.paymentSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.paymentDateOfPayment') }}</label>
+                      <div>{{ command.disbursementA2.paymentDateOfPayment || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.paymentAmountWithdrawn') }}</label>
+                      <div>{{ command.disbursementA2.paymentAmountWithdrawn | number: '1.2-2' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA2.paymentEvidenceOfPayment') }}</label>
+                      <div>{{ command.disbursementA2.paymentEvidenceOfPayment || '—' }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="command.disbursementA3" class="mt-4">
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA3.title') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.periodForUtilization') }}</label>
+                      <div>{{ command.disbursementA3.periodForUtilization || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.itemNumber') }}</label>
+                      <div>{{ command.disbursementA3.itemNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.goodDescription') }}</label>
+                      <div>{{ command.disbursementA3.goodDescription || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.goodQuantity') }}</label>
+                      <div>{{ command.disbursementA3.goodQuantity || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.annualBudget') }}</label>
+                      <div>{{ command.disbursementA3.annualBudget | number: '1.2-2' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.bankShare') }}</label>
+                      <div>{{ command.disbursementA3.bankShare | number: '1.2-2' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.advanceRequested') }}</label>
+                      <div class="text-success"><strong>{{ command.disbursementA3.advanceRequested | number: '1.2-2' }}</strong></div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeA3.dateOfApproval') }}</label>
+                      <div>{{ command.disbursementA3.dateOfApproval || '—' }}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="command.disbursementB1" class="mt-4">
+                  <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeB1.title') }}</h6>
+
+                  <div class="row mb-2">
+                    <div class="col-12">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }}</label>
+                      <div>{{ command.disbursementB1.guaranteeDetails || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.confirmingBank') }}</label>
+                      <div>{{ command.disbursementB1.confirmingBank || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeB1.issuingBankSection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBankName') }}</label>
+                      <div>{{ command.disbursementB1.issuingBankName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.issuingBankAddress') }}</label>
+                      <div>{{ command.disbursementB1.issuingBankAdress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.guaranteeAmount') }}</label>
+                      <div class="text-success"><strong>{{ command.disbursementB1.guaranteeAmount | number: '1.2-2' }}</strong></div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.expiryDate') }}</label>
+                      <div>{{ command.disbursementB1.expiryDate || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeB1.beneficiarySection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryName') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryBPNumber') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryBPNumber || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryAFDBContract') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryAFDBContract || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryBankAddress') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryBankAddress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryCity') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryCity || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.goodDescription') }}</label>
+                      <div>{{ command.disbursementB1.goodDescription || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.beneficiaryLcContractRef') }}</label>
+                      <div>{{ command.disbursementB1.beneficiaryLcContractRef || '—' }}</div>
+                    </div>
+                  </div>
+
+                  <h6 class="text-secondary mt-3 mb-2">{{ i18n.t('disbursements.typeB1.executingAgencySection') }}</h6>
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyName') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyName || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyContactPerson') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyContactPerson || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyEmail') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyEmail || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyPhone') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyPhone || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyAddress') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyAddress || '—' }}</div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <label class="text-muted small">{{ i18n.t('disbursements.typeB1.executingAgencyCity') }}</label>
+                      <div>{{ command.disbursementB1.executingAgencyCity || '—' }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label">
+                <i class="bi bi-paperclip me-2"></i>
+                {{ i18n.t('disbursements.wizard.supportingDocs') }}
+              </label>
+
+              <div class="file-upload-zone" (click)="fileInput.click()" (dragover)="onDragOver($event)"
+                (drop)="onDrop($event)">
+                <div class="text-center py-4">
+                  <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-3"></i>
+                  <p class="mb-2">
+                    <strong>{{ i18n.t('disbursements.wizard.clickToSelect') }}</strong>
+                    {{ i18n.t('disbursements.wizard.orDragDrop') }}
+                  </p>
+                  <small class="text-muted">
+                    {{ i18n.t('disbursements.wizard.fileTypes') }}
+                  </small>
+                </div>
+                <input #fileInput type="file" class="d-none" multiple (change)="onFileSelected($event)"
+                  accept=".pdf,.doc,.docx,.xls,.xlsx" />
+              </div>
+
+              <div *ngIf="selectedFiles.length > 0" class="mt-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <p class="text-success mb-0">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <strong>{{ selectedFiles.length }}</strong> {{ i18n.t('disbursements.wizard.filesSelected') }}
+                  </p>
+                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="clearFiles()">
+                    <i class="bi bi-trash me-1"></i>
+                    {{ i18n.t('disbursements.wizard.clearAll') }}
+                  </button>
+                </div>
+                <div class="list-group">
+                  <div *ngFor="let file of selectedFiles; let i = index"
+                    class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                      <i class="bi bi-file-earmark-pdf text-danger me-2" *ngIf="file.name.endsWith('.pdf')"></i>
+                      <i class="bi bi-file-earmark-word text-primary me-2"
+                        *ngIf="file.name.endsWith('.doc') || file.name.endsWith('.docx')"></i>
+                      <i class="bi bi-file-earmark-excel text-success me-2"
+                        *ngIf="file.name.endsWith('.xls') || file.name.endsWith('.xlsx')"></i>
+                      <strong>{{ file.name }}</strong>
+                      <small class="text-muted ms-2">({{ (file.size / 1024).toFixed(2) }} KB)</small>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" (click)="removeFile(i)">
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="alert alert-info">
+              <i class="bi bi-info-circle me-2"></i>
+              {{ i18n.t('disbursements.wizard.reviewNote') }}
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+              <button type="button" class="btn btn-secondary" (click)="previousStep()">
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.t('disbursements.wizard.previous') }}
+              </button>
+              <button type="button" class="btn btn-success" (click)="submitDisbursement()" [disabled]="loading">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ loading ? (i18n.t('disbursements.edit.updating')) : (i18n.t('disbursements.edit.update')) }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

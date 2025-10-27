@@ -3,6 +3,8 @@ import {
   DisbursementDto,
   CreateDisbursementCommand,
   CreateDisbursementResponse,
+  EditDisbursementCommand,
+  EditDisbursementResponse,
   SubmitDisbursementCommand,
   SubmitDisbursementResponse,
   ApproveDisbursementCommand,
@@ -27,6 +29,10 @@ export abstract class DisbursementService {
   abstract createDisbursement(
     command: CreateDisbursementCommand
   ): Observable<CreateDisbursementResponse>;
+
+  abstract editDisbursement(
+    command: EditDisbursementCommand
+  ): Observable<EditDisbursementResponse>;
 
   abstract submitDisbursement(
     command: SubmitDisbursementCommand
