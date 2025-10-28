@@ -27,6 +27,7 @@ export class EditDisbursementWizardComponent implements OnInit {
   currentStep = 1;
   loading = false;
   errorMessage = '';
+  successMessage = '';
   loadingProjects = false;
   loadingCurrencies = false;
   loadingTypes = false;
@@ -313,7 +314,12 @@ export class EditDisbursementWizardComponent implements OnInit {
   initializeTypeSpecificData(): void {
     const typeCode = this.getSelectedTypeCode();
 
-    if (typeCode === 'A1' && !this.command.disbursementA1) {
+    this.command.disbursementA1 = null;
+    this.command.disbursementA2 = null;
+    this.command.disbursementA3 = null;
+    this.command.disbursementB1 = null;
+
+    if (typeCode === 'A1') {
       this.command.disbursementA1 = {
         paymentPurpose: '',
         beneficiaryBpNumber: '',
@@ -336,7 +342,7 @@ export class EditDisbursementWizardComponent implements OnInit {
         signatoryPhone: '',
         signatoryTitle: ''
       };
-    } else if (typeCode === 'A2' && !this.command.disbursementA2) {
+    } else if (typeCode === 'A2') {
       this.command.disbursementA2 = {
         reimbursementPurpose: '',
         contractor: '',
@@ -354,7 +360,7 @@ export class EditDisbursementWizardComponent implements OnInit {
         paymentAmountWithdrawn: 0,
         paymentEvidenceOfPayment: ''
       };
-    } else if (typeCode === 'A3' && !this.command.disbursementA3) {
+    } else if (typeCode === 'A3') {
       this.command.disbursementA3 = {
         periodForUtilization: '',
         itemNumber: 0,
@@ -366,7 +372,7 @@ export class EditDisbursementWizardComponent implements OnInit {
         advanceRequested: 0,
         dateOfApproval: new Date().toISOString()
       };
-    } else if (typeCode === 'B1' && !this.command.disbursementB1) {
+    } else if (typeCode === 'B1') {
       this.command.disbursementB1 = {
         guaranteeDetails: '',
         confirmingBank: '',
@@ -480,5 +486,18 @@ export class EditDisbursementWizardComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/disbursements']);
+  }
+
+  resetToOriginal(): void {
+    if (this.existingDisbursement) {
+      this.populateFormData(this.existingDisbursement);
+      this.currentStep = 1;
+      this.selectedFiles = [];
+      this.errorMessage = '';
+      this.successMessage = this.i18n.t('disbursements.edit.resetSuccess');
+      setTimeout(() => {
+        this.successMessage = '';
+      }, 3000);
+    }
   }
 }

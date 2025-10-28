@@ -55,6 +55,13 @@
           </div>
           }
 
+          @if (successMessage) {
+          <div class="alert alert-success">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ successMessage }}
+          </div>
+          }
+
           <div *ngIf="currentStep === 1" class="step-content">
             <h5 class="mb-4">
               {{ i18n.t('disbursements.wizard.step1') }}
@@ -134,9 +141,15 @@
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-              <button type="button" class="btn btn-secondary" (click)="cancel()">
-                {{ i18n.t('common.cancel') }}
-              </button>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-secondary" (click)="cancel()">
+                  {{ i18n.t('common.cancel') }}
+                </button>
+                <button type="button" class="btn btn-outline-warning" (click)="resetToOriginal()">
+                  <i class="bi bi-arrow-clockwise me-2"></i>
+                  {{ i18n.t('disbursements.edit.reset') }}
+                </button>
+              </div>
               <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep1()">
                 {{ i18n.t('disbursements.wizard.next') }}
                 <i class="bi bi-arrow-right ms-2"></i>
@@ -737,10 +750,16 @@
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-              <button type="button" class="btn btn-secondary" (click)="previousStep()">
-                <i class="bi bi-arrow-left me-2"></i>
-                {{ i18n.t('disbursements.wizard.previous') }}
-              </button>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-secondary" (click)="previousStep()">
+                  <i class="bi bi-arrow-left me-2"></i>
+                  {{ i18n.t('disbursements.wizard.previous') }}
+                </button>
+                <button type="button" class="btn btn-outline-warning" (click)="resetToOriginal()">
+                  <i class="bi bi-arrow-clockwise me-2"></i>
+                  {{ i18n.t('disbursements.edit.reset') }}
+                </button>
+              </div>
               <button type="button" class="btn btn-primary" (click)="nextStep()" [disabled]="!canProceedStep2()">
                 {{ i18n.t('disbursements.wizard.next') }}
                 <i class="bi bi-arrow-right ms-2"></i>
@@ -1146,10 +1165,16 @@
             </div>
 
             <div class="d-flex justify-content-between mt-4">
-              <button type="button" class="btn btn-secondary" (click)="previousStep()">
-                <i class="bi bi-arrow-left me-2"></i>
-                {{ i18n.t('disbursements.wizard.previous') }}
-              </button>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-secondary" (click)="previousStep()">
+                  <i class="bi bi-arrow-left me-2"></i>
+                  {{ i18n.t('disbursements.wizard.previous') }}
+                </button>
+                <button type="button" class="btn btn-outline-warning" (click)="resetToOriginal()">
+                  <i class="bi bi-arrow-clockwise me-2"></i>
+                  {{ i18n.t('disbursements.edit.reset') }}
+                </button>
+              </div>
               <button type="button" class="btn btn-success" (click)="submitDisbursement()" [disabled]="loading">
                 <i class="bi bi-check-circle me-2"></i>
                 {{ loading ? (i18n.t('disbursements.edit.updating')) : (i18n.t('disbursements.edit.update')) }}

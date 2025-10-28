@@ -648,6 +648,8 @@
       "title": "Modifier la Demande de Décaissement",
       "update": "Mettre à Jour la Demande",
       "updating": "Mise à jour en cours...",
+      "reset": "Réinitialiser aux Valeurs d'Origine",
+      "resetSuccess": "Formulaire réinitialisé aux valeurs d'origine",
       "success": "Demande de décaissement mise à jour avec succès",
       "error": "Erreur lors de la mise à jour de la demande"
     },
