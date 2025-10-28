@@ -141,14 +141,14 @@ export class ExternalClientHomeComponent implements OnInit {
   }
 
   private checkAuthAndLoadData(): void {
-    console.log('🔍 Checking authentication and loading user data...');
-    console.log('🔍 isAuthenticated():', this.authService.isAuthenticated());
-    console.log('🔍 getCurrentUser():', this.authService.getCurrentUser());
+    console.log('Checking authentication and loading user data...');
+    console.log('isAuthenticated():', this.authService.isAuthenticated());
+    console.log('getCurrentUser():', this.authService.getCurrentUser());
 
     this.currentUser = this.authService.getCurrentUser();
 
     if (!this.currentUser) {
-      console.warn('⚠️ No authenticated user found, redirecting to /home');
+      console.warn('No authenticated user found, redirecting to /home');
       // Attendre un peu au cas où l'authentification est en cours
       setTimeout(() => {
         if (!this.authService.getCurrentUser()) {
@@ -162,7 +162,7 @@ export class ExternalClientHomeComponent implements OnInit {
     }
 
     this.isLoading = false;
-    console.log('✅ User data loaded successfully:', this.currentUser.firstName, this.currentUser.lastName);
+    console.log('User data loaded successfully:', this.currentUser.firstName, this.currentUser.lastName);
   }
 
   private updateLastLoginDate(): void {
@@ -195,24 +195,24 @@ export class ExternalClientHomeComponent implements OnInit {
 
   // Méthodes pour les actions rapides
   requestDisbursement(): void {
-    console.log('💰 Requesting disbursement...');
+    console.log('Requesting disbursement...');
     // Rediriger vers la page de demande de décaissement
     // this.router.navigate(['/disbursements/new']);
   }
 
   createClaim(): void {
-    console.log('📝 Creating claim...');
+    console.log('Creating claim...');
     // Rediriger vers la page de réclamation
     // this.router.navigate(['/claims/new']);
   }
 
   downloadLatestReport(): void {
-    console.log('📥 Downloading latest report...');
+    console.log('Downloading latest report...');
     // Implémenter la logique de téléchargement
   }
 
   contactSupport(): void {
-    console.log('📞 Contacting support...');
+    console.log(' Contacting support...');
     // Implémenter la logique de contact support
   }
 }
