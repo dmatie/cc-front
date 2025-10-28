@@ -61,6 +61,33 @@ export class CreateDisbursementWizardComponent implements OnInit {
   ngOnInit(): void {
     this.loadDropdowns();
     this.loadSapCodes();
+    this.checkForPreFilledData();
+  }
+
+  checkForPreFilledData(): void {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state || (history.state as any);
+
+    if (state && state.preFillData) {
+      const data = state.preFillData;
+      this.command.sapCodeProject = data.sapCodeProject || '';
+      this.command.loanGrantNumber = data.loanGrantNumber || '';
+      this.command.disbursementTypeId = data.disbursementTypeId || '';
+      this.command.currencyId = data.currencyId || '';
+
+      if (data.disbursementA1) {
+        this.command.disbursementA1 = { ...data.disbursementA1 };
+      }
+      if (data.disbursementA2) {
+        this.command.disbursementA2 = { ...data.disbursementA2 };
+      }
+      if (data.disbursementA3) {
+        this.command.disbursementA3 = { ...data.disbursementA3 };
+      }
+      if (data.disbursementB1) {
+        this.command.disbursementB1 = { ...data.disbursementB1 };
+      }
+    }
   }
 
   loadSapCodes(): void {

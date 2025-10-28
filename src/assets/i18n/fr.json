@@ -653,6 +653,21 @@
       "success": "Demande de décaissement mise à jour avec succès",
       "error": "Erreur lors de la mise à jour de la demande"
     },
+    "duplicate": {
+      "button": "Créer une Demande Similaire",
+      "title": "Créer une Nouvelle Demande à Partir de Celle-ci",
+      "intro": "Vous allez créer une nouvelle demande de décaissement basée sur cette demande approuvée :",
+      "step1Title": "Étape 1 : Initialisation",
+      "step1Desc": "Une nouvelle demande sera initialisée avec les mêmes informations que cette demande approuvée",
+      "step2Title": "Étape 2 : Redirection",
+      "step2Desc": "Vous serez redirigé vers le formulaire de création pré-rempli avec les données",
+      "step3Title": "Étape 3 : Modification",
+      "step3Desc": "Vous pourrez modifier les informations selon vos besoins",
+      "step4Title": "Étape 4 : Sauvegarde",
+      "step4Desc": "Vous devrez sauvegarder la nouvelle demande via le bouton de soumission du formulaire",
+      "note": "Note : La nouvelle demande sera créée en statut Brouillon et ne sera pas liée à cette demande.",
+      "continue": "Continuer"
+    },
     "wizard": {
       "title": "Créer une Demande de Décaissement",
       "step1": "Informations Générales",

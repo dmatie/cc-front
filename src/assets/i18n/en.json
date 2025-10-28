@@ -660,6 +660,21 @@
       "success": "Disbursement updated successfully",
       "error": "Error updating disbursement"
     },
+    "duplicate": {
+      "button": "Create Similar Request",
+      "title": "Create a New Request from This One",
+      "intro": "You will create a new disbursement request based on this approved request:",
+      "step1Title": "Step 1: Initialize",
+      "step1Desc": "A new request will be initialized with the same information as this approved request",
+      "step2Title": "Step 2: Redirect",
+      "step2Desc": "You will be redirected to the creation form pre-filled with the data",
+      "step3Title": "Step 3: Modify",
+      "step3Desc": "You can modify any information according to your needs",
+      "step4Title": "Step 4: Save",
+      "step4Desc": "You must save the new request using the submission button in the form",
+      "note": "Note: The new request will be created in Draft status and will not be linked to this request.",
+      "continue": "Continue"
+    },
     "wizard": {
       "title": "Create Disbursement Request",
       "step1": "General Information",

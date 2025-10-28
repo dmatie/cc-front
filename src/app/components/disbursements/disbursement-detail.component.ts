@@ -9,11 +9,12 @@ import { DisbursementDto, DisbursementStatus } from '../../models/disbursement.m
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { BackendMessageTranslationService } from '../../services/backend-message-translation.service';
 import { ResubmitDisbursementModalComponent } from './resubmit-disbursement-modal.component';
+import { DuplicateDisbursementModalComponent } from './duplicate-disbursement-modal.component';
 
 @Component({
   selector: 'app-disbursement-detail',
   standalone: true,
-  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent, ResubmitDisbursementModalComponent],
+  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent, ResubmitDisbursementModalComponent, DuplicateDisbursementModalComponent],
   templateUrl: './disbursement-detail.component.html',
   styleUrls: ['./disbursement-detail.component.css']
 })
@@ -30,6 +31,7 @@ export class DisbursementDetailComponent implements OnInit {
   showRejectModal = false;
   showBackToClientModal = false;
   showResubmitModal = false;
+  showDuplicateModal = false;
 
   rejectComment = '';
   backToClientComment = '';
@@ -97,6 +99,24 @@ export class DisbursementDetailComponent implements OnInit {
   canEdit(): boolean {
     return !this.isInternalUser &&
            this.disbursement?.status === DisbursementStatus.Draft;
+  }
+
+  canDuplicate(): boolean {
+    return !this.isInternalUser &&
+           this.disbursement?.status === DisbursementStatus.Approved;
+  }
+
+  openDuplicateModal(): void {
+    this.showDuplicateModal = true;
+  }
+
+  duplicateDisbursement(): void {
+    if (!this.disbursement) return;
+
+    this.showDuplicateModal = false;
+    this.router.navigate(['/disbursements/create'], {
+      state: { preFillData: this.disbursement }
+    });
   }
 
   editDisbursement(): void {
