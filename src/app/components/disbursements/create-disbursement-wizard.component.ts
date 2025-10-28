@@ -39,7 +39,7 @@ export class CreateDisbursementWizardComponent implements OnInit {
   countries: Country[] = [];
   sapCodes: string[] = [];
 
-  command: any = {
+  command: CreateDisbursementCommand = {
     sapCodeProject: '',
     loanGrantNumber: '',
     disbursementTypeId: '',
