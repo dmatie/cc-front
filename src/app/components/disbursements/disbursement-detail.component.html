@@ -607,7 +607,7 @@
                             <div>
                               <strong>{{ process.processedByUserName }}</strong>
                               <div class="text-muted small">
-                                {{ process.processedAt | date: 'medium' }}
+                                {{ process.createdAt | date: 'medium' }}
                               </div>
                             </div>
                             <span [class]="getStatusClass(process.status)">
