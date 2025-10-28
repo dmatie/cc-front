@@ -5,13 +5,7 @@ import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { User } from '../../models/user.model';
-
-interface InternalStats {
-  accessRequests: number;
-  pendingClaims: number;
-  pendingDisbursements: number;
-  totalUsers: number;
-}
+import { AbstractDashboardService, InternalDashboardStatsDto } from '../../services/abstract/dashboard-service.abstract';
 
 @Component({
   selector: 'app-internal-dashboard',
@@ -23,18 +17,13 @@ interface InternalStats {
 export class InternalDashboardComponent implements OnInit {
   currentUser: User | null = null;
   isLoading = true;
-
-  // Statistiques du dashboard interne
-  internalStats: InternalStats = {
-    accessRequests: 8,
-    pendingClaims: 12,
-    pendingDisbursements: 5,
-    totalUsers: 156
-  };
+  internalStats: InternalDashboardStatsDto | null = null;
+  errorMessage = '';
 
   constructor(
     private authService: AuthService,
     private router: Router,
+    private dashboardService: AbstractDashboardService,
     public i18n: I18nService
   ) {
   }
@@ -44,15 +33,31 @@ export class InternalDashboardComponent implements OnInit {
   }
 
   private checkAuthAndLoadData(): void {
-    
     this.currentUser = this.authService.getCurrentUser();
 
     if (!this.currentUser) {
       console.warn('No authenticated user found');
+      this.isLoading = false;
       return;
     }
 
-    this.isLoading = false;
+    this.loadDashboardStats();
+  }
+
+  private loadDashboardStats(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.dashboardService.getInternalDashboardStats().subscribe({
+      next: (stats) => {
+        this.internalStats = stats;
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Error loading dashboard statistics';
+        this.isLoading = false;
+      }
+    });
   }
 
   // Actions rapides

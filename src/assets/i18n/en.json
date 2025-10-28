@@ -332,8 +332,8 @@
       "disbursements_desc": "active requests",
       "claims": "Claims",
       "claims_desc": "pending",
-      "reports": "Reports",
-      "reports_desc": "available"
+      "training": "Training & Resources",
+      "training_desc": "Access training materials"
     },
     "actions": {
       "title": "Quick Actions",
@@ -429,7 +429,17 @@
     "good_evening": "Good Evening",
     "my_profile": "My Profile",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "services": {
+      "disbursements": "Disbursement Management",
+      "disbursements_desc": "View and manage your disbursement requests",
+      "claims": "Claims Management",
+      "claims_desc": "Manage your claims and view their status",
+      "projects": "My Projects",
+      "projects_desc": "Track the progress of your projects",
+      "training": "Training & Resources",
+      "training_desc": "Access training materials and documentation"
+    }
   },
   "projects": {
     "sapCode": "SAP Code",

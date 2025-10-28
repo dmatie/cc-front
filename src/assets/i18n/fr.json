@@ -325,8 +325,8 @@
       "disbursements_desc": "demandes actives",
       "claims": "Réclamations",
       "claims_desc": "en attente",
-      "reports": "Rapports",
-      "reports_desc": "disponibles"
+      "training": "Formation & Ressources",
+      "training_desc": "Accéder aux supports de formation"
     },
     "actions": {
       "title": "Actions Rapides",
@@ -422,7 +422,17 @@
     "good_evening": "Bonsoir",
     "my_profile": "Mon Profil",
     "settings": "Paramètres",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "services": {
+      "disbursements": "Gestion des Décaissements",
+      "disbursements_desc": "Consultez et gérez vos demandes de décaissement",
+      "claims": "Gestion des Réclamations",
+      "claims_desc": "Gérez vos réclamations et consultez leur statut",
+      "projects": "Mes Projets",
+      "projects_desc": "Suivez l'avancement de vos projets",
+      "training": "Formation & Ressources",
+      "training_desc": "Accédez aux supports de formation et documentation"
+    }
   },
   "projects": {
     "sapCode": "Code SAP",

@@ -24,14 +24,27 @@
     </div>
   </div>
 
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+    </div>
+  </div>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    <i class="bi bi-exclamation-triangle me-2"></i>
+    {{ errorMessage }}
+  </div>
+
   <!-- Statistiques rapides -->
-  <div class="row g-4 mb-5">
+  <div *ngIf="!isLoading && !errorMessage && dashboardStats" class="row g-4 mb-5">
     <div class="col-md-3">
       <div class="card stats-card h-100">
         <div class="card-body text-center">
           <i class="bi bi-folder text-primary mb-3" style="font-size: 2.5rem;"></i>
           <h5 class="card-title">{{ i18n.t('external.stats.active_projects') }}</h5>
-          <h3 class="text-primary mb-2">{{ clientStats.activeProjects }}</h3>
+          <h3 class="text-primary mb-2">{{ dashboardStats.activeProjects }}</h3>
           <p class="text-muted mb-3">{{ i18n.t('external.stats.active_projects_desc') }}</p>
           <a routerLink="/client/access-request" class="btn btn-outline-primary">
             <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
@@ -39,13 +52,13 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-md-3">
       <div class="card stats-card h-100">
         <div class="card-body text-center">
           <i class="bi bi-cash-coin text-success mb-3" style="font-size: 2.5rem;"></i>
           <h5 class="card-title">{{ i18n.t('external.stats.disbursements') }}</h5>
-          <h3 class="text-success mb-2">{{ clientStats.activeDisbursementRequests }}</h3>
+          <h3 class="text-success mb-2">{{ dashboardStats.activeDisbursementRequests }}</h3>
           <p class="text-muted mb-3">{{ i18n.t('external.stats.disbursements_desc') }}</p>
           <a routerLink="/disbursements" class="btn btn-outline-success">
             <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
@@ -53,13 +66,13 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-md-3">
       <div class="card stats-card h-100">
         <div class="card-body text-center">
           <i class="bi bi-exclamation-triangle text-warning mb-3" style="font-size: 2.5rem;"></i>
           <h5 class="card-title">{{ i18n.t('external.stats.claims') }}</h5>
-          <h3 class="text-warning mb-2">{{ clientStats.pendingClaims }}</h3>
+          <h3 class="text-warning mb-2">{{ dashboardStats.pendingClaims }}</h3>
           <p class="text-muted mb-3">{{ i18n.t('external.stats.claims_desc') }}</p>
           <a routerLink="/claims" class="btn btn-outline-warning">
             <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
@@ -67,14 +80,13 @@
         </div>
       </div>
     </div>
-    
+
     <div class="col-md-3">
       <div class="card stats-card h-100">
         <div class="card-body text-center">
-          <i class="bi bi-file-earmark-text text-info mb-3" style="font-size: 2.5rem;"></i>
-          <h5 class="card-title">{{ i18n.t('external.stats.reports') }}</h5>
-          <h3 class="text-info mb-2">{{ clientStats.availableReports }}</h3>
-          <p class="text-muted mb-3">{{ i18n.t('external.stats.reports_desc') }}</p>
+          <i class="bi bi-book text-info mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('external.stats.training') }}</h5>
+          <p class="text-muted mb-3">{{ i18n.t('external.stats.training_desc') }}</p>
           <a href="#" class="btn btn-outline-info">
             <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
           </a>
@@ -147,7 +159,7 @@
             <div class="col-md-4">
               <div class="border-end">
                 <h6 class="text-success">{{ i18n.t('external.info.security') }}</h6>
-                <p class="text-muted mb-0 small">{{ i18n.t('external.info.security_desc') }} {{ clientStats.lastLoginDate | date:'dd/MM/yyyy' }}</p>
+                <p class="text-muted mb-0 small">{{ i18n.t('external.info.security_desc') }}</p>
               </div>
             </div>
             <div class="col-md-4">

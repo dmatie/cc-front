@@ -16,6 +16,9 @@ import { ClaimServiceMock } from '../implementations/claim-service.mock';
 import { DisbursementService } from '../abstract/disbursement-service.abstract';
 import { DisbursementApiService } from '../implementations/disbursement-service.api';
 import { DisbursementMockService } from '../implementations/disbursement-service.mock';
+import { AbstractDashboardService } from '../abstract/dashboard-service.abstract';
+import { ApiDashboardService } from '../implementations/dashboard-service.api';
+import { DashboardServiceMock } from '../implementations/dashboard-service.mock';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 
@@ -87,6 +90,20 @@ export function disbursementServiceFactory(): DisbursementService {
   } else {
     console.log('🔧 [FACTORY] Using API Disbursement Service');
     return new DisbursementApiService();
+  }
+}
+
+/**
+ * Factory pour le service dashboard
+ * Retourne l'implémentation appropriée selon l'environnement
+ */
+export function dashboardServiceFactory(http: HttpClient, errorHandler: ErrorHandlerService): AbstractDashboardService {
+  if (environment.features.enableMockData) {
+    console.log('🔧 [FACTORY] Using MOCK Dashboard Service');
+    return new DashboardServiceMock();
+  } else {
+    console.log('🔧 [FACTORY] Using API Dashboard Service');
+    return new ApiDashboardService(http, errorHandler);
   }
 }
 

@@ -11,11 +11,12 @@ import { I18nService } from './services/i18n.service';
 import { AbstractDropdownService } from './services/abstract/dropdown-service.abstract';
 import { AbstractRegistrationService } from './services/abstract/registration-service.abstract';
 import { ErrorHandlerService } from './services/error-handler.service';
-import { dropdownServiceFactory, MSALInstanceFactory, projectsServiceFactory, registrationServiceFactory, claimServiceFactory, disbursementServiceFactory } from './services/factories/service.factories';
+import { dropdownServiceFactory, MSALInstanceFactory, projectsServiceFactory, registrationServiceFactory, claimServiceFactory, disbursementServiceFactory, dashboardServiceFactory } from './services/factories/service.factories';
 import { AuthService } from './services/auth.service';
 import { AbstractProjectsService } from './services/abstract/projects-service.abstract';
 import { ClaimService } from './services/abstract/claim-service.abstract';
 import { DisbursementService } from './services/abstract/disbursement-service.abstract';
+import { AbstractDashboardService } from './services/abstract/dashboard-service.abstract';
 import { MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { ApiErrorInterceptor } from './interceptors/api-error-interceptor';
@@ -70,6 +71,11 @@ export const appConfig: ApplicationConfig = {
     {
       provide: DisbursementService,
       useFactory: disbursementServiceFactory
+    },
+    {
+      provide: AbstractDashboardService,
+      useFactory: dashboardServiceFactory,
+      deps: [HttpClient, ErrorHandlerService]
     },
     {
       provide: MSAL_INSTANCE,
