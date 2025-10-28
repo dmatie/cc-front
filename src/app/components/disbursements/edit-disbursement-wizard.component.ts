@@ -40,13 +40,13 @@ export class EditDisbursementWizardComponent implements OnInit {
   countries: Country[] = [];
   sapCodes: string[] = [];
 
-  command: any = {
+  command: EditDisbursementCommand = {
     id: '',
     sapCodeProject: '',
     loanGrantNumber: '',
     disbursementTypeId: '',
     currencyId: '',
-    documents: []
+    documents: [],
   };
 
   selectedFiles: File[] = [];
@@ -314,10 +314,10 @@ export class EditDisbursementWizardComponent implements OnInit {
   initializeTypeSpecificData(): void {
     const typeCode = this.getSelectedTypeCode();
 
-    this.command.disbursementA1 = null;
-    this.command.disbursementA2 = null;
-    this.command.disbursementA3 = null;
-    this.command.disbursementB1 = null;
+    this.command.disbursementA1 = undefined;
+    this.command.disbursementA2 = undefined;
+    this.command.disbursementA3 = undefined;
+    this.command.disbursementB1 = undefined;
 
     if (typeCode === 'A1') {
       this.command.disbursementA1 = {
