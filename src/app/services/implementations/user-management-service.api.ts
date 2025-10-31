@@ -12,9 +12,7 @@ import {
 import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../error-handler.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UserManagementServiceApi extends AbstractUserManagementService {
   private readonly userApiUrl = `${environment.apiUrl}/User`;
   private readonly azureAdApiUrl = `${environment.apiUrl}/AzureAd`;
