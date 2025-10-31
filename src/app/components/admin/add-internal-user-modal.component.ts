@@ -82,6 +82,7 @@ export class AddInternalUserModalComponent implements OnInit {
       if (role === UserRole.Admin) {
         countryIdsControl?.clearValidators();
         countryIdsControl?.setValue([]);
+        countryIdsControl?.markAsUntouched();
       } else {
         countryIdsControl?.setValidators(Validators.required);
       }
@@ -129,16 +130,36 @@ export class AddInternalUserModalComponent implements OnInit {
     this.searchControl.setValue('');
     this.showResults = false;
     this.azureUsers = [];
+    this.userForm.reset();
   }
 
   isRoleAdmin(): boolean {
     return this.userForm.get('role')?.value === UserRole.Admin;
   }
 
-  onCountryChange(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const selectedOptions = Array.from(select.selectedOptions).map(option => option.value);
-    this.userForm.patchValue({ countryIds: selectedOptions });
+  isCountrySelected(countryId: string): boolean {
+    const selectedIds = this.userForm.get('countryIds')?.value || [];
+    return selectedIds.includes(countryId);
+  }
+
+  onCountrySelectionChange(countryId: string, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const currentIds = this.userForm.get('countryIds')?.value || [];
+
+    if (checkbox.checked) {
+      if (!currentIds.includes(countryId)) {
+        this.userForm.patchValue({ countryIds: [...currentIds, countryId] });
+      }
+    } else {
+      this.userForm.patchValue({
+        countryIds: currentIds.filter((id: string) => id !== countryId)
+      });
+    }
+  }
+
+  getSelectedCountriesCount(): number {
+    const selectedIds = this.userForm.get('countryIds')?.value || [];
+    return selectedIds.length;
   }
 
   canSave(): boolean {

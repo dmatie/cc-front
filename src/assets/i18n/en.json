@@ -505,7 +505,7 @@
       "select_role": "Select a role",
       "role_required": "Role is required",
       "countries": "Assign Countries",
-      "countries_help": "Hold Ctrl/Cmd to select multiple countries",
+      "countries_selected": "country(ies) selected",
       "countries_required": "At least one country is required for this role"
     },
     "no_countries": "No countries assigned",

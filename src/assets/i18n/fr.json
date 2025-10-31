@@ -498,7 +498,7 @@
       "select_role": "Sélectionner un rôle",
       "role_required": "Le rôle est obligatoire",
       "countries": "Attribuer des Pays",
-      "countries_help": "Maintenez Ctrl/Cmd pour sélectionner plusieurs pays",
+      "countries_selected": "pays sélectionné(s)",
       "countries_required": "Au moins un pays est requis pour ce rôle"
     },
     "no_countries": "Aucun pays attribué",
