@@ -74,7 +74,6 @@ export class InternalDashboardComponent implements OnInit {
   }
 
   manageUsers(): void {
-    console.log('Managing users...');
-    // Rediriger vers la gestion des utilisateurs
+    this.router.navigate(['/admin/users']);
   }
 }
