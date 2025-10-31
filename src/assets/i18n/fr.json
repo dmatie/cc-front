@@ -458,6 +458,58 @@
       "unknown": "Inconnu"
     }
   },
+  "users": {
+    "roles": {
+      "admin": "Administrateur",
+      "do": "Agent de Décaissement",
+      "da": "Assistant de Décaissement",
+      "external": "Utilisateur Externe"
+    },
+    "status": {
+      "active": "Actif",
+      "inactive": "Inactif"
+    },
+    "list": {
+      "title": "Gestion des Utilisateurs",
+      "header": "Utilisateurs Internes",
+      "description": "Gérer les utilisateurs internes et leurs rôles",
+      "add_user": "Ajouter un Utilisateur",
+      "name": "Nom",
+      "email": "Email",
+      "role": "Rôle",
+      "countries": "Pays",
+      "status": "Statut",
+      "created_at": "Créé le",
+      "loading": "Chargement des utilisateurs...",
+      "no_users": "Aucun utilisateur trouvé",
+      "no_users_desc": "Commencez par ajouter votre premier utilisateur interne",
+      "add_first_user": "Ajouter le Premier Utilisateur",
+      "showing": "Affichage",
+      "of": "sur"
+    },
+    "add_user_modal": {
+      "title": "Ajouter un Utilisateur Interne",
+      "search_user": "Rechercher un Utilisateur dans Azure AD",
+      "search_placeholder": "Saisir nom ou email...",
+      "search_help": "Saisir au moins 3 caractères pour rechercher",
+      "searching": "Recherche en cours...",
+      "no_results": "Aucun utilisateur trouvé",
+      "role": "Rôle",
+      "select_role": "Sélectionner un rôle",
+      "role_required": "Le rôle est obligatoire",
+      "countries": "Attribuer des Pays",
+      "countries_help": "Maintenez Ctrl/Cmd pour sélectionner plusieurs pays",
+      "countries_required": "Au moins un pays est requis pour ce rôle"
+    },
+    "no_countries": "Aucun pays attribué",
+    "messages": {
+      "user_added_success": "Utilisateur ajouté avec succès"
+    },
+    "errors": {
+      "load_failed": "Échec du chargement des utilisateurs",
+      "add_failed": "Échec de l'ajout de l'utilisateur"
+    }
+  },
   "accessRequest": {
     "summary": {
       "title": "Ma Demande d'Accès",

@@ -19,6 +19,9 @@ import { DisbursementMockService } from '../implementations/disbursement-service
 import { AbstractDashboardService } from '../abstract/dashboard-service.abstract';
 import { ApiDashboardService } from '../implementations/dashboard-service.api';
 import { DashboardServiceMock } from '../implementations/dashboard-service.mock';
+import { AbstractUserManagementService } from '../abstract/user-management-service.abstract';
+import { UserManagementServiceApi } from '../implementations/user-management-service.api';
+import { UserManagementServiceMock } from '../implementations/user-management-service.mock';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 
@@ -104,6 +107,20 @@ export function dashboardServiceFactory(http: HttpClient, errorHandler: ErrorHan
   } else {
     console.log('🔧 [FACTORY] Using API Dashboard Service');
     return new ApiDashboardService(http, errorHandler);
+  }
+}
+
+/**
+ * Factory pour le service user management
+ * Retourne l'implémentation appropriée selon l'environnement
+ */
+export function userManagementServiceFactory(http: HttpClient, errorHandler: ErrorHandlerService): AbstractUserManagementService {
+  if (environment.features.enableMockData) {
+    console.log('🔧 [FACTORY] Using MOCK User Management Service');
+    return new UserManagementServiceMock();
+  } else {
+    console.log('🔧 [FACTORY] Using API User Management Service');
+    return new UserManagementServiceApi(http, errorHandler);
   }
 }
 

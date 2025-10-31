@@ -465,6 +465,58 @@
       "unknown": "Unknown"
     }
   },
+  "users": {
+    "roles": {
+      "admin": "Administrator",
+      "do": "Disbursement Officer",
+      "da": "Disbursement Assistant",
+      "external": "External User"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "list": {
+      "title": "User Management",
+      "header": "Internal Users",
+      "description": "Manage internal users and their roles",
+      "add_user": "Add User",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "countries": "Countries",
+      "status": "Status",
+      "created_at": "Created At",
+      "loading": "Loading users...",
+      "no_users": "No users found",
+      "no_users_desc": "Start by adding your first internal user",
+      "add_first_user": "Add First User",
+      "showing": "Showing",
+      "of": "of"
+    },
+    "add_user_modal": {
+      "title": "Add Internal User",
+      "search_user": "Search User in Azure AD",
+      "search_placeholder": "Type name or email...",
+      "search_help": "Enter at least 3 characters to search",
+      "searching": "Searching...",
+      "no_results": "No users found",
+      "role": "Role",
+      "select_role": "Select a role",
+      "role_required": "Role is required",
+      "countries": "Assign Countries",
+      "countries_help": "Hold Ctrl/Cmd to select multiple countries",
+      "countries_required": "At least one country is required for this role"
+    },
+    "no_countries": "No countries assigned",
+    "messages": {
+      "user_added_success": "User added successfully"
+    },
+    "errors": {
+      "load_failed": "Failed to load users",
+      "add_failed": "Failed to add user"
+    }
+  },
   "accessRequest": {
     "summary": {
       "title": "My Access Request",

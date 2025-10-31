@@ -1,0 +1,165 @@
+<div class="modal" (click)="onBackdropClick($event)" tabindex="-1" style="display: block; background-color: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          <i class="bi bi-person-plus-fill me-2"></i>
+          {{ i18n.t('users.add_user_modal.title') }}
+        </h5>
+        <button type="button" class="btn-close" (click)="close()" [disabled]="isSaving"></button>
+      </div>
+
+      <div class="modal-body">
+        <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show">
+          <i class="bi bi-exclamation-triangle me-2"></i>
+          {{ errorMessage }}
+          <button type="button" class="btn-close" (click)="errorMessage = ''"></button>
+        </div>
+
+        <!-- Azure AD User Search -->
+        <div class="mb-4">
+          <label class="form-label">
+            {{ i18n.t('users.add_user_modal.search_user') }}
+            <span class="text-danger">*</span>
+          </label>
+          <div class="position-relative">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-search"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control"
+                [formControl]="searchControl"
+                [placeholder]="i18n.t('users.add_user_modal.search_placeholder')"
+                [disabled]="isSaving || selectedAzureUser !== null"
+              />
+              <button
+                *ngIf="selectedAzureUser"
+                class="btn btn-outline-secondary"
+                type="button"
+                (click)="clearSelection()"
+                [disabled]="isSaving"
+              >
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+
+            <!-- Search Results Dropdown -->
+            <div *ngIf="showResults && !selectedAzureUser" class="dropdown-menu show w-100 shadow-lg" style="max-height: 300px; overflow-y: auto;">
+              <div *ngIf="isSearching" class="text-center py-3">
+                <div class="spinner-border spinner-border-sm text-primary" role="status">
+                  <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+                </div>
+                <p class="text-muted mb-0 mt-2 small">{{ i18n.t('users.add_user_modal.searching') }}</p>
+              </div>
+
+              <div *ngIf="!isSearching && azureUsers.length === 0" class="text-center py-3">
+                <i class="bi bi-search text-muted" style="font-size: 2rem;"></i>
+                <p class="text-muted mb-0 mt-2">{{ i18n.t('users.add_user_modal.no_results') }}</p>
+              </div>
+
+              <button
+                *ngFor="let user of azureUsers"
+                type="button"
+                class="dropdown-item"
+                (click)="selectAzureUser(user)"
+              >
+                <div class="d-flex align-items-start">
+                  <i class="bi bi-person-circle me-2 text-primary" style="font-size: 2rem;"></i>
+                  <div class="flex-grow-1">
+                    <div class="fw-bold">{{ user.displayName }}</div>
+                    <div class="small text-muted">{{ user.email }}</div>
+                    <div *ngIf="user.jobTitle || user.department" class="small text-muted">
+                      <span *ngIf="user.jobTitle">{{ user.jobTitle }}</span>
+                      <span *ngIf="user.jobTitle && user.department"> - </span>
+                      <span *ngIf="user.department">{{ user.department }}</span>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </div>
+          </div>
+          <div class="form-text">{{ i18n.t('users.add_user_modal.search_help') }}</div>
+        </div>
+
+        <!-- Selected User Display -->
+        <div *ngIf="selectedAzureUser" class="alert alert-info">
+          <div class="d-flex align-items-center">
+            <i class="bi bi-person-check-fill me-3" style="font-size: 2rem;"></i>
+            <div class="flex-grow-1">
+              <h6 class="mb-1">{{ selectedAzureUser.displayName }}</h6>
+              <div class="small">{{ selectedAzureUser.email }}</div>
+              <div *ngIf="selectedAzureUser.jobTitle || selectedAzureUser.department" class="small text-muted">
+                <span *ngIf="selectedAzureUser.jobTitle">{{ selectedAzureUser.jobTitle }}</span>
+                <span *ngIf="selectedAzureUser.jobTitle && selectedAzureUser.department"> - </span>
+                <span *ngIf="selectedAzureUser.department">{{ selectedAzureUser.department }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Form -->
+        <form [formGroup]="userForm" *ngIf="selectedAzureUser">
+          <!-- Role Selection -->
+          <div class="mb-3">
+            <label class="form-label">
+              {{ i18n.t('users.add_user_modal.role') }}
+              <span class="text-danger">*</span>
+            </label>
+            <select class="form-select" formControlName="role" [disabled]="isSaving">
+              <option [value]="null" disabled>{{ i18n.t('users.add_user_modal.select_role') }}</option>
+              <option *ngFor="let role of userRoles" [value]="role.value">
+                {{ i18n.t(role.label) }}
+              </option>
+            </select>
+            <div *ngIf="userForm.get('role')?.invalid && userForm.get('role')?.touched" class="text-danger small mt-1">
+              {{ i18n.t('users.add_user_modal.role_required') }}
+            </div>
+          </div>
+
+          <!-- Country Selection (for DO and DA only) -->
+          <div *ngIf="!isRoleAdmin() && userForm.get('role')?.value" class="mb-3">
+            <label class="form-label">
+              {{ i18n.t('users.add_user_modal.countries') }}
+              <span class="text-danger">*</span>
+            </label>
+            <select
+              class="form-select"
+              formControlName="countryIds"
+              multiple
+              size="5"
+              (change)="onCountryChange($event)"
+              [disabled]="isSaving"
+            >
+              <option *ngFor="let country of countries" [value]="country.id">
+                {{ country.name }}
+              </option>
+            </select>
+            <div class="form-text">{{ i18n.t('users.add_user_modal.countries_help') }}</div>
+            <div *ngIf="userForm.get('countryIds')?.invalid && userForm.get('countryIds')?.touched" class="text-danger small mt-1">
+              {{ i18n.t('users.add_user_modal.countries_required') }}
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close()" [disabled]="isSaving">
+          <i class="bi bi-x-circle me-1"></i>
+          {{ i18n.t('common.cancel') }}
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="save()"
+          [disabled]="!canSave()"
+        >
+          <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
+          <i *ngIf="!isSaving" class="bi bi-check-circle me-1"></i>
+          {{ isSaving ? i18n.t('common.saving') : i18n.t('common.save') }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

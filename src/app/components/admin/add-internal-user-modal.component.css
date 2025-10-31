@@ -1,0 +1,27 @@
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1050;
+}
+
+.dropdown-item {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.form-select[multiple] {
+  height: auto;
+}
+
+.modal {
+  overflow-y: auto;
+}
