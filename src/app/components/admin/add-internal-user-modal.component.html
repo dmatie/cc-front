@@ -124,35 +124,18 @@
               {{ i18n.t('users.add_user_modal.countries') }}
               <span class="text-danger">*</span>
             </label>
-
-            <!-- Countries Checkbox List -->
-            <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
-              <div class="row g-2">
-                <div class="col-12" *ngFor="let country of countries">
-                  <div class="form-check">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      [id]="'country-' + country.id"
-                      [checked]="isCountrySelected(country.id)"
-                      (change)="onCountrySelectionChange(country.id, $event)"
-                      [disabled]="isSaving"
-                    >
-                    <label class="form-check-label" [for]="'country-' + country.id">
-                      <strong>{{ country.code }}</strong> - {{ country.name }}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div *ngIf="getSelectedCountriesCount() > 0" class="mt-2">
-              <small class="text-muted">
-                <i class="bi bi-check-circle text-success me-1"></i>
-                {{ getSelectedCountriesCount() }} {{ i18n.t('users.add_user_modal.countries_selected') }}
-              </small>
-            </div>
-
+            <select
+              class="form-select"
+              formControlName="countryIds"
+              multiple
+              size="5"
+              [disabled]="isSaving"
+            >
+              <option *ngFor="let country of countries" [value]="country.id">
+                {{ country.name }}
+              </option>
+            </select>
+            <div class="form-text">{{ i18n.t('users.add_user_modal.countries_help') }}</div>
             <div *ngIf="userForm.get('countryIds')?.invalid && userForm.get('countryIds')?.touched" class="text-danger small mt-1">
               {{ i18n.t('users.add_user_modal.countries_required') }}
             </div>
