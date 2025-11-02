@@ -151,7 +151,7 @@ export class AddInternalUserModalComponent implements OnInit {
 
     const request: CreateInternalUserRequest = {
       email: this.selectedAzureUser.email,
-      role: this.userForm.value.role,
+      role: parseInt(this.userForm.value.role, 10) as UserRole,
       countryIds: this.userForm.value.countryIds || []
     };
 
