@@ -137,6 +137,31 @@ export class AddInternalUserModalComponent implements OnInit {
     return this.userForm.get('role')?.value === UserRole.Admin;
   }
 
+  isCountrySelected(countryId: string): boolean {
+    const selectedIds = this.userForm.get('countryIds')?.value || [];
+    return selectedIds.includes(countryId);
+  }
+
+  onCountrySelectionChange(countryId: string, event: Event): void {
+    const checkbox = event.target as HTMLInputElement;
+    const currentIds = this.userForm.get('countryIds')?.value || [];
+
+    if (checkbox.checked) {
+      if (!currentIds.includes(countryId)) {
+        this.userForm.patchValue({ countryIds: [...currentIds, countryId] });
+      }
+    } else {
+      this.userForm.patchValue({
+        countryIds: currentIds.filter((id: string) => id !== countryId)
+      });
+    }
+  }
+
+  getSelectedCountriesCount(): number {
+    const selectedIds = this.userForm.get('countryIds')?.value || [];
+    return selectedIds.length;
+  }
+
   canSave(): boolean {
     return this.selectedAzureUser !== null && this.userForm.valid && !this.isSaving;
   }
