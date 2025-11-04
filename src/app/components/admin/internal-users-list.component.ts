@@ -116,7 +116,7 @@ export class InternalUsersListComponent implements OnInit {
     if (!user.countries || user.countries.length === 0) {
       return this.i18n.t('users.no_countries');
     }
-    return user.countries.map(c => c.name).join(', ');
+    return user.countries.map(c => c.countryName).join(', ');
   }
 
   openAddUserModal(): void {
@@ -135,6 +135,10 @@ export class InternalUsersListComponent implements OnInit {
     setTimeout(() => {
       this.successMessage = '';
     }, 5000);
+  }
+
+  viewUserDetail(userId: string): void {
+    this.router.navigate(['/admin/users', userId]);
   }
 
   dismissSuccess(): void {

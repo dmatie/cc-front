@@ -66,11 +66,12 @@
               <th>{{ i18n.t('users.list.countries') }}</th>
               <th>{{ i18n.t('users.list.status') }}</th>
               <th>{{ i18n.t('users.list.created_at') }}</th>
+              <th class="text-end">{{ i18n.t('common.actions') }}</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let user of paginatedUsers">
-              <td>
+              <td (click)="viewUserDetail(user.id)" style="cursor: pointer;">
                 <div class="d-flex align-items-center">
                   <i class="bi bi-person-circle text-primary me-2" style="font-size: 1.5rem;"></i>
                   <div>
@@ -81,27 +82,27 @@
                   </div>
                 </div>
               </td>
-              <td>
+              <td (click)="viewUserDetail(user.id)" style="cursor: pointer;">
                 <a [href]="'mailto:' + user.email" class="text-decoration-none">
                   {{ user.email }}
                 </a>
               </td>
-              <td>
+              <td (click)="viewUserDetail(user.id)" style="cursor: pointer;">
                 <span class="badge" [ngClass]="getRoleBadgeClass(user.role)">
                   {{ getRoleLabel(user.role) }}
                 </span>
               </td>
-              <td>
+              <td (click)="viewUserDetail(user.id)" style="cursor: pointer;">
                 <div *ngIf="user.countries && user.countries.length > 0" class="small">
                   <span *ngFor="let country of user.countries; let last = last">
-                    {{ country.name }}<span *ngIf="!last">, </span>
+                    {{ country.countryName }}<span *ngIf="!last">, </span>
                   </span>
                 </div>
                 <span *ngIf="!user.countries || user.countries.length === 0" class="text-muted small">
                   {{ i18n.t('users.no_countries') }}
                 </span>
               </td>
-              <td>
+              <td (click)="viewUserDetail(user.id)" style="cursor: pointer;">
                 <span *ngIf="user.isActive" class="badge bg-success">
                   <i class="bi bi-check-circle me-1"></i>
                   {{ i18n.t('users.status.active') }}
@@ -111,8 +112,14 @@
                   {{ i18n.t('users.status.inactive') }}
                 </span>
               </td>
-              <td>
+              <td (click)="viewUserDetail(user.id)">
                 <span class="small">{{ user.createdAt | date:'dd/MM/yyyy' }}</span>
+              </td>
+              <td class="text-end">
+                <button class="btn btn-sm btn-outline-primary" (click)="viewUserDetail(user.id)">
+                  <i class="bi bi-eye me-1"></i>
+                  {{ i18n.t('common.view') }}
+                </button>
               </td>
             </tr>
           </tbody>

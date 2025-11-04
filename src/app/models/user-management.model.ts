@@ -6,9 +6,16 @@ export enum UserRole {
 }
 
 export interface CountryAdminDto {
-  id: string;
-  name: string;
-  code: string;
+  countryId: string;
+  userId: string;
+  isActive: boolean;
+  userEmail?: string;
+  userFirstName?: string;
+  userLastName?: string;
+  userFullName?: string;
+  countryName?: string;
+  countryNameFr?: string;
+  counrtyCode?: string;
 }
 
 export interface UserDto {

@@ -25,4 +25,30 @@ export abstract class AbstractUserManagementService {
    * @return Observable avec la réponse de la création
    */
   abstract addInternalUser(request: CreateInternalUserRequest): Observable<CreateInternalUserResponse>;
+
+  /** Récupère les détails d'un utilisateur par son ID
+   * @param id ID de l'utilisateur
+   * @return Observable avec les détails de l'utilisateur
+   */
+  abstract getUserById(id: string): Observable<UserDto>;
+
+  /** Désactive un utilisateur
+   * @param id ID de l'utilisateur
+   * @return Observable avec le résultat de l'opération
+   */
+  abstract deactivateUser(id: string): Observable<boolean>;
+
+  /** Ajoute des pays à un utilisateur
+   * @param userId ID de l'utilisateur
+   * @param countryIds Liste des IDs des pays à ajouter
+   * @return Observable avec le résultat de l'opération
+   */
+  abstract addCountriesToUser(userId: string, countryIds: string[]): Observable<boolean>;
+
+  /** Supprime un pays d'un utilisateur
+   * @param userId ID de l'utilisateur
+   * @param countryId ID du pays à supprimer
+   * @return Observable avec le résultat de l'opération
+   */
+  abstract removeCountryFromUser(userId: string, countryId: string): Observable<boolean>;
 }

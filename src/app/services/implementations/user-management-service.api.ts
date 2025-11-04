@@ -88,4 +88,76 @@ export class UserManagementServiceApi extends AbstractUserManagementService {
       })
     );
   }
+
+  getUserById(id: string): Observable<UserDto> {
+    console.log('📤 [API] Fetching user by ID:', id);
+
+    return this.http.get<{ user: UserDto }>(`${this.userApiUrl}/${id}`).pipe(
+      timeout(this.timeout),
+      map(response => {
+        console.log('✅ [API] User details fetched:', response.user);
+        return {
+          ...response.user,
+          createdAt: new Date(response.user.createdAt)
+        };
+      }),
+      catchError(error => {
+        console.error('❌ [API] Error fetching user details:', error);
+        const errorMessage = this.errorHandler.handleApiError(error);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  deactivateUser(id: string): Observable<boolean> {
+    console.log('📤 [API] Deactivating user:', id);
+
+    return this.http.post<boolean>(`${this.userApiUrl}/${id}/deactivate`, {}).pipe(
+      timeout(this.timeout),
+      map(response => {
+        console.log('✅ [API] User deactivated:', response);
+        return response;
+      }),
+      catchError(error => {
+        console.error('❌ [API] Error deactivating user:', error);
+        const errorMessage = this.errorHandler.handleApiError(error);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  addCountriesToUser(userId: string, countryIds: string[]): Observable<boolean> {
+    console.log('📤 [API] Adding countries to user:', userId, countryIds);
+
+    const request = { userId, countryIds };
+    return this.http.post<boolean>(`${this.userApiUrl}/${userId}/addCountries`, request).pipe(
+      timeout(this.timeout),
+      map(response => {
+        console.log('✅ [API] Countries added to user:', response);
+        return response;
+      }),
+      catchError(error => {
+        console.error('❌ [API] Error adding countries to user:', error);
+        const errorMessage = this.errorHandler.handleApiError(error);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  removeCountryFromUser(userId: string, countryId: string): Observable<boolean> {
+    console.log('📤 [API] Removing country from user:', userId, countryId);
+
+    return this.http.delete<boolean>(`${this.userApiUrl}/${userId}/countries/${countryId}`).pipe(
+      timeout(this.timeout),
+      map(response => {
+        console.log('✅ [API] Country removed from user:', response);
+        return response;
+      }),
+      catchError(error => {
+        console.error('❌ [API] Error removing country from user:', error);
+        const errorMessage = this.errorHandler.handleApiError(error);
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
 }

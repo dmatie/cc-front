@@ -94,6 +94,11 @@ export const routes: Routes = [
     loadComponent: () => import('./components/admin/internal-users-list.component').then(m => m.InternalUsersListComponent),
     canActivate: [() => inject(InternalUserGuard).canActivate()]
   },
+  {
+    path: 'admin/users/:id',
+    loadComponent: () => import('./components/admin/user-detail.component').then(m => m.UserDetailComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
 
   {
     path: 'no-access',

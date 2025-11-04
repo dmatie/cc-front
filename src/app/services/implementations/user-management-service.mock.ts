@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AbstractUserManagementService } from '../abstract/user-management-service.abstract';
 import {
@@ -38,8 +38,8 @@ export class UserManagementServiceMock extends AbstractUserManagementService {
       organizationName: 'AfDB',
       createdAt: new Date('2024-02-20'),
       countries: [
-        { id: '1', name: 'Côte d\'Ivoire', code: 'CI' },
-        { id: '2', name: 'Senegal', code: 'SN' }
+        { countryId: '1', userId: '2', isActive: true, countryName: 'Côte d\'Ivoire', counrtyCode: 'CI' },
+        { countryId: '2', userId: '2', isActive: true, countryName: 'Senegal', counrtyCode: 'SN' }
       ]
     },
     {
@@ -54,7 +54,7 @@ export class UserManagementServiceMock extends AbstractUserManagementService {
       organizationName: 'AfDB',
       createdAt: new Date('2024-03-10'),
       countries: [
-        { id: '3', name: 'Ghana', code: 'GH' }
+        { countryId: '3', userId: '3', isActive: true, countryName: 'Ghana', counrtyCode: 'GH' }
       ]
     }
   ];
@@ -114,9 +114,11 @@ export class UserManagementServiceMock extends AbstractUserManagementService {
       organizationName: 'AfDB',
       createdAt: new Date(),
       countries: request.countryIds.map(id => ({
-        id,
-        name: `Country ${id}`,
-        code: id.substr(0, 2).toUpperCase()
+        countryId: id,
+        userId: Math.random().toString(36).substr(2, 9),
+        isActive: true,
+        countryName: `Country ${id}`,
+        counrtyCode: id.substr(0, 2).toUpperCase()
       }))
     };
 
@@ -128,5 +130,44 @@ export class UserManagementServiceMock extends AbstractUserManagementService {
     };
 
     return of(response).pipe(delay(1000));
+  }
+
+  getUserById(id: string): Observable<UserDto> {
+    const user = this.mockUsers.find(u => u.id === id);
+    if (!user) {
+      return throwError(() => new Error('User not found'));
+    }
+    return of(user).pipe(delay(500));
+  }
+
+  deactivateUser(id: string): Observable<boolean> {
+    const user = this.mockUsers.find(u => u.id === id);
+    if (user) {
+      user.isActive = false;
+    }
+    return of(true).pipe(delay(800));
+  }
+
+  addCountriesToUser(userId: string, countryIds: string[]): Observable<boolean> {
+    const user = this.mockUsers.find(u => u.id === userId);
+    if (user) {
+      const newCountries = countryIds.map(id => ({
+        countryId: id,
+        userId: userId,
+        isActive: true,
+        countryName: `Country ${id}`,
+        counrtyCode: id.substr(0, 2).toUpperCase()
+      }));
+      user.countries = [...(user.countries || []), ...newCountries];
+    }
+    return of(true).pipe(delay(800));
+  }
+
+  removeCountryFromUser(userId: string, countryId: string): Observable<boolean> {
+    const user = this.mockUsers.find(u => u.id === userId);
+    if (user && user.countries) {
+      user.countries = user.countries.filter(c => c.countryId !== countryId);
+    }
+    return of(true).pipe(delay(800));
   }
 }
