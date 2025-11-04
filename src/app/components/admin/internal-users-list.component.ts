@@ -144,4 +144,8 @@ export class InternalUsersListComponent implements OnInit {
   dismissError(): void {
     this.errorMessage = '';
   }
+
+  goBack(): void {
+    this.router.navigate(['/internal/dashboard']);
+  }
 }

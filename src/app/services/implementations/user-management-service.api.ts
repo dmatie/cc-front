@@ -14,7 +14,7 @@ import { ErrorHandlerService } from '../error-handler.service';
 
 @Injectable()
 export class UserManagementServiceApi extends AbstractUserManagementService {
-  private readonly userApiUrl = `${environment.apiUrl}/User`;
+  private readonly userApiUrl = `${environment.apiUrl}/Users`;
   private readonly azureAdApiUrl = `${environment.apiUrl}/AzureAd`;
   private readonly timeout = 30000;
 

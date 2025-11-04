@@ -79,7 +79,8 @@ export class AddInternalUserModalComponent implements OnInit {
   private setupRoleChangeListener(): void {
     this.userForm.get('role')?.valueChanges.subscribe(role => {
       const countryIdsControl = this.userForm.get('countryIds');
-      if (role === UserRole.Admin) {
+      const selectedRole = parseInt(role, 10) as UserRole;
+      if (selectedRole === UserRole.Admin) {
         countryIdsControl?.clearValidators();
         countryIdsControl?.setValue([]);
         countryIdsControl?.markAsUntouched();
@@ -134,7 +135,9 @@ export class AddInternalUserModalComponent implements OnInit {
   }
 
   isRoleAdmin(): boolean {
-    return this.userForm.get('role')?.value === UserRole.Admin;
+    const role = this.userForm.get('role')?.value;
+    const selectedRole = parseInt(role, 10) as UserRole;
+    return selectedRole === UserRole.Admin;
   }
 
   isCountrySelected(countryId: string): boolean {

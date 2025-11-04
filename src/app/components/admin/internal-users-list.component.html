@@ -12,13 +12,22 @@
             <i class="bi bi-people-fill me-2"></i>
             {{ i18n.t('users.list.header') }}
           </h4>
-          <button class="btn btn-light btn-sm" (click)="openAddUserModal()">
-            <i class="bi bi-person-plus-fill me-2"></i>
-            {{ i18n.t('users.list.add_user') }}
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>
+            {{ i18n.t('users.list.back') }}
           </button>
         </div>
 
         <div class="card-body">
+
+
+            <div class="d-flex justify-content-end align-items-center mb-4">
+              <button class="btn btn-primary" (click)="openAddUserModal()">
+                <i class="bi bi-person-plus-fill me-2"></i>
+                {{ i18n.t('claims.createClaim') }}
+              </button>
+            </div>
+
 
           <!-- Success Message -->
   <div *ngIf="successMessage" class="alert alert-success alert-dismissible fade show">
