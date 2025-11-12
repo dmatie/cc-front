@@ -46,7 +46,19 @@ export class AuthService {
     if (response) {
       console.log('🔄 Réponse de redirection reçue');
       await this.handleAuthenticationResult(response);
-      window.location.replace('/client/home');
+      if(this.isExternalUser()){
+        console.log('🔄 Redirection vers la page d\'accueil client après connexion');
+        window.location.replace('/client/home');
+
+      }
+      else if(this.isInternalUser()){
+        console.log('🔄 Redirection vers la page d\'accueil interne après connexion');
+        window.location.replace('/internal/dashboard');
+      }
+      else{
+        console.log('🔄 Redirection vers la page d\'accueil générale après connexion');
+        window.location.replace('/no-access');
+      }
     } else {
       const accounts = this.msalInstance.getAllAccounts();
       if (accounts.length > 0) {
@@ -230,8 +242,7 @@ export class AuthService {
     );
 
     // Vérifier par domaine email (fallback)
-    const isAfdbEmail = email.toLowerCase().includes('@afdb.org') || 
-                       email.toLowerCase().includes('@afdb.com');
+    const isAfdbEmail = email.toLowerCase().includes('@afdb.org');
 
     if (hasAdminRole || isAfdbEmail) {
       console.log('✅ Utilisateur identifié comme admin/interne');

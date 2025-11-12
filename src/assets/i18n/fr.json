@@ -31,8 +31,10 @@
     "by": "par",
     "error": "Une erreur s'est produite",
     "active": "Actif",
+    "inactive": "Inactif",
     "quickActions": "Actions Rapides",
-    "browse": "Parcourir"
+    "browse": "Parcourir",
+    "remove": "Supprimer"
   },
   "home": {
     "title": "Portail Client AfDB",
@@ -485,7 +487,8 @@
       "no_users_desc": "Commencez par ajouter votre premier utilisateur interne",
       "add_first_user": "Ajouter le Premier Utilisateur",
       "showing": "Affichage",
-      "of": "sur"
+      "of": "sur",
+      "back": "Retour au Tableau de Bord"
     },
     "add_user_modal": {
       "title": "Ajouter un Utilisateur Interne",
@@ -673,6 +676,7 @@
     "submitResponse": "Soumettre la Réponse",
     "selectStatus": "Sélectionner le statut",
     "filterByStatus": "Filtrer par Statut",
+    "submitting": "Envoi en cours...",
     "status": {
       "all": "Tous les Statuts",
       "submitted": "Soumis",

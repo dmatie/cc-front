@@ -49,7 +49,8 @@
           </div>
           }
 
-          <div *ngIf="currentStep === 1" class="step-content">
+          @if (currentStep === 1) {
+          <div class="step-content">
             <h5 class="mb-4">
               {{ i18n.t('disbursements.wizard.step1') }}
             </h5>
@@ -137,8 +138,12 @@
               </button>
             </div>
           </div>
+          }
 
-          <div *ngIf="currentStep === 2" class="step-content">
+
+          @if( currentStep === 2) {
+
+          <div class="step-content">
             <h5 class="mb-4">
               {{ i18n.t('disbursements.wizard.step2') }}
             </h5>
@@ -742,7 +747,11 @@
             </div>
           </div>
 
-          <div *ngIf="currentStep === 3" class="step-content">
+          }
+
+
+          @if(currentStep === 3) {
+          <div class="step-content">
             <h5 class="mb-4">
               {{ i18n.t('disbursements.wizard.step3') }}
             </h5>
@@ -1150,6 +1159,9 @@
               </button>
             </div>
           </div>
+          }
+
+          
         </div>
       </div>
     </div>

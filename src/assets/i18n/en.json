@@ -31,8 +31,10 @@
     "by": "by",
     "error": "An error occurred",
     "active": "Active",
+    "inactive": "Inactive",
     "quickActions": "Quick Actions",
-    "browse": "Browse"
+    "browse": "Browse",
+    "remove": "Remove"
   },
   "home": {
     "title": "AfDB Client Portal",
@@ -492,7 +494,8 @@
       "no_users_desc": "Start by adding your first internal user",
       "add_first_user": "Add First User",
       "showing": "Showing",
-      "of": "of"
+      "of": "of",
+      "back": "Back to Dashboard"
     },
     "add_user_modal": {
       "title": "Add Internal User",
@@ -680,6 +683,7 @@
     "submitResponse": "Submit Response",
     "selectStatus": "Select status",
     "filterByStatus": "Filter by Status",
+    "submitting": "Submitting...",
     "status": {
       "all": "All Status",
       "submitted": "Submitted",

@@ -223,6 +223,10 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
   initializeTypeSpecificData(): void {
     const typeCode = this.getSelectedTypeCode();
+    this.command.disbursementA1 = undefined;
+    this.command.disbursementA2 = undefined;
+    this.command.disbursementA3 = undefined;
+    this.command.disbursementB1 = undefined;
 
     if (typeCode === 'A1' && !this.command.disbursementA1) {
       this.command.disbursementA1 = {

@@ -6,6 +6,7 @@ import { RegistrationDetail } from '../../models/registration.model';
 import { CommonModule } from '@angular/common';
 import { RequestDetailsComponent } from "../request/request-details.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-registration-review',
@@ -26,6 +27,7 @@ export class RegistrationReviewComponent implements OnInit {
   private cooldownInterval?: any;
 
   constructor(
+     private location: Location,
     private fb: FormBuilder,
     private router: Router,
     public i18n: I18nService,
@@ -177,7 +179,7 @@ export class RegistrationReviewComponent implements OnInit {
   }
 
   goBack(): void {
-    this.router.navigate(['/register/amend']);
+    this.location.back();
   }
 
   ngOnDestroy(): void {
