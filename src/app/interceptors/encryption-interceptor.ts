@@ -12,29 +12,44 @@ export const encryptionInterceptor: HttpInterceptorFn = (req, next) => {
   }
 
   const isApiRequest = req.url.startsWith(environment.apiUrl);
-  const hasBody = req.body !== null && req.body !== undefined;
-  const isModifyingRequest = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
 
-  if (!isApiRequest || !hasBody || !isModifyingRequest) {
+  if (!isApiRequest) {
     return next(req);
   }
 
-  return from(encryptionService.encrypt(req.body)).pipe(
-    switchMap(encryptedBody => {
-      const encryptedReq = req.clone({
-        body: encryptedBody
-      });
+  const hasBody = req.body !== null && req.body !== undefined;
+  const isModifyingRequest = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
+  const shouldEncryptRequest = hasBody && isModifyingRequest;
 
-      return next(encryptedReq).pipe(
-        switchMap(event => {
-          if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && 'encryptedData' in event.body) {
-            return from(encryptionService.decrypt(event.body)).pipe(
-              map(decryptedBody => event.clone({ body: decryptedBody }))
-            );
-          }
-          return from(Promise.resolve(event));
-        })
-      );
+  if (shouldEncryptRequest) {
+    return from(encryptionService.encrypt(req.body)).pipe(
+      switchMap(encryptedBody => {
+        const encryptedReq = req.clone({
+          body: encryptedBody
+        });
+
+        return next(encryptedReq).pipe(
+          switchMap(event => {
+            if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && 'encryptedData' in event.body) {
+              return from(encryptionService.decrypt(event.body)).pipe(
+                map(decryptedBody => event.clone({ body: decryptedBody }))
+              );
+            }
+            return from(Promise.resolve(event));
+          })
+        );
+      })
+    );
+  }
+
+  return next(req).pipe(
+    switchMap(event => {
+      if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && 'encryptedData' in event.body) {
+        return from(encryptionService.decrypt(event.body)).pipe(
+          map(decryptedBody => event.clone({ body: decryptedBody }))
+        );
+      }
+      return from(Promise.resolve(event));
     })
   );
 };
