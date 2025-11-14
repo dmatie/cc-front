@@ -21,6 +21,7 @@ import { AbstractUserManagementService } from './services/abstract/user-manageme
 import { MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { ApiErrorInterceptor } from './interceptors/api-error-interceptor';
+import { encryptionInterceptor } from './interceptors/encryption-interceptor';
 
 // Register locales
 registerLocaleData(localeEn, 'en');
@@ -42,6 +43,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withEnabledBlockingInitialNavigation()),
     provideHttpClient(
       withInterceptorsFromDi(),
+      withInterceptors([encryptionInterceptor])
     ),
     { provide: LOCALE_ID, useValue: getLocale() },
     I18nService,
