@@ -18,6 +18,7 @@ COPY . .
 
 # Compiler l'application pour la production
 RUN npm run build:prod
+#RUN npm run build --configuration=perso
 
 # =================================
 # Étape 2: Servir avec Nginx

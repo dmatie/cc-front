@@ -602,7 +602,12 @@
     "permission_error": "Permission error",
     "system_error": "System error",
     "business_error": "Business error",
-    "unexpected_error": "An unexpected error occurred"
+    "unexpected_error": "An unexpected error occurred",
+    "missing_ad_group": "User is missing required AD group",
+    "access_request":{
+      "email_already_exists":"An access request with this email already exists",  
+      "request_not_found":"Access request not found"
+    }
   },
   "admin": {
     "access_requests": {

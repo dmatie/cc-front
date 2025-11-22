@@ -5,6 +5,7 @@ import { AbstractRegistrationService } from '../../services/abstract/registratio
 import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { RegistrationDetail, RegistrationResponseAll, StatusMapper } from '../../models/registration.model';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-access-request-list',
@@ -22,7 +23,8 @@ export class AccessRequestListComponent implements OnInit {
   constructor(
     private registrationService: AbstractRegistrationService,
     private router: Router,
-    public i18n: I18nService
+    public i18n: I18nService,
+    
   ) {}
 
   ngOnInit(): void {

@@ -296,9 +296,15 @@ export class EditDisbursementWizardComponent implements OnInit {
     return false;
   }
 
+  onDisbursementTypeChange(): void {
+    this.initializeTypeSpecificData();
+  }
+
   nextStep(): void {
     if (this.currentStep === 1 && this.canProceedStep1()) {
-      this.initializeTypeSpecificData();
+      if (!this.existingDisbursement) {
+        this.initializeTypeSpecificData();
+      }
       this.currentStep = 2;
     } else if (this.currentStep === 2 && this.canProceedStep2()) {
       this.currentStep = 3;

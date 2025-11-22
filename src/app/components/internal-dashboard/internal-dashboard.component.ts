@@ -19,6 +19,7 @@ export class InternalDashboardComponent implements OnInit {
   isLoading = true;
   internalStats: InternalDashboardStatsDto | null = null;
   errorMessage = '';
+  isAdmin: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -26,6 +27,8 @@ export class InternalDashboardComponent implements OnInit {
     private dashboardService: AbstractDashboardService,
     public i18n: I18nService
   ) {
+    this.isAdmin = this.authService.isAdmin();
+    console.log(this.isAdmin);
   }
 
   ngOnInit(): void {

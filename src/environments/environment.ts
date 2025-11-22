@@ -1,16 +1,23 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://cc-perso-api.azurewebsites.net/api', // URL de production
+    apiUrl: 'https://clientconnection-backend.victoriousmeadow-cdaaa30d.eastus.azurecontainerapps.io/api', // URL de production
     azureAd: {
-        clientId: '7b937ab1-2b96-4206-b373-f0aacb79b4a7', // Client ID de test - À remplacer
-        authority: 'https://login.microsoftonline.com/515af266-ba4c-4452-a190-d3a7520a6957',
-        redirectUri: 'https://cc-perso-app.azurewebsites.net/client/home',
-        postLogoutRedirectUri: 'https://cc-perso-app.azurewebsites.net/home',
-        backendScope:'api://586ffe0a-59c4-4e52-af81-be102e2e6e07/access_as_user'
+        clientId: '6ea7798e-7e05-452a-a8b2-13909a0566d0', // Client ID de test - À remplacer
+        authority: 'https://login.microsoftonline.com/727339d1-16ec-43cb-b6c3-5001fec5e907',
+        redirectUri: 'https://clientconnection-frontend.gentlepond-89c90e87.eastus.azurecontainerapps.io/client/home',
+        postLogoutRedirectUri: 'https://clientconnection-frontend.gentlepond-89c90e87.eastus.azurecontainerapps.io/home',
+        backendScope:'api://e2cfa7cd-a691-48df-9da3-3171fe3c5c41/access_as_user'
     },
     features: {
         enableMockData: false, // false = API services en production
         enableDebugLogs: false,
         enableCaptcha: true
+    },
+    encryption: {
+        enabled: true,
+        key: 'Pzgq08B00AhKkVVA3cfmAJnk1EtgLPbn29cltULMlVs=',
+        neverEncryptPaths: [
+            '/api/disbursements'
+        ]
     }
 };

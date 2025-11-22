@@ -1,5 +1,6 @@
 export const environment = {
     production: false,
+   // apiUrl: 'https://clientconnection-backend.victoriousmeadow-cdaaa30d.eastus.azurecontainerapps.io/api', // URL de développement
     apiUrl: 'https://localhost:7501/api', // URL de développement
     azureAd: {
         clientId: '6ea7798e-7e05-452a-a8b2-13909a0566d0', 
@@ -12,5 +13,12 @@ export const environment = {
         enableMockData: false, // true = Mock services, false = API services
         enableDebugLogs: true,
         enableCaptcha: true
+    },
+    encryption: {
+        enabled: true,
+        key: 'Pzgq08B00AhKkVVA3cfmAJnk1EtgLPbn29cltULMlVs=',
+        neverEncryptPaths: [
+            '/api/disbursements'
+        ]
     }
 };

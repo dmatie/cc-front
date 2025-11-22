@@ -14,7 +14,9 @@ export class I18nService {
 
   constructor(private http: HttpClient) {
     // Charger la locale par défaut
-    this.loadTranslations('fr');
+    const savedLocale = localStorage.getItem('locale') || 'fr';
+    this.currentLocaleSubject.next(savedLocale);
+    this.loadTranslations(savedLocale);
   }
 
   /**

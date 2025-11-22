@@ -27,3 +27,7 @@
   background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 193, 7, 0.05));
   border-left: 4px solid #ffc107;
 }
+
+a {
+  text-decoration: none;
+}

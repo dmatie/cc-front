@@ -241,10 +241,7 @@ export class AuthService {
       internalRoles.includes(role) || adminGroups.includes(role)
     );
 
-    // Vérifier par domaine email (fallback)
-    const isAfdbEmail = email.toLowerCase().includes('@afdb.org');
-
-    if (hasAdminRole || isAfdbEmail) {
+    if (hasAdminRole) {
       console.log('✅ Utilisateur identifié comme admin/interne');
       userRole= AppConstants.GeneralUserRole.Internal;
     }
@@ -336,8 +333,6 @@ export class AuthService {
 
   isExternalUser(): boolean {
     return this.currentUserSubject.value?.role===AppConstants.GeneralUserRole.External;
-
-    //return this.hasRole(AppConstants.AdRoleName.ExternalUser)
   }
 
   getCurrentUser(): User | null {

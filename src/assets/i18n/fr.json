@@ -595,7 +595,12 @@
     "permission_error": "Erreur de permission",
     "system_error": "Erreur système",
     "business_error": "Erreur métier",
-    "unexpected_error": "Une erreur inattendue s'est produite"
+    "unexpected_error": "Une erreur inattendue s'est produite",
+    "missing_ad_group": "Le groupe AD requis est manquant",
+    "access_request":{
+      "email_already_exists":"Une demande d'accès avec cet email existe déjà",  
+      "request_not_found":"Demande d'accès non trouvée"
+    }
   },
   "admin": {
     "access_requests": {

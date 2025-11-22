@@ -22,10 +22,13 @@
 
 
             <div class="d-flex justify-content-end align-items-center mb-4">
-              <button class="btn btn-primary" (click)="openAddUserModal()">
-                <i class="bi bi-person-plus-fill me-2"></i>
-                {{ i18n.t('claims.createClaim') }}
-              </button>
+              @if(isAdminUser)
+              {
+                <button class="btn btn-primary" (click)="openAddUserModal()">
+                  <i class="bi bi-person-plus-fill me-2"></i>
+                  {{ i18n.t('users.list.add_user') }}
+                </button>
+              }
             </div>
 
 

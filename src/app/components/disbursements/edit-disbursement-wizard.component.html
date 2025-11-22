@@ -111,7 +111,7 @@
                   <span class="text-danger">*</span>
                 </label>
                 <select class="form-select" [(ngModel)]="command.disbursementTypeId" name="disbursementTypeId"
-                  #disbursementType="ngModel" required [disabled]="loadingTypes">
+                  #disbursementType="ngModel" required [disabled]="loadingTypes" (change)="onDisbursementTypeChange()">
                   <option value="">{{ i18n.t('disbursements.selectDisbursementType') }}</option>
                   <option *ngFor="let type of disbursementTypes" [value]="type.id">
                     {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}

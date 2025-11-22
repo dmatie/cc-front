@@ -19,10 +19,18 @@ export class ErrorTranslationService {
   translateErrorCode(errorCode: string): string {
     // Mapping des codes d'erreur vers les clés i18n
     const errorKeyMapping: { [key: string]: string } = {
+
+      //AccessRequest Errors
+      'ERR.AccessRequest.EmailAlreadyExists': 'errors.access_request.email_already_exists',
+      'ERR.AccessRequest.RequestAlreadyExists': 'errors.access_request.email_already_exists',
+
       // Erreurs générales
       'ERR.General.ReferenceDataNotExist': 'errors.reference_data_not_exist',
       'ERR.General.InvalidEmailFormat': 'errors.invalid_email_format',
       'ERR.General.EmailAlreadyExists': 'errors.email_already_exists',
+      'ERR.General.MissingAdGroup': 'errors.missing_ad_group',
+      'ERR.General.EmailExistsInEntra': 'errors.access_request.invalid_status_transition',
+
       
       // Erreurs de validation des champs
       'ERR.General.FirstNameTooShort': 'errors.first_name_too_short',

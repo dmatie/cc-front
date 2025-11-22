@@ -22,6 +22,7 @@ export class InternalUsersListComponent implements OnInit {
   errorMessage = '';
   successMessage = '';
   showAddUserModal = false;
+  isAdminUser = false;
 
   currentPage = 1;
   pageSize = 10;
@@ -34,10 +35,12 @@ export class InternalUsersListComponent implements OnInit {
     private userManagementService: AbstractUserManagementService,
     private authService: AuthService,
     private router: Router,
-    public i18n: I18nService
+    public i18n: I18nService,
+
   ) {}
 
   ngOnInit(): void {
+    this.isAdminUser = this.authService.isAdmin();
     this.loadUsers();
   }
 

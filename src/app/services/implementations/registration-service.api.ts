@@ -233,7 +233,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
   approveRegistration(requestId: string, approveContent: ApproveRequest): Observable<{ success: boolean; message: string; }> {
     console.log('✅ [API] Approving registration:', requestId, approveContent);
 
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve`, approveContent).pipe(
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/approve-byapp`, approveContent).pipe(
       timeout(this.timeout),
       catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );
@@ -242,7 +242,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
   rejectRegistration(requestId: string, rejectContent: RejectRequest): Observable<{ success: boolean; message: string; }> {
     console.log('❌ [API] Rejecting registration:', requestId, rejectContent);
 
-    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject`, rejectContent).pipe(
+    return this.http.post<{ success: boolean; message: string; }>(`${this.apiUrl}/${requestId}/reject-byapp`, rejectContent).pipe(
       timeout(this.timeout),
       catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );

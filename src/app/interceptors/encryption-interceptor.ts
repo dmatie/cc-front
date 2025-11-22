@@ -17,6 +17,29 @@ export const encryptionInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
+  const neverEncryptPaths = environment.encryption.neverEncryptPaths || [];
+  const shouldSkipEncryption = neverEncryptPaths.some(pattern => {
+    const regexPattern = pattern
+      .replace(/[.+?^${}()|[\]\\]/g, '\\$&')
+      .replace(/\*/g, '[^/]+');
+    const regex = new RegExp(regexPattern, 'i');
+    return regex.test(req.url);
+  });
+
+
+  if (shouldSkipEncryption) {
+    return next(req).pipe(
+      switchMap(event => {
+        if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && ('EncryptedData' in event.body || 'encryptedData' in event.body)) {
+          return from(encryptionService.decrypt(event.body)).pipe(
+            map(decryptedBody => event.clone({ body: decryptedBody }))
+          );
+        }
+        return from(Promise.resolve(event));
+      })
+    );
+  }
+
   const hasBody = req.body !== null && req.body !== undefined;
   const isModifyingRequest = ['POST', 'PUT', 'PATCH', 'DELETE'].includes(req.method);
   const shouldEncryptRequest = hasBody && isModifyingRequest;
@@ -30,7 +53,7 @@ export const encryptionInterceptor: HttpInterceptorFn = (req, next) => {
 
         return next(encryptedReq).pipe(
           switchMap(event => {
-            if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && 'encryptedData' in event.body) {
+            if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && ('EncryptedData' in event.body || 'encryptedData' in event.body)) {
               return from(encryptionService.decrypt(event.body)).pipe(
                 map(decryptedBody => event.clone({ body: decryptedBody }))
               );
@@ -44,7 +67,7 @@ export const encryptionInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     switchMap(event => {
-      if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && 'encryptedData' in event.body) {
+      if (event instanceof HttpResponse && event.body && typeof event.body === 'object' && ('EncryptedData' in event.body || 'encryptedData' in event.body)) {
         return from(encryptionService.decrypt(event.body)).pipe(
           map(decryptedBody => event.clone({ body: decryptedBody }))
         );
