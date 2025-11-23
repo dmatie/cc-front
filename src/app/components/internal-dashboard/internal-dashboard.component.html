@@ -115,6 +115,12 @@
               </button>
             </div>
             <div class="col-md-3">
+              <button class="btn btn-outline-success w-100" (click)="viewApprovedAccessRequests()">
+                <i class="bi bi-check-circle me-2"></i>
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Demandes approuvées' : 'Approved Requests' }}
+              </button>
+            </div>
+            <div class="col-md-3">
               <button class="btn btn-outline-danger w-100" (click)="manageClaims()">
                 <i class="bi bi-exclamation-triangle me-2"></i>
                 {{ i18n.t('internal.actions.claims') }}

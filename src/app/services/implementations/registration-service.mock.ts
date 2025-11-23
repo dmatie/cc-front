@@ -473,6 +473,87 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
     );
   }
 
+  getApprovedAccessRequests(filters: {
+    countryId?: string;
+    projectCode?: string;
+    pageNumber?: number;
+    pageSize?: number;
+  }): Observable<RegistrationResponseAll> {
+    console.log('✅ [MOCK] Getting approved access requests with filters:', filters);
+
+    return of(null).pipe(
+      delay(800),
+      map(() => {
+        const approvedRequests: AccessRequestDetail[] = [
+          {
+            id: 'REQ-APPROVED-001',
+            email: 'john.doe@example.com',
+            firstName: 'John',
+            lastName: 'Doe',
+            functionId: '11111111-2222-3333-4444-555555555555',
+            countryId: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+            businessProfileId: 'aaaabbbb-cccc-dddd-eeee-111111111111',
+            financingTypeId: 'public-001',
+            selectedProjectCodes: ['P-MA-AAA-001', 'P-MA-BBB-002'],
+            status: MapAccessRequestModelStatusToApi('approved'),
+            submissionDate: new Date('2024-01-10'),
+            processedDate: new Date('2024-01-12'),
+            functionName: 'Project Accountant',
+            countryName: 'Morocco',
+            businessProfileName: 'Government Agency',
+            financingTypeName: 'Public'
+          },
+          {
+            id: 'REQ-APPROVED-002',
+            email: 'jane.smith@example.com',
+            firstName: 'Jane',
+            lastName: 'Smith',
+            functionId: '22222222-3333-4444-5555-666666666666',
+            countryId: 'b2c3d4e5-f6g7-8901-bcde-f23456789012',
+            businessProfileId: 'bbbbcccc-dddd-eeee-ffff-222222222222',
+            financingTypeId: 'public-001',
+            selectedProjectCodes: ['P-TN-CCC-003', 'P-TN-DDD-004', 'P-TN-EEE-005'],
+            status: MapAccessRequestModelStatusToApi('approved'),
+            submissionDate: new Date('2024-01-08'),
+            processedDate: new Date('2024-01-10'),
+            functionName: 'Project Manager',
+            countryName: 'Tunisia',
+            businessProfileName: 'Public Institution',
+            financingTypeName: 'Public'
+          }
+        ];
+
+        let filteredRequests = approvedRequests;
+
+        if (filters.countryId) {
+          filteredRequests = filteredRequests.filter(req => req.countryId === filters.countryId);
+        }
+
+        if (filters.projectCode) {
+          filteredRequests = filteredRequests.filter(req =>
+            req.selectedProjectCodes.includes(filters.projectCode!)
+          );
+        }
+
+        const pageSize = filters.pageSize || 10;
+        const pageNumber = filters.pageNumber || 1;
+        const totalCount = filteredRequests.length;
+        const totalPages = Math.ceil(totalCount / pageSize);
+
+        const startIndex = (pageNumber - 1) * pageSize;
+        const paginatedRequests = filteredRequests.slice(startIndex, startIndex + pageSize);
+
+        return {
+          accessRequests: paginatedRequests,
+          pageNumber,
+          pageSize,
+          totalCount,
+          totalPages
+        };
+      })
+    );
+  }
+
   // MÉTHODES PRIVÉES
 
   private generateRequestId(): string {

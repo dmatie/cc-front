@@ -248,6 +248,26 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
+  getApprovedAccessRequests(filters: {
+    countryId?: string;
+    projectCode?: string;
+    pageNumber?: number;
+    pageSize?: number;
+  }): Observable<RegistrationResponseAll> {
+    console.log('✅ [API] Getting approved access requests with filters:', filters);
+
+    let params = new HttpParams();
+    if (filters.countryId) params = params.set('countryId', filters.countryId);
+    if (filters.projectCode) params = params.set('projectCode', filters.projectCode);
+    if (filters.pageNumber) params = params.set('pageNumber', filters.pageNumber.toString());
+    if (filters.pageSize) params = params.set('pageSize', filters.pageSize.toString());
+
+    return this.http.get<RegistrationResponseAll>(`${this.apiUrl}/approved`, { params }).pipe(
+      timeout(this.timeout),
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
+    );
+  }
+
   // MÉTHODES PRIVÉES
 
   private processResponse(response: RegistrationResponse): RegistrationResponse {

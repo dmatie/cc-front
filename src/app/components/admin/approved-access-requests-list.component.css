@@ -1,0 +1,58 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.cursor-pointer:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.table th {
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.badge {
+  font-size: 0.9rem;
+  padding: 0.4rem 0.6rem;
+}
+
+.pagination .page-link {
+  color: #198754;
+  border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.pagination .page-link:hover {
+  background-color: #f8f9fa;
+  color: #146c43;
+}
+
+.pagination .page-item.disabled .page-link {
+  color: #6c757d;
+}
+
+.form-select:focus,
+.btn:focus {
+  border-color: #198754;
+  box-shadow: 0 0 0 0.2rem rgba(25, 135, 80, 0.25);
+}
+
+.alert-info {
+  background-color: #d1ecf1;
+  border-color: #bee5eb;
+  color: #0c5460;
+}
+
+.card {
+  border: none;
+}
+
+.card-header {
+  border-bottom: 3px solid rgba(255, 255, 255, 0.2);
+}

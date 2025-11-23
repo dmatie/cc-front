@@ -68,6 +68,10 @@ export class InternalDashboardComponent implements OnInit {
     this.router.navigate(['/admin/accessrequests']);
   }
 
+  viewApprovedAccessRequests(): void {
+    this.router.navigate(['/admin/approved-accessrequests']);
+  }
+
   manageClaims(): void {
     this.router.navigate(['/admin/claims']);
   }

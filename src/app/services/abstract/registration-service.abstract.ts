@@ -104,4 +104,16 @@ export abstract class AbstractRegistrationService {
    * @returns Observable avec la réponse
    */
   abstract updateRegistration(request: AmendRegistrationRequest): Observable<RegistrationResponse>;
+
+  /**
+   * Obtenir toutes les demandes d'accès approuvées avec filtres optionnels
+   * @param filters Filtres optionnels (countryId, projectCode, pagination)
+   * @returns Observable avec la liste paginée des demandes approuvées
+   */
+  abstract getApprovedAccessRequests(filters: {
+    countryId?: string;
+    projectCode?: string;
+    pageNumber?: number;
+    pageSize?: number;
+  }): Observable<RegistrationResponseAll>;
 }
