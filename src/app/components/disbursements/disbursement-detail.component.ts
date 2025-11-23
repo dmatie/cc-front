@@ -98,7 +98,8 @@ export class DisbursementDetailComponent implements OnInit {
 
   canEdit(): boolean {
     return !this.isInternalUser &&
-           this.disbursement?.status === DisbursementStatus.Draft;
+           (this.disbursement?.status === DisbursementStatus.Draft ||
+            this.disbursement?.status === DisbursementStatus.BackedToClient);
   }
 
   canDuplicate(): boolean {
