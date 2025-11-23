@@ -43,12 +43,27 @@
               <select
                 class="form-select"
                 [(ngModel)]="selectedProjectCode"
-                (change)="onProjectChange()">
-                <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Tous les projets' : 'All Projects' }}</option>
+                (change)="onProjectChange()"
+                [disabled]="!selectedCountryId || isLoadingProjects">
+                <option value="">
+                  {{ !selectedCountryId
+                    ? (i18n.getCurrentLocale() === 'fr' ? 'Sélectionnez d\'abord un pays' : 'Select a country first')
+                    : isLoadingProjects
+                    ? (i18n.getCurrentLocale() === 'fr' ? 'Chargement...' : 'Loading...')
+                    : (i18n.getCurrentLocale() === 'fr' ? 'Tous les projets' : 'All Projects') }}
+                </option>
                 <option *ngFor="let project of projects" [value]="project.sapCode">
                   {{ project.sapCode }} - {{ project.projectName }}
                 </option>
               </select>
+              @if (isLoadingProjects) {
+                <div class="mt-2">
+                  <small class="text-muted">
+                    <span class="spinner-border spinner-border-sm me-1"></span>
+                    {{ i18n.getCurrentLocale() === 'fr' ? 'Chargement des projets...' : 'Loading projects...' }}
+                  </small>
+                </div>
+              }
             </div>
 
             <div class="col-md-4 d-flex align-items-end">

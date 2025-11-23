@@ -36,6 +36,8 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
   selectedCountryId: string = '';
   selectedProjectCode: string = '';
 
+  isLoadingProjects = false;
+
   currentPage = 1;
   pageSize = 10;
 
@@ -49,14 +51,15 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCountries();
-    this.loadProjects();
     this.loadApprovedRequests();
   }
 
   loadCountries(): void {
-    this.dropdownService.getCountries().subscribe({
+    this.dropdownService.getCountries({ isActive: true }).subscribe({
       next: (response) => {
-        this.countries = response.data || [];
+        if (response.success) {
+          this.countries = response.data || [];
+        }
       },
       error: (error: any) => {
         console.error('Error loading countries:', error);
@@ -64,13 +67,20 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
     });
   }
 
-  loadProjects(): void {
-    this.projectsService.getProjects().subscribe({
-      next: (response: any) => {
-        this.projects = response.data || [];
+  loadProjectsForCountry(countryCode: string): void {
+    this.isLoadingProjects = true;
+    this.projects = [];
+    this.selectedProjectCode = '';
+
+    this.projectsService.getProjectsByCountry(countryCode).subscribe({
+      next: (response) => {
+        this.projects = response.projects || [];
+        this.isLoadingProjects = false;
       },
       error: (error: any) => {
         console.error('Error loading projects:', error);
+        this.projects = [];
+        this.isLoadingProjects = false;
       }
     });
   }
@@ -100,6 +110,16 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
 
   onCountryChange(): void {
     this.currentPage = 1;
+    this.selectedProjectCode = '';
+    this.projects = [];
+
+    if (this.selectedCountryId) {
+      const selectedCountry = this.countries.find(c => c.id === this.selectedCountryId);
+      if (selectedCountry) {
+        this.loadProjectsForCountry(selectedCountry.code);
+      }
+    }
+
     this.loadApprovedRequests();
   }
 
@@ -111,6 +131,7 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
   resetFilters(): void {
     this.selectedCountryId = '';
     this.selectedProjectCode = '';
+    this.projects = [];
     this.currentPage = 1;
     this.loadApprovedRequests();
   }
