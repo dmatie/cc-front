@@ -444,4 +444,12 @@ export class DisbursementMockService extends DisbursementService {
   override getCurrencies(): Observable<CurrencyDto[]> {
     return of(this.mockCurrencies).pipe(delay(300));
   }
+
+  override downloadDocument(
+    referenceNumber: string,
+    fileName: string
+  ): Observable<Blob> {
+    const mockBlob = new Blob(['Mock file content'], { type: 'application/pdf' });
+    return of(mockBlob).pipe(delay(300));
+  }
 }

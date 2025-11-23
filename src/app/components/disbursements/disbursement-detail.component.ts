@@ -297,6 +297,29 @@ export class DisbursementDetailComponent implements OnInit {
     }
   }
 
+  downloadDocument(fileName: string): void {
+    if (!this.disbursement) return;
+
+    this.disbursementService
+      .downloadDocument(this.disbursement.requestNumber, fileName)
+      .subscribe({
+        next: (blob: Blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = fileName;
+          link.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          this.errorMessage = this.i18n.getCurrentLocale() === 'fr'
+            ? 'Erreur lors du téléchargement du fichier'
+            : 'Error downloading file';
+          console.error('Download error:', error);
+        }
+      });
+  }
+
   goBack(): void {
     if (this.isInternalUser) {
       this.router.navigate(['/admin/disbursements']);

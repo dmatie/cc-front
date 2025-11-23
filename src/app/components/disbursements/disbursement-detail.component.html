@@ -581,10 +581,14 @@
                             <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
                             <strong>{{ doc.fileName }}</strong>
                           </div>
-                          <a [href]="doc.fileUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                          <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            (click)="downloadDocument(doc.fileName)"
+                            [disabled]="loading">
                             <i class="bi bi-download me-1"></i>
                             {{ i18n.getCurrentLocale() === 'fr' ? 'Télécharger' : 'Download' }}
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>

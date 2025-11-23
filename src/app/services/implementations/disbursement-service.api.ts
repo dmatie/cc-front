@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DisbursementService } from '../abstract/disbursement-service.abstract';
@@ -157,6 +157,22 @@ export class DisbursementApiService extends DisbursementService {
 
   override getCurrencies(): Observable<CurrencyDto[]> {
     return this.http.get<CurrencyDto[]>(`${environment.apiUrl}/Currencies`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+  override downloadDocument(
+    referenceNumber: string,
+    fileName: string
+  ): Observable<Blob> {
+    const params = new HttpParams()
+      .set('ReferenceNumber', referenceNumber)
+      .set('FileName', fileName);
+
+    return this.http.get(`${this.baseUrl}/DownloadDocument`, {
+      params,
+      responseType: 'blob'
+    }).pipe(
       catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }

@@ -57,4 +57,9 @@ export abstract class DisbursementService {
   abstract getDisbursementTypes(): Observable<DisbursementTypeDto[]>;
 
   abstract getCurrencies(): Observable<CurrencyDto[]>;
+
+  abstract downloadDocument(
+    referenceNumber: string,
+    fileName: string
+  ): Observable<Blob>;
 }
