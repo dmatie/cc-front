@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
 import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
-import { ApproveRequest, RegistrationDetail, RejectRequest } from '../../models/registration.model';
+import { ApproveRequest, RegistrationDetail, RejectRequest, StatusEnum } from '../../models/registration.model';
 import { RequestDetailsComponent } from '../request/request-details.component';
 import { RejectModalComponent } from '../shared/reject-modal.component';
 
@@ -24,6 +24,7 @@ export class AccessRequestDetailComponent implements OnInit {
   successMessage = '';
   isProcessing = false;
   showRejectModal = false;
+  isPending = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -49,7 +50,14 @@ export class AccessRequestDetailComponent implements OnInit {
       next: (registration) => {
         if (registration) {
           this.registration = registration;
-          this.registrationViewData = registration.accessRequest; // Préparer les données pour l'affichage.
+          this.registrationViewData = registration.accessRequest;
+          this.isPending = registration.accessRequest.status === StatusEnum.Pending;
+
+          if (!this.isPending) {
+            this.errorMessage = this.i18n.getCurrentLocale() === 'fr'
+              ? 'Cette demande a déjà été traitée et ne peut plus être approuvée ou rejetée.'
+              : 'This request has already been processed and can no longer be approved or rejected.';
+          }
         } else {
           this.errorMessage = this.i18n.t('admin.access_request_detail.not_found');
         }
@@ -63,7 +71,7 @@ export class AccessRequestDetailComponent implements OnInit {
   }
 
   approveRequest(): void {
-    if (!this.requestId) return;
+    if (!this.requestId || !this.isPending) return;
 
     this.isProcessing = true;
     this.errorMessage = '';
@@ -93,6 +101,7 @@ export class AccessRequestDetailComponent implements OnInit {
   }
 
   openRejectModal(): void {
+    if (!this.isPending) return;
     this.showRejectModal = true;
   }
 
@@ -101,7 +110,7 @@ export class AccessRequestDetailComponent implements OnInit {
   }
 
   rejectRequest(reason: string): void {
-    if (!this.requestId) return;
+    if (!this.requestId || !this.isPending) return;
 
     this.isProcessing = true;
     this.errorMessage = '';
@@ -133,5 +142,41 @@ export class AccessRequestDetailComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/admin/accessrequests']);
+  }
+
+  getStatusBadgeClass(): string {
+    if (!this.registration) return '';
+
+    switch (this.registration.accessRequest.status) {
+      case StatusEnum.Pending:
+        return 'bg-warning';
+      case StatusEnum.Approved:
+        return 'bg-success';
+      case StatusEnum.Rejected:
+        return 'bg-danger';
+      case StatusEnum.Abandoned:
+        return 'bg-secondary';
+      default:
+        return 'bg-info';
+    }
+  }
+
+  getStatusLabel(): string {
+    if (!this.registration) return '';
+
+    const isFr = this.i18n.getCurrentLocale() === 'fr';
+
+    switch (this.registration.accessRequest.status) {
+      case StatusEnum.Pending:
+        return isFr ? 'En attente' : 'Pending';
+      case StatusEnum.Approved:
+        return isFr ? 'Approuvée' : 'Approved';
+      case StatusEnum.Rejected:
+        return isFr ? 'Rejetée' : 'Rejected';
+      case StatusEnum.Abandoned:
+        return isFr ? 'Abandonnée' : 'Abandoned';
+      default:
+        return isFr ? 'Inconnu' : 'Unknown';
+    }
   }
 }
