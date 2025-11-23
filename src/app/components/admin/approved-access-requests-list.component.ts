@@ -116,7 +116,7 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
   }
 
   viewDetail(requestId: string): void {
-    this.router.navigate(['/admin/accessrequests', requestId]);
+    this.router.navigate(['/admin/approved-accessrequests', requestId]);
   }
 
   goToPage(page: number): void {

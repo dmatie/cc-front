@@ -88,6 +88,11 @@ export const routes: Routes = [
     canActivate: [() => inject(InternalUserGuard).canActivate()]
   },
   {
+    path: 'admin/approved-accessrequests/:id',
+    loadComponent: () => import('./components/admin/approved-access-request-detail.component').then(m => m.ApprovedAccessRequestDetailComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
+  {
     path: 'admin/accessrequests/:id',
     loadComponent: () => import('./components/admin/access-request-detail.component').then(m => m.AccessRequestDetailComponent),
     canActivate: [() => inject(InternalUserGuard).canActivate()]

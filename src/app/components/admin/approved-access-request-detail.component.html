@@ -1,0 +1,238 @@
+<app-authenticated-navbar
+  [title]="i18n.t('internal.nav.title')"
+  [userType]="'internal'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-lg-11">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-check-circle me-2"></i>
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Détails de la demande approuvée' : 'Approved Request Details' }}
+          </h4>
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('common.back') }}
+          </button>
+        </div>
+        <div class="card-body">
+
+          @if (loading) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-success" role="status">
+                <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+              </div>
+              <p class="mt-3 text-muted">{{ i18n.t('common.loadingData') }}</p>
+            </div>
+          }
+
+          @if (!loading && errorMessage) {
+            <div class="alert alert-warning text-center py-4">
+              <i class="bi bi-exclamation-triangle fs-1 mb-3"></i>
+              <p class="mb-0">{{ errorMessage }}</p>
+            </div>
+          }
+
+          @if (!loading && !errorMessage && accessRequest) {
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-8">
+                  <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                          <i class="bi bi-info-circle me-2"></i>
+                          {{ i18n.getCurrentLocale() === 'fr' ? 'Statut' : 'Status' }}
+                        </h5>
+                        <span [class]="getStatusClass(accessRequest.status)">
+                          <i [class]="'bi ' + getStatusIcon(accessRequest.status) + ' me-1'"></i>
+                          {{ getStatusLabel(accessRequest.status) }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">
+                        <i class="bi bi-person me-2"></i>
+                        {{ i18n.getCurrentLocale() === 'fr' ? 'Informations personnelles' : 'Personal Information' }}
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <label class="text-muted small">{{ i18n.t('registration.form.firstName') }}</label>
+                          <div><strong>{{ accessRequest.firstName }}</strong></div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="text-muted small">{{ i18n.t('registration.form.lastName') }}</label>
+                          <div><strong>{{ accessRequest.lastName }}</strong></div>
+                        </div>
+                      </div>
+                      <div class="mb-3">
+                        <label class="text-muted small">{{ i18n.t('registration.form.email') }}</label>
+                        <div><strong>{{ accessRequest.email }}</strong></div>
+                      </div>
+                      <div class="mb-0">
+                        <label class="text-muted small">{{ i18n.t('registration.form.function') }}</label>
+                        <div><strong>{{ accessRequest.functionName }}</strong></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">
+                        <i class="bi bi-briefcase me-2"></i>
+                        {{ i18n.getCurrentLocale() === 'fr' ? 'Informations professionnelles' : 'Professional Information' }}
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <label class="text-muted small">{{ i18n.t('registration.form.country') }}</label>
+                          <div><strong>{{ accessRequest.countryName }}</strong></div>
+                        </div>
+                        <div class="col-md-6">
+                          <label class="text-muted small">{{ i18n.t('registration.form.businessProfile') }}</label>
+                          <div><strong>{{ accessRequest.businessProfileName }}</strong></div>
+                        </div>
+                      </div>
+                      <div class="mb-0">
+                        <label class="text-muted small">{{ i18n.t('registration.form.financingType') }}</label>
+                        <div><strong>{{ accessRequest.financingTypeName }}</strong></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">
+                        <i class="bi bi-folder me-2"></i>
+                        {{ i18n.getCurrentLocale() === 'fr' ? 'Projets associés' : 'Associated Projects' }} ({{ accessRequest.selectedProjectCodes?.length || 0 }})
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      @if (!accessRequest.selectedProjectCodes || accessRequest.selectedProjectCodes.length === 0) {
+                        <div class="text-muted text-center py-4">
+                          <i class="bi bi-inbox fs-1"></i>
+                          <p class="mt-2">{{ i18n.getCurrentLocale() === 'fr' ? 'Aucun projet' : 'No projects' }}</p>
+                        </div>
+                      }
+
+                      <div class="list-group">
+                        <div *ngFor="let sapCode of accessRequest.selectedProjectCodes" class="list-group-item">
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                              <h6 class="mb-0">
+                                <i class="bi bi-code-square me-2"></i>
+                                <strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Code SAP' : 'SAP Code' }}:</strong> {{ sapCode }}
+                              </h6>
+                            </div>
+                            <span class="badge bg-success">
+                              <i class="bi bi-check-circle me-1"></i>{{ i18n.getCurrentLocale() === 'fr' ? 'Actif' : 'Active' }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  @if (accessRequest.processingComments) {
+                    <div class="card shadow-sm mt-4">
+                      <div class="card-header bg-white">
+                        <h5 class="mb-0">
+                          <i class="bi bi-chat-left-text me-2"></i>
+                          {{ i18n.getCurrentLocale() === 'fr' ? 'Commentaires de traitement' : 'Processing Comments' }}
+                        </h5>
+                      </div>
+                      <div class="card-body">
+                        <div class="bg-light p-3 rounded">
+                          {{ accessRequest.processingComments }}
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
+
+                <div class="col-lg-4">
+                  <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">
+                        <i class="bi bi-clock-history me-2"></i>
+                        {{ i18n.getCurrentLocale() === 'fr' ? 'Chronologie' : 'Timeline' }}
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <div class="timeline">
+                        <div class="timeline-item">
+                          <div class="timeline-marker bg-primary"></div>
+                          <div class="timeline-content">
+                            <div class="small text-muted">{{ accessRequest.submissionDate | date: 'short' }}</div>
+                            <div><strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Soumise' : 'Submitted' }}</strong></div>
+                            <div class="small text-muted">{{ i18n.getCurrentLocale() === 'fr' ? 'Demande créée' : 'Request created' }}</div>
+                          </div>
+                        </div>
+
+                        @if (accessRequest.processedDate) {
+                          <div class="timeline-item">
+                            <div class="timeline-marker"
+                                 [class.bg-success]="accessRequest.status === 2"
+                                 [class.bg-danger]="accessRequest.status === 3"
+                                 [class.bg-secondary]="accessRequest.status === 30">
+                            </div>
+                            <div class="timeline-content">
+                              <div class="small text-muted">{{ accessRequest.processedDate | date: 'short' }}</div>
+                              <div><strong>{{ getStatusLabel(accessRequest.status) }}</strong></div>
+                              <div class="small text-muted">{{ i18n.getCurrentLocale() === 'fr' ? 'Demande traitée' : 'Request processed' }}</div>
+                            </div>
+                          </div>
+                        }
+                      </div>
+
+                      <div class="mt-4 pt-4 border-top">
+                        <h6 class="text-muted small mb-3">{{ i18n.getCurrentLocale() === 'fr' ? 'Informations supplémentaires' : 'Additional Information' }}</h6>
+                        <div class="small mb-2">
+                          <i class="bi bi-calendar-event text-primary me-2"></i>
+                          <span class="text-muted">{{ i18n.getCurrentLocale() === 'fr' ? 'Soumise le' : 'Submitted on' }}</span><br>
+                          <strong class="ms-4">{{ accessRequest.submissionDate | date: 'full' }}</strong>
+                        </div>
+                        @if (accessRequest.processedDate) {
+                          <div class="small">
+                            <i class="bi bi-calendar-check text-success me-2"></i>
+                            <span class="text-muted">{{ i18n.getCurrentLocale() === 'fr' ? 'Traitée le' : 'Processed on' }}</span><br>
+                            <strong class="ms-4">{{ accessRequest.processedDate | date: 'full' }}</strong>
+                          </div>
+                        }
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="card shadow-sm mt-4">
+                    <div class="card-header bg-white">
+                      <h5 class="mb-0">
+                        <i class="bi bi-lightning me-2"></i>
+                        {{ i18n.getCurrentLocale() === 'fr' ? 'Actions rapides' : 'Quick Actions' }}
+                      </h5>
+                    </div>
+                    <div class="card-body">
+                      <button class="btn btn-outline-success w-100 mb-2" (click)="goBack()">
+                        <i class="bi bi-arrow-left me-2"></i>{{ i18n.getCurrentLocale() === 'fr' ? 'Retour à la liste' : 'Back to List' }}
+                      </button>
+                      <button class="btn btn-outline-primary w-100" routerLink="/internal/dashboard">
+                        <i class="bi bi-house me-2"></i>{{ i18n.getCurrentLocale() === 'fr' ? 'Tableau de bord' : 'Dashboard' }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
