@@ -248,7 +248,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
-  getApprovedAccessRequests(filters: {
+    getApprovedAccessRequests(filters: {
     countryId?: string;
     projectCode?: string;
     pageNumber?: number;

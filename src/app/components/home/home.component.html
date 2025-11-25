@@ -71,7 +71,7 @@
                   </button>
                   <small class="text-muted d-block mt-2 text-center">
                     <i class="bi bi-shield-check me-1"></i>
-                    Connexion sécurisée via Microsoft
+                    {{ i18n.t('home.secured_connection') }}
                   </small>
                 </div>
               </div>
@@ -83,18 +83,13 @@
             <div class="col-md-8">
               <div class="alert alert-info border-0 text-center">
                 <i class="bi bi-info-circle me-2"></i>
-                <strong>Connexion Microsoft :</strong> Utilisez vos identifiants Microsoft pour accéder à votre portail client AfDB
+                <strong>{{ i18n.t('home.microsoft_connection') }} :</strong> {{ i18n.t('home.microsoft_connection_desc') }}
               </div>
               
               <!-- Lien pour les démos -->
               <div class="text-center mt-3">
                 <small class="text-muted">
-                  Pour les démos : 
-                  <a routerLink="/login" class="text-decoration-none">
-                    <i class="bi bi-gear me-1"></i>
-                    Connexion de test
-                  </a>
-                  <span class="mx-2">|</span>
+                  <span class="mx-2"></span>
                   <a routerLink="/register/amend" class="text-decoration-none">
                     <i class="bi bi-pencil-square me-1"></i>
                     {{ i18n.t('home.amend_request') }}
@@ -114,8 +109,8 @@
   <div class="container">
     <div class="row text-center mb-5">
       <div class="col-12">
-        <h2 class="display-6 fw-bold text-primary mb-3">Nos Services</h2>
-        <p class="lead text-muted">Découvrez les outils mis à votre disposition</p>
+        <h2 class="display-6 fw-bold text-primary mb-3">{{ i18n.t('home.features.our_services') }}</h2>
+        <p class="lead text-muted">{{ i18n.t('home.features.our_services_desc') }}</p>
       </div>
     </div>
 
@@ -172,7 +167,7 @@
             <div class="bg-info bg-opacity-20 rounded-circle p-3 me-3">
               <i class="bi bi-info-circle text-info" style="font-size: 1.5rem;"></i>
             </div>
-            <h5 class="mb-0 text-info">Processus d'Approbation</h5>
+            <h5 class="mb-0 text-info">{{ i18n.t('home.approval_process') }}</h5>
           </div>
           <p class="mb-0 text-muted">{{ i18n.t('home.info') }}</p>
         </div>

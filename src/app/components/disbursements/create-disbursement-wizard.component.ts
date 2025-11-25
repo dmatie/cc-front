@@ -33,6 +33,7 @@ export class CreateDisbursementWizardComponent implements OnInit {
   loadingProjects = false;
   loadingCurrencies = false;
   loadingTypes = false;
+  previousDisbursementTypeId='';
 
   disbursementTypes: DisbursementTypeDto[] = [];
   currencies: CurrencyDto[] = [];
@@ -223,6 +224,23 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
   initializeTypeSpecificData(): void {
     const typeCode = this.getSelectedTypeCode();
+    const currentTypeId = this.command.disbursementTypeId;
+
+    //Si le type n'a PAS changé ET qu'il y a déjà des données, on ne fait RIEN
+    if (this.previousDisbursementTypeId === currentTypeId && currentTypeId !== '') {
+      // Vérifie qu'il y a bien des données existantes pour ce type
+      if (
+        (typeCode === 'A1' && this.command.disbursementA1) ||
+        (typeCode === 'A2' && this.command.disbursementA2) ||
+        (typeCode === 'A3' && this.command.disbursementA3) ||
+        (typeCode === 'B1' && this.command.disbursementB1)
+      ) {
+        return; // On conserve les données existantes
+      }
+    }
+    // Le type a changé, on réinitialise uniquement les données du nouveau type
+    this.previousDisbursementTypeId = currentTypeId;
+
     this.command.disbursementA1 = undefined;
     this.command.disbursementA2 = undefined;
     this.command.disbursementA3 = undefined;

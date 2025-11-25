@@ -45,9 +45,15 @@
     "existing_user_desc": "Connectez-vous avec vos identifiants Microsoft",
     "register": "S'enregistrer",
     "login": "Se connecter avec Microsoft",
+    "secured_connection": "Connexion sécurisée via Microsoft",
+    "microsoft_connection":"Connexion Microsoft",
+    "microsoft_connection_desc":"Utilisez vos identifiants Microsoft pour accéder à votre portail client AfDB",
     "amend_request": "Modifier une demande",
+    "approval_process": "Processus d'Approbation",
     "info": "Toutes les demandes d'enregistrement sont soumises à un processus d'approbation pour garantir la sécurité de nos systèmes.",
     "features": {
+      "our_services":"Nos Services",
+      "our_services_desc":"Découvrez les outils mis à votre disposition",
       "reports": "Rapports Financiers",
       "reports_desc": "Consultez vos rapports et documents financiers",
       "claims": "Support Client",
@@ -126,7 +132,9 @@
       "country": "Pays requis",
       "business_profile": "Profil d'entreprise requis",
       "financing_type": "Type de financement requis",
-      "projects": "Au moins un projet doit être sélectionné"
+      "projects": "Au moins un projet doit être sélectionné",
+      "email_required": "L'email est requis",
+      "email_format": "Format d'email invalide"
     },
     "send_code_error": "Erreur lors de l'envoi du code de vérification"
   },
@@ -725,7 +733,7 @@
     "created_success": "Le décaissement a été créé avec succès",
     "approved_success": "Le décaissement a été approuvé avec succès",
     "rejected_success": "Le décaissement a été rejeté",
-    "backed_to_client_success": "Le décaissement a été renvoyé au client avec succès",
+    "backedtoclient_success": "Le décaissement a été renvoyé au client avec succès",
     "updated_success": "Le décaissement a été mis à jour avec succès",
     "validation_errors": {
       "loanGrantNumber_invalid": "Le numéro de prêt/subvention est invalide",

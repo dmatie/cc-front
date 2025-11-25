@@ -45,9 +45,15 @@
     "existing_user_desc": "Sign in with your Microsoft credentials",
     "register": "Register",
     "login": "Sign in with Microsoft",
+    "secured_connection": "Secured connection via Microsoft",
+    "microsoft_connection":"Microsoft connection",
+    "microsoft_connection_desc":"Use your Microsoft credentials to access your AfDB client portal",
     "amend_request": "Amend a request",
+    "approval_process": "Approval Process",
     "info": "All registration requests are subject to an approval process to ensure the security of our systems.",
     "features": {
+      "our_services":"Our Services",
+      "our_services_desc":"Discover the tools available to you",
       "reports": "Financial Reports",
       "reports_desc": "Access your financial reports and documents",
       "claims": "Customer Support",
@@ -126,7 +132,9 @@
       "country": "Country required",
       "business_profile": "Business profile required",
       "financing_type": "Financing type required",
-      "projects": "At least one project must be selected"
+      "projects": "At least one project must be selected",
+      "email_required": "Email is required",
+      "email_format": "Invalid email format"
     },
     "send_code_error": "Error sending verification code"
   },
@@ -732,7 +740,7 @@
     "created_success": "Disbursement created successfully",
     "approved_success": "Disbursement approved successfully",
     "rejected_success": "Disbursement rejected",
-    "backed_to_client_success": "Disbursement returned to client successfully",
+    "backedtoclient_success": "Disbursement returned to client successfully",
     "updated_success": "Disbursement updated successfully",
     "validation_errors": {
       "loanGrantNumber_invalid": "The loan/grant number is invalid",
