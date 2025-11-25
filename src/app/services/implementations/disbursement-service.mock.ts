@@ -20,6 +20,7 @@ import {
   DisbursementTypeDto,
   CurrencyDto,
   DisbursementStatus,
+  DisbursementPermissionsDto,
 } from '../../models/disbursement.model';
 
 @Injectable()
@@ -451,5 +452,12 @@ export class DisbursementMockService extends DisbursementService {
   ): Observable<Blob> {
     const mockBlob = new Blob(['Mock file content'], { type: 'application/pdf' });
     return of(mockBlob).pipe(delay(300));
+  }
+
+  override getMyPermissions(): Observable<DisbursementPermissionsDto> {
+    return of({
+      canConsult: true,
+      canSubmit: true
+    }).pipe(delay(300));
   }
 }

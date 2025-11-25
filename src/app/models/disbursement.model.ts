@@ -483,3 +483,8 @@ export interface EditDisbursementResponse {
   disbursement: DisbursementDto;
   message: string;
 }
+
+export interface DisbursementPermissionsDto {
+  canConsult: boolean;
+  canSubmit: boolean;
+}

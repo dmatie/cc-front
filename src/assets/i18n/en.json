@@ -710,6 +710,8 @@
     "allDisbursements": "All Disbursements",
     "createDisbursement": "Create Disbursement",
     "noDisbursements": "No disbursements to display",
+    "noAccessPermission": "You do not have permission to access the Disbursement module",
+    "noSubmitPermission": "You do not have permission to create or modify disbursements",
     "disbursementDetails": "Disbursement Details",
     "backToList": "Back to List",
     "sapCode": "SAP Code",
@@ -742,7 +744,7 @@
     "rejected_success": "Disbursement rejected",
     "backedtoclient_success": "Disbursement returned to client successfully",
     "updated_success": "Disbursement updated successfully",
-    "validation_errors": {
+    "validation_errors": {noAccessPermission
       "loanGrantNumber_invalid": "The loan/grant number is invalid",
       "beneficiaryBpNumber_invalid": "The beneficiary BP number is invalid"
     },

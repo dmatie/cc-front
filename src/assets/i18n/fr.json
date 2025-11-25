@@ -703,6 +703,8 @@
     "allDisbursements": "Tous les Décaissements",
     "createDisbursement": "Créer un Décaissement",
     "noDisbursements": "Aucun décaissement à afficher",
+    "noAccessPermission": "Vous n'avez pas la permission d'accéder au module Décaissement",
+    "noSubmitPermission": "Vous n'avez pas la permission de créer ou modifier des décaissements",
     "disbursementDetails": "Détails du Décaissement",
     "backToList": "Retour à la Liste",
     "sapCode": "Code SAP",

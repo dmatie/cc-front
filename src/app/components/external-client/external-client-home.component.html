@@ -108,10 +108,15 @@
         <div class="card-body">
           <div class="row g-3">
             <div class="col-md-3">
-              <a routerLink="/disbursements/create" class="btn btn-outline-success w-100">
+              <button
+                (click)="requestDisbursement()"
+                [disabled]="!canRequestDisbursement()"
+                [class.disabled]="!canRequestDisbursement()"
+                class="btn btn-outline-success w-100"
+                [attr.title]="!canRequestDisbursement() ? i18n.t('disbursements.noSubmitPermission') : ''">
                 <i class="bi bi-cash-coin me-2"></i>
                 {{ i18n.t('external.actions.request_disbursement') }}
-              </a>
+              </button>
             </div>
             <div class="col-md-3">
               <a routerLink="/claims" class="btn btn-outline-warning w-100">

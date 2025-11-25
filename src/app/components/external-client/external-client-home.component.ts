@@ -6,6 +6,8 @@ import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { User } from '../../models/user.model';
 import { AbstractDashboardService, ExternalDashboardStatsDto } from '../../services/abstract/dashboard-service.abstract';
+import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
+import { DisbursementPermissionsDto } from '../../models/disbursement.model';
 
 interface ServiceItem {
   title: string;
@@ -37,6 +39,7 @@ export class ExternalClientHomeComponent implements OnInit {
   isLoading = true;
   dashboardStats: ExternalDashboardStatsDto | null = null;
   errorMessage = '';
+  disbursementPermissions: DisbursementPermissionsDto | null = null;
 
   availableServices: ServiceItem[] = [];
 
@@ -80,6 +83,7 @@ export class ExternalClientHomeComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private dashboardService: AbstractDashboardService,
+    private disbursementService: DisbursementService,
     public i18n: I18nService
   ) {
     console.log('🏠 ExternalClientHomeComponent constructor called');
@@ -88,6 +92,18 @@ export class ExternalClientHomeComponent implements OnInit {
   ngOnInit(): void {
     console.log('🔄 ExternalClientHomeComponent ngOnInit called');
     this.checkAuthAndLoadData();
+    this.loadDisbursementPermissions();
+  }
+
+  private loadDisbursementPermissions(): void {
+    this.disbursementService.getMyPermissions().subscribe({
+      next: (perms) => {
+        this.disbursementPermissions = perms;
+      },
+      error: () => {
+        this.disbursementPermissions = { canConsult: false, canSubmit: false };
+      }
+    });
   }
 
   private checkAuthAndLoadData(): void {
@@ -190,11 +206,15 @@ export class ExternalClientHomeComponent implements OnInit {
     return this.recentNotifications.filter(n => !n.read).length;
   }
 
+  canRequestDisbursement(): boolean {
+    return this.disbursementPermissions?.canSubmit ?? false;
+  }
+
   // Méthodes pour les actions rapides
   requestDisbursement(): void {
+    if (!this.canRequestDisbursement()) return;
     console.log('Requesting disbursement...');
-    // Rediriger vers la page de demande de décaissement
-    // this.router.navigate(['/disbursements/new']);
+    this.router.navigate(['/disbursements/create']);
   }
 
   createClaim(): void {

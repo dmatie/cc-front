@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { DisbursementDto, DisbursementStatus } from '../../models/disbursement.model';
+import { DisbursementDto, DisbursementStatus, DisbursementPermissionsDto } from '../../models/disbursement.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { BackendMessageTranslationService } from '../../services/backend-message-translation.service';
 import { ResubmitDisbursementModalComponent } from './resubmit-disbursement-modal.component';
@@ -25,6 +25,7 @@ export class DisbursementDetailComponent implements OnInit {
   actionLoading = false;
   errorMessage = '';
   successMessage = '';
+  permissions: DisbursementPermissionsDto | null = null;
 
   showSubmitConfirm = false;
   showApproveConfirm = false;
@@ -49,9 +50,29 @@ export class DisbursementDetailComponent implements OnInit {
   ngOnInit(): void {
     this.isInternalUser = this.authService.isInternalUser();
     const disbursementId = this.route.snapshot.paramMap.get('id');
-    if (disbursementId) {
+
+    if (!this.isInternalUser) {
+      this.loadPermissions(disbursementId);
+    } else if (disbursementId) {
       this.loadDisbursementDetail(disbursementId);
     }
+  }
+
+  loadPermissions(disbursementId: string | null): void {
+    this.disbursementService.getMyPermissions().subscribe({
+      next: (perms) => {
+        this.permissions = perms;
+        if (disbursementId) {
+          this.loadDisbursementDetail(disbursementId);
+        }
+      },
+      error: () => {
+        this.permissions = { canConsult: false, canSubmit: false };
+        if (disbursementId) {
+          this.loadDisbursementDetail(disbursementId);
+        }
+      }
+    });
   }
 
   loadDisbursementDetail(disbursementId: string): void {
@@ -72,8 +93,9 @@ export class DisbursementDetailComponent implements OnInit {
   }
 
   canSubmit(): boolean {
-    return !this.isInternalUser &&
-           this.disbursement?.status === DisbursementStatus.Draft;
+    if (this.isInternalUser) return false;
+    const hasPermission = this.permissions?.canSubmit ?? false;
+    return hasPermission && this.disbursement?.status === DisbursementStatus.Draft;
   }
 
   canApprove(): boolean {
@@ -92,19 +114,23 @@ export class DisbursementDetailComponent implements OnInit {
   }
 
   canResubmit(): boolean {
-    return !this.isInternalUser &&
-           this.disbursement?.status === DisbursementStatus.BackedToClient;
+    if (this.isInternalUser) return false;
+    const hasPermission = this.permissions?.canSubmit ?? false;
+    return hasPermission && this.disbursement?.status === DisbursementStatus.BackedToClient;
   }
 
   canEdit(): boolean {
-    return !this.isInternalUser &&
+    if (this.isInternalUser) return false;
+    const hasPermission = this.permissions?.canSubmit ?? false;
+    return hasPermission &&
            (this.disbursement?.status === DisbursementStatus.Draft ||
             this.disbursement?.status === DisbursementStatus.BackedToClient);
   }
 
   canDuplicate(): boolean {
-    return !this.isInternalUser &&
-           this.disbursement?.status === DisbursementStatus.Approved;
+    if (this.isInternalUser) return false;
+    const hasPermission = this.permissions?.canSubmit ?? false;
+    return hasPermission && this.disbursement?.status === DisbursementStatus.Approved;
   }
 
   openDuplicateModal(): void {

@@ -21,6 +21,7 @@ import {
   ReSubmitDisbursementResponse,
   DisbursementTypeDto,
   CurrencyDto,
+  DisbursementPermissionsDto,
 } from '../../models/disbursement.model';
 import { ErrorHandlerService } from '../error-handler.service';
 
@@ -173,6 +174,12 @@ export class DisbursementApiService extends DisbursementService {
       params,
       responseType: 'blob'
     }).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+  override getMyPermissions(): Observable<DisbursementPermissionsDto> {
+    return this.http.get<DisbursementPermissionsDto>(`${this.baseUrl}/me/permissions`).pipe(
       catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
