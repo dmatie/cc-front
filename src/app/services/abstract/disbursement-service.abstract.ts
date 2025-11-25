@@ -17,6 +17,7 @@ import {
   ReSubmitDisbursementResponse,
   DisbursementTypeDto,
   CurrencyDto,
+  DisbursementPermissionsDto,
 } from '../../models/disbursement.model';
 
 export abstract class DisbursementService {
@@ -62,4 +63,6 @@ export abstract class DisbursementService {
     referenceNumber: string,
     fileName: string
   ): Observable<Blob>;
+
+  abstract getMyPermissions(): Observable<DisbursementPermissionsDto>;
 }

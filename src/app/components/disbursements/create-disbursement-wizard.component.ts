@@ -14,7 +14,8 @@ import {
   CreateDisbursementA3Command,
   CreateDisbursementB1Command,
   DisbursementTypeDto,
-  CurrencyDto
+  CurrencyDto,
+  DisbursementPermissionsDto
 } from '../../models/disbursement.model';
 import { Country } from '../../models/dropdown.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
@@ -59,9 +60,23 @@ export class CreateDisbursementWizardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.checkPermissions();
     this.loadDropdowns();
     this.loadSapCodes();
     this.checkForPreFilledData();
+  }
+
+  checkPermissions(): void {
+    this.disbursementService.getMyPermissions().subscribe({
+      next: (perms) => {
+        if (!perms.canSubmit) {
+          this.router.navigate(['/disbursements']);
+        }
+      },
+      error: () => {
+        this.router.navigate(['/disbursements']);
+      }
+    });
   }
 
   checkForPreFilledData(): void {

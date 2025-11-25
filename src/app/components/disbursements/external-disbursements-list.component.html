@@ -16,11 +16,22 @@
         </div>
 
         <div class="card-body">
-          <div class="d-flex justify-content-end align-items-center mb-4">
+          <div *ngIf="loadingPermissions" class="text-center py-3">
+            <div class="spinner-border spinner-border-sm text-primary" role="status">
+              <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+            </div>
+          </div>
+
+          <div *ngIf="!loadingPermissions && canCreateDisbursement()" class="d-flex justify-content-end align-items-center mb-4">
             <button class="btn btn-primary" (click)="createDisbursement()">
               <i class="bi bi-plus-circle me-2"></i>
               {{ i18n.t('disbursements.createDisbursement') }}
             </button>
+          </div>
+
+          <div *ngIf="!loadingPermissions && !canViewDisbursements()" class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ i18n.t('disbursements.noAccessPermission') }}
           </div>
 
           <div *ngIf="loading" class="text-center py-5">
@@ -29,19 +40,19 @@
             </div>
           </div>
 
-          @if (errorMessage) {
+          @if (errorMessage && !loadingPermissions) {
             <div class="alert alert-danger">
               <i class="bi bi-exclamation-triangle me-2"></i>
               {{ errorMessage }}
             </div>
           }
 
-          <div *ngIf="!loading && disbursements.length === 0 && !errorMessage" class="alert alert-info">
+          <div *ngIf="canViewDisbursements() && !loading && disbursements.length === 0 && !errorMessage" class="alert alert-info">
             <i class="bi bi-info-circle me-2"></i>
             {{ i18n.getCurrentLocale() === 'fr' ? 'Aucune demande de décaissement trouvée' : 'No disbursement requests found' }}
           </div>
 
-          <div *ngIf="!loading && disbursements.length > 0" class="table-responsive">
+          <div *ngIf="canViewDisbursements() && !loading && disbursements.length > 0" class="table-responsive">
             <table class="table table-hover">
               <thead class="table-light">
                 <tr>

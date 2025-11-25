@@ -702,6 +702,8 @@
     "allDisbursements": "All Disbursements",
     "createDisbursement": "Create Disbursement",
     "noDisbursements": "No disbursements to display",
+    "noAccessPermission": "You do not have permission to access the Disbursement module",
+    "noSubmitPermission": "You do not have permission to create or modify disbursements",
     "disbursementDetails": "Disbursement Details",
     "backToList": "Back to List",
     "sapCode": "SAP Code",

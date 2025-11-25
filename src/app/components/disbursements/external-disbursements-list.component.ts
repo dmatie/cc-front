@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 import { I18nService } from '../../services/i18n.service';
-import { DisbursementDto, DisbursementStatus } from '../../models/disbursement.model';
+import { DisbursementDto, DisbursementStatus, DisbursementPermissionsDto } from '../../models/disbursement.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 
 @Component({
@@ -17,6 +17,8 @@ export class ExternalDisbursementsListComponent implements OnInit {
   disbursements: DisbursementDto[] = [];
   loading = false;
   errorMessage = '';
+  permissions: DisbursementPermissionsDto | null = null;
+  loadingPermissions = true;
 
   constructor(
     private disbursementService: DisbursementService,
@@ -25,7 +27,26 @@ export class ExternalDisbursementsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.loadPermissions();
     this.loadDisbursements();
+  }
+
+  loadPermissions(): void {
+    this.loadingPermissions = true;
+    this.disbursementService.getMyPermissions().subscribe({
+      next: (perms) => {
+        this.permissions = perms;
+        this.loadingPermissions = false;
+
+        if (!perms.canConsult) {
+          this.errorMessage = this.i18n.t('disbursements.noAccessPermission');
+        }
+      },
+      error: (error) => {
+        this.loadingPermissions = false;
+        this.errorMessage = error.message || 'Error loading permissions';
+      }
+    });
   }
 
   loadDisbursements(): void {
@@ -92,5 +113,13 @@ export class ExternalDisbursementsListComponent implements OnInit {
 
   goBack(): void {
     this.router.navigate(['/client/home']);
+  }
+
+  canCreateDisbursement(): boolean {
+    return this.permissions?.canSubmit ?? false;
+  }
+
+  canViewDisbursements(): boolean {
+    return this.permissions?.canConsult ?? false;
   }
 }
