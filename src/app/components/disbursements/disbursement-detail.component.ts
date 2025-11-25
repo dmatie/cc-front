@@ -49,24 +49,28 @@ export class DisbursementDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.isInternalUser = this.authService.isInternalUser();
+    const disbursementId = this.route.snapshot.paramMap.get('id');
 
     if (!this.isInternalUser) {
-      this.loadPermissions();
-    }
-
-    const disbursementId = this.route.snapshot.paramMap.get('id');
-    if (disbursementId) {
+      this.loadPermissions(disbursementId);
+    } else if (disbursementId) {
       this.loadDisbursementDetail(disbursementId);
     }
   }
 
-  loadPermissions(): void {
+  loadPermissions(disbursementId: string | null): void {
     this.disbursementService.getMyPermissions().subscribe({
       next: (perms) => {
         this.permissions = perms;
+        if (disbursementId) {
+          this.loadDisbursementDetail(disbursementId);
+        }
       },
       error: () => {
         this.permissions = { canConsult: false, canSubmit: false };
+        if (disbursementId) {
+          this.loadDisbursementDetail(disbursementId);
+        }
       }
     });
   }

@@ -28,7 +28,6 @@ export class ExternalDisbursementsListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadPermissions();
-    this.loadDisbursements();
   }
 
   loadPermissions(): void {
@@ -40,6 +39,8 @@ export class ExternalDisbursementsListComponent implements OnInit {
 
         if (!perms.canConsult) {
           this.errorMessage = this.i18n.t('disbursements.noAccessPermission');
+        } else {
+          this.loadDisbursements();
         }
       },
       error: (error) => {
