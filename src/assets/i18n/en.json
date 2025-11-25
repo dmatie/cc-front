@@ -736,7 +736,7 @@
     "rejected_success": "Disbursement rejected",
     "backed_to_client_success": "Disbursement returned to client successfully",
     "updated_success": "Disbursement updated successfully",
-    "validation_errors": {
+    "validation_errors": {noAccessPermission
       "loanGrantNumber_invalid": "The loan/grant number is invalid",
       "beneficiaryBpNumber_invalid": "The beneficiary BP number is invalid"
     },
