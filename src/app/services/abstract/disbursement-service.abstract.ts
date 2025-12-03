@@ -64,5 +64,5 @@ export abstract class DisbursementService {
     fileName: string
   ): Observable<Blob>;
 
-  abstract getMyPermissions(): Observable<DisbursementPermissionsDto>;
+   abstract getMyPermissions(): Observable<DisbursementPermissionsDto>;
 }

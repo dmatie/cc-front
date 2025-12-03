@@ -24,6 +24,21 @@ export class ErrorTranslationService {
       'ERR.AccessRequest.EmailAlreadyExists': 'errors.access_request.email_already_exists',
       'ERR.AccessRequest.RequestAlreadyExists': 'errors.access_request.email_already_exists',
 
+
+      //File Upload Errors
+      'ERR.FILE.NULL': 'errors.file.null',
+      'ERR.FILE.NAME_EMPTY': 'errors.file.name_empty',
+      'ERR.FILE.EMPTY': 'errors.file.empty',
+      'ERR.FILE.SIZE_EXCEEDED': 'errors.file.size_exceeded',
+      'ERR.FILE.EXTENSION_NOT_ALLOWED': 'errors.file.extension_not_allowed',
+      'ERR.FILE.MIMETYPE_NOT_ALLOWED': 'errors.file.mimetype_not_allowed',
+
+       //Disbursement Errors
+      'ERR.Disbursement.DisbursementTypeNotExist': 'disbursements.validation_errors.disbursement_type_not_exist',
+      'ERR.Disbursement.CurrencyNotExist': 'disbursements.validation_errors.currency_not_exist',
+      'ERR.Disbursement.DisbursementTypeCodeNotExist': 'disbursements.validation_errors.disbursement_type_code_not_exist',
+
+
       // Erreurs générales
       'ERR.General.ReferenceDataNotExist': 'errors.reference_data_not_exist',
       'ERR.General.InvalidEmailFormat': 'errors.invalid_email_format',
@@ -33,6 +48,7 @@ export class ErrorTranslationService {
 
       
       // Erreurs de validation des champs
+      'ERR.General.UserNotFound': 'errors.user_not_found',
       'ERR.General.FirstNameTooShort': 'errors.first_name_too_short',
       'ERR.General.LastNameTooShort': 'errors.last_name_too_short',
       'ERR.General.FunctionRequired': 'errors.function_required',

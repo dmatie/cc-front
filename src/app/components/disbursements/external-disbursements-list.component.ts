@@ -27,10 +27,10 @@ export class ExternalDisbursementsListComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadPermissions();
+    this.loadData();
   }
 
-  loadPermissions(): void {
+    loadData(): void {
     this.loadingPermissions = true;
     this.disbursementService.getMyPermissions().subscribe({
       next: (perms) => {

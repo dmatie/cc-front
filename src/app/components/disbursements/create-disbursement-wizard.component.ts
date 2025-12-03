@@ -14,11 +14,14 @@ import {
   CreateDisbursementA3Command,
   CreateDisbursementB1Command,
   DisbursementTypeDto,
-  CurrencyDto,
-  DisbursementPermissionsDto
+  CurrencyDto
 } from '../../models/disbursement.model';
 import { Country } from '../../models/dropdown.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
+import { getCharCountClass } from '../../core/utils/helper';
+import { AppConstants } from '../../core/constants/app-constants';
+import { ValidationUtils } from '../../core/utils/validation.util';
+import { SanitizationUtils } from '../../core/utils/sanitization.util';
 
 @Component({
   selector: 'app-create-disbursement-wizard',
@@ -51,13 +54,26 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
   selectedFiles: File[] = [];
 
+  paymentPurposeCustomErrors: string[] = [];
+  paymentPurposeCustomTouched = false;
+
+  reimbursementPurposeCustomErrors: string[] = [];
+  reimbursementPurposeCustomTouched = false;
+
+  guaranteeDetailsCustomErrors: string[] = [];
+  guaranteeDetailsCustomTouched = false;
+
+  protected readonly getCharCountClass = getCharCountClass;
+  protected readonly AppConstants = AppConstants;
+  fileUploadError = '';
+
   constructor(
     private disbursementService: DisbursementService,
     private dropdownService: AbstractDropdownService,
     private registrationService: AbstractRegistrationService,
     private authService: AuthService,
     private router: Router,
-    public i18n: I18nService
+    public i18n: I18nService    
   ) {}
 
   ngOnInit(): void {
@@ -363,17 +379,29 @@ export class CreateDisbursementWizardComponent implements OnInit {
   }
 
   addFiles(files: File[]): void {
-    const allowedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'application/vnd.ms-excel',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    ];
+    this.fileUploadError = '';
+    const maxSize = AppConstants.FileUpload.maxSizeBytes;
+    const allowedTypes = AppConstants.FileUpload.allowedTypes;
 
-    const validFiles = files.filter(file => allowedTypes.includes(file.type));
-    this.selectedFiles = [...this.selectedFiles, ...validFiles];
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        this.fileUploadError = this.i18n.translate('errors.fileTypeNotAllowed').replace('{fileName}', file.name);
+        continue;
+      }
+
+      if (file.size > maxSize) {
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        this.fileUploadError = this.i18n.translate('errors.fileTooLarge')
+          .replace('{fileName}', file.name)
+          .replace('{size}', sizeMB)
+          .replace('{maxSize}', AppConstants.FileUpload.maxSizeMB.toString());
+        continue;
+      }
+
+      this.selectedFiles.push(file);
+    }
   }
+
 
   removeFile(index: number): void {
     this.selectedFiles.splice(index, 1);
@@ -414,7 +442,31 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
     this.command.documents = this.selectedFiles.length > 0 ? this.selectedFiles : undefined;
 
-    this.disbursementService.createDisbursement(this.command).subscribe({
+    const sanitizedCommand = { ...this.command };
+
+    if (sanitizedCommand.disbursementA1?.paymentPurpose) {
+      sanitizedCommand.disbursementA1 = {
+        ...sanitizedCommand.disbursementA1,
+        paymentPurpose: SanitizationUtils.sanitizeComment(sanitizedCommand.disbursementA1.paymentPurpose)
+      };
+    }
+
+    if (sanitizedCommand.disbursementA2?.reimbursementPurpose) {
+      sanitizedCommand.disbursementA2 = {
+        ...sanitizedCommand.disbursementA2,
+        reimbursementPurpose: SanitizationUtils.sanitizeComment(sanitizedCommand.disbursementA2.reimbursementPurpose)
+      };
+    }
+
+    if (sanitizedCommand.disbursementB1?.guaranteeDetails) {
+      sanitizedCommand.disbursementB1 = {
+        ...sanitizedCommand.disbursementB1,
+        guaranteeDetails: SanitizationUtils.sanitizeComment(sanitizedCommand.disbursementB1.guaranteeDetails)
+      };
+    }
+
+
+    this.disbursementService.createDisbursement(sanitizedCommand).subscribe({
       next: (response) => {
         this.loading = false;
         this.router.navigate(['/disbursements', response.disbursement.id]);
@@ -428,5 +480,102 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
   cancel(): void {
     this.router.navigate(['/disbursements']);
+  }
+
+   onPaymentPurposeChange(): void {
+    this.paymentPurposeCustomTouched = true;
+    this.validatePaymentPurpose();
+  }
+
+  validatePaymentPurpose(): void {
+    if (!this.paymentPurposeCustomTouched) return;
+
+    const validation = ValidationUtils.validateComment(
+      this.command.disbursementA1?.paymentPurpose || '',
+      this.i18n.t('disbursements.typeA1.paymentPurpose')
+    );
+
+    this.paymentPurposeCustomErrors = validation.errors.filter(error =>
+      error.includes('dangerous') ||
+      error.includes('invalid characters') ||
+      error.includes('control characters')
+    );
+  }
+
+  onReimbursementPurposeChange(): void {
+    this.reimbursementPurposeCustomTouched = true;
+    this.validateReimbursementPurpose();
+  }
+
+  validateReimbursementPurpose(): void {
+    if (!this.reimbursementPurposeCustomTouched) return;
+
+    const validation = ValidationUtils.validateComment(
+      this.command.disbursementA2?.reimbursementPurpose || '',
+      this.i18n.t('disbursements.typeA2.reimbursementPurpose')
+    );
+
+    this.reimbursementPurposeCustomErrors = validation.errors.filter(error =>
+      error.includes('dangerous') ||
+      error.includes('invalid characters') ||
+      error.includes('control characters')
+    );
+  }
+
+  onGuaranteeDetailsChange(): void {
+    this.guaranteeDetailsCustomTouched = true;
+    this.validateGuaranteeDetails();
+  }
+
+  validateGuaranteeDetails(): void {
+    if (!this.guaranteeDetailsCustomTouched) return;
+
+    const validation = ValidationUtils.validateComment(
+      this.command.disbursementB1?.guaranteeDetails || '',
+      this.i18n.t('disbursements.typeB1.guaranteeDetails')
+    );
+
+    this.guaranteeDetailsCustomErrors = validation.errors.filter(error =>
+      error.includes('dangerous') ||
+      error.includes('invalid characters') ||
+      error.includes('control characters')
+    );
+  }
+
+  validateAllCustomFields(): void {
+    const typeCode = this.getSelectedTypeCode();
+
+    if (typeCode === 'A1') {
+      this.paymentPurposeCustomTouched = true;
+      this.validatePaymentPurpose();
+    }
+
+    if (typeCode === 'A2') {
+      this.reimbursementPurposeCustomTouched = true;
+      this.validateReimbursementPurpose();
+    }
+
+    if (typeCode === 'B1') {
+      this.guaranteeDetailsCustomTouched = true;
+      this.validateGuaranteeDetails();
+    }
+  }
+
+  hasCustomValidationErrors(): boolean {
+    const typeCode = this.getSelectedTypeCode();
+
+    if (typeCode === 'A1' && this.paymentPurposeCustomErrors.length > 0) {
+      return true;
+    }
+
+    if (typeCode === 'A2' && this.reimbursementPurposeCustomErrors.length > 0) {
+      return true;
+    }
+
+    if (typeCode === 'B1' && this.guaranteeDetailsCustomErrors.length > 0) {
+      return true;
+    }
+
+    return false;
   }
 }

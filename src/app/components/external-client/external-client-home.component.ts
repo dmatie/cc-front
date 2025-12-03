@@ -6,8 +6,8 @@ import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { User } from '../../models/user.model';
 import { AbstractDashboardService, ExternalDashboardStatsDto } from '../../services/abstract/dashboard-service.abstract';
-import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 import { DisbursementPermissionsDto } from '../../models/disbursement.model';
+import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 
 interface ServiceItem {
   title: string;
@@ -91,8 +91,8 @@ export class ExternalClientHomeComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('🔄 ExternalClientHomeComponent ngOnInit called');
-    this.checkAuthAndLoadData();
     this.loadDisbursementPermissions();
+    this.checkAuthAndLoadData();
   }
 
   private loadDisbursementPermissions(): void {

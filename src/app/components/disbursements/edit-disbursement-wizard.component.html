@@ -162,15 +162,61 @@
               {{ i18n.t('disbursements.wizard.step2') }}
             </h5>
 
-            <div *ngIf="getSelectedTypeCode() === 'A1' && command.disbursementA1" class="type-details">
+
+            @if(getSelectedTypeCode() === 'A1' && command.disbursementA1) {
+            <div class="type-details">
               <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA1.title') }}</h6>
 
               <div class="row">
                 <div class="col-12 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA1.paymentPurpose') }} <span
                       class="text-danger">*</span></label>
-                  <textarea class="form-control" rows="3"
-                    [(ngModel)]="command.disbursementA1.paymentPurpose"></textarea>
+
+                    <textarea 
+                      class="form-control" 
+                      rows="3"
+                      [(ngModel)]="command.disbursementA1.paymentPurpose"
+                      #paymentPurposeField="ngModel"
+                      name="paymentPurpose"
+                      required
+                      [minlength]="AppConstants.FormValidation.COMMENT.minLength"
+                      [maxlength]="AppConstants.FormValidation.COMMENT.maxLength"
+                      (input)="onPaymentPurposeChange()"
+                      (blur)="paymentPurposeCustomTouched = true; validatePaymentPurpose()"
+                      [class.is-invalid]="(paymentPurposeField.invalid && paymentPurposeField.touched) || (paymentPurposeCustomTouched && paymentPurposeCustomErrors.length > 0)"
+                      [class.is-valid]="paymentPurposeField.valid && paymentPurposeCustomTouched && paymentPurposeCustomErrors.length === 0 && (command.disbursementA1?.paymentPurpose?.length || 0) > 0">
+                    </textarea>
+
+                    <div class="d-flex justify-content-between align-items-center mt-1">
+                      <div>
+                        @if (paymentPurposeField.invalid && paymentPurposeField.touched) {
+                          <small class="text-danger">
+                            @if (paymentPurposeField.errors?.['required']) {
+                              {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                            }
+                            @if (paymentPurposeField.errors?.['minlength']) {
+                              {{ i18n.t('common.validation_errors.minlength', 
+                              { min: AppConstants.FormValidation.COMMENT.minLength }) ||
+                               'La longueur minimale est de ' + AppConstants.FormValidation.COMMENT.minLength 
+                               + ' caractères.' }}
+                            }
+                          </small>
+                        }
+                      @if (paymentPurposeCustomTouched && paymentPurposeCustomErrors.length > 0) {
+                        <div class="invalid-feedback d-block">
+                          @for (error of paymentPurposeCustomErrors; track error) {
+                            <div><i class="bi bi-shield-exclamation me-1"></i>{{ error }}</div>
+                          }
+                        </div>
+                      }
+                      </div>
+                      <small [class]="getCharCountClass(command.disbursementA1.paymentPurpose, AppConstants.FormValidation.COMMENT.maxLength)">
+                        {{ command.disbursementA1.paymentPurpose?.length || 0 }} / {{AppConstants.FormValidation.COMMENT.maxLength}}
+                      </small>
+
+                    </div>
+
+
                 </div>
 
                 <div class="col-12 mt-3">
@@ -196,7 +242,8 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryBpNumber') }} <span
+                      class="text-danger">*</span></label>
                   <input required
                     name="beneficiaryBpNumber"  pattern="^\d{13}$"
                     minlength="13"
@@ -221,12 +268,14 @@
 
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryAddress') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control" [(ngModel)]="command.disbursementA1.beneficiaryAddress" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryCountry') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.beneficiaryCountry') }} <span
+                      class="text-danger">*</span></label>
                   <select class="form-select" [(ngModel)]="command.disbursementA1.beneficiaryCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
@@ -261,25 +310,29 @@
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankSwiftCode') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control"
                     [(ngModel)]="command.disbursementA1.correspondentBankSwiftCode" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentAccountNumber') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control"
                     [(ngModel)]="command.disbursementA1.correspondantAccountNumber" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankAddress') }} <span
+                      class="text-danger">*</span></label>
                   <input type="text" class="form-control"
                     [(ngModel)]="command.disbursementA1.correspondentBankAddress" />
                 </div>
 
                 <div class="col-md-6 mb-3">
-                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankCountry') }}</label>
+                  <label class="form-label">{{ i18n.t('disbursements.typeA1.correspondentBankCountry') }} <span
+                      class="text-danger">*</span></label>
                   <select class="form-select" [(ngModel)]="command.disbursementA1.correspondentBankCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
@@ -346,16 +399,64 @@
 
               </div>
             </div>
+            }
 
-            <div *ngIf="getSelectedTypeCode() === 'A2' && command.disbursementA2" class="type-details">
+
+            @if(getSelectedTypeCode() === 'A2' && command.disbursementA2) {
+
+            <div class="type-details">
               <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA2.title') }}</h6>
 
               <div class="row">
                 <div class="col-12 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeA2.reimbursementPurpose') }} <span
                       class="text-danger">*</span></label>
-                  <textarea class="form-control" rows="3" name="reimbursementPurpose" required
-                    [(ngModel)]="command.disbursementA2.reimbursementPurpose"></textarea>
+                  <textarea 
+                    class="form-control"
+                    rows="3"
+                    name="reimbursementPurpose"
+                    required
+                    #reimbursementPurposeField="ngModel"
+                    [(ngModel)]="command.disbursementA2.reimbursementPurpose"
+                    [minlength]="AppConstants.FormValidation.COMMENT.minLength"
+                    [maxlength]="AppConstants.FormValidation.COMMENT.maxLength"
+                    (input)="onReimbursementPurposeChange()"
+                    (blur)="reimbursementPurposeCustomTouched = true; validateReimbursementPurpose()"
+                    [class.is-invalid]="(reimbursementPurposeField.invalid && reimbursementPurposeField.touched) || (reimbursementPurposeCustomTouched && reimbursementPurposeCustomErrors.length > 0)"
+                    [class.is-valid]="reimbursementPurposeField.valid && reimbursementPurposeCustomTouched && reimbursementPurposeCustomErrors.length === 0 && (command.disbursementA2?.reimbursementPurpose?.length || 0) > 0">
+                  </textarea>
+
+
+                  <div class="d-flex justify-content-between align-items-center mt-1">
+                      <div>
+                        @if (reimbursementPurposeField.invalid && reimbursementPurposeField.touched) {
+                          <small class="text-danger">
+                            @if (reimbursementPurposeField.errors?.['required']) {
+                              {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                            }
+                            @if (reimbursementPurposeField.errors?.['minlength']) {
+                              {{ i18n.t('common.validation_errors.minlength', 
+                              { min: AppConstants.FormValidation.COMMENT.minLength }) ||
+                               'La longueur minimale est de ' + AppConstants.FormValidation.COMMENT.minLength 
+                               + ' caractères.' }}
+                            }
+                          </small>
+                        }
+                      @if (reimbursementPurposeCustomTouched && reimbursementPurposeCustomErrors.length > 0) {
+                        <div class="invalid-feedback d-block">
+                          @for (error of reimbursementPurposeCustomErrors; track error) {
+                            <div><i class="bi bi-shield-exclamation me-1"></i>{{ error }}</div>
+                          }
+                        </div>
+                      }
+                      </div>
+                      <small [class]="getCharCountClass(command.disbursementA2.reimbursementPurpose, AppConstants.FormValidation.COMMENT.maxLength)">
+                        {{ command.disbursementA2.reimbursementPurpose?.length || 0 }} / 
+                        {{AppConstants.FormValidation.COMMENT.maxLength}}
+                      </small>
+
+                  </div>
+                  
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -482,8 +583,10 @@
                 </div>
               </div>
             </div>
+            }
 
-            <div *ngIf="getSelectedTypeCode() === 'A3' && command.disbursementA3" class="type-details">
+            @if(getSelectedTypeCode() === 'A3' && command.disbursementA3) {
+            <div class="type-details">
               <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeA3.title') }}</h6>
 
               <div class="row">
@@ -567,16 +670,52 @@
                 </div>
               </div>
             </div>
+            }
 
-            <div *ngIf="getSelectedTypeCode() === 'B1' && command.disbursementB1" class="type-details">
+            @if(getSelectedTypeCode() === 'B1' && command.disbursementB1) {
+            <div class="type-details">
               <h6 class="text-primary mb-3">{{ i18n.t('disbursements.typeB1.title') }}</h6>
 
               <div class="row">
                 <div class="col-12 mb-3">
                   <label class="form-label">{{ i18n.t('disbursements.typeB1.guaranteeDetails') }} <span
                       class="text-danger">*</span></label>
-                  <textarea class="form-control" rows="3" name="guaranteeDetails" required
-                    [(ngModel)]="command.disbursementB1.guaranteeDetails"></textarea>
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    name="guaranteeDetails" 
+                    required
+                    #guaranteeDetailsField="ngModel"
+                    [minlength]="AppConstants.FormValidation.COMMENT.minLength"
+                    [maxlength]="AppConstants.FormValidation.COMMENT.maxLength"
+                    [(ngModel)]="command.disbursementB1.guaranteeDetails"
+                    (input)="onGuaranteeDetailsChange()"
+                    (blur)="guaranteeDetailsCustomTouched = true; validateGuaranteeDetails()"
+                    [class.is-invalid]="(guaranteeDetailsField.invalid && guaranteeDetailsField.touched) || (guaranteeDetailsCustomTouched && guaranteeDetailsCustomErrors.length > 0)"
+                    [class.is-valid]="guaranteeDetailsField.valid && guaranteeDetailsCustomTouched && guaranteeDetailsCustomErrors.length === 0 && (command.disbursementB1?.guaranteeDetails?.length || 0) > 0">
+                  </textarea>
+
+                  <div class="d-flex justify-content-between align-items-center mt-1">
+                      <div>
+                        @if (guaranteeDetailsField.invalid && guaranteeDetailsField.touched) {
+                          <small class="text-danger">
+                            @if (guaranteeDetailsField.errors?.['required']) {
+                              {{ i18n.t('common.required_field') || 'Ce champ est requis.' }}
+                            }
+                            @if (guaranteeDetailsField.errors?.['minlength']) {
+                              {{ i18n.t('common.validation_errors.minlength', 
+                              { min: AppConstants.FormValidation.COMMENT.minLength }) ||
+                               'La longueur minimale est de ' + AppConstants.FormValidation.COMMENT.minLength 
+                               + ' caractères.' }}
+                            }
+                          </small>
+                        }
+                      </div>
+                      <small [class]="getCharCountClass(command.disbursementB1.guaranteeDetails, AppConstants.FormValidation.COMMENT.maxLength)">
+                        {{ command.disbursementB1.guaranteeDetails?.length || 0 }} / {{AppConstants.FormValidation.COMMENT.maxLength}}
+                      </small>
+
+                  </div>
                 </div>
 
                 <div class="col-md-6 mb-3">
@@ -748,6 +887,9 @@
                 </div>
               </div>
             </div>
+            }
+
+
 
             <div class="d-flex justify-content-between mt-4">
               <div class="d-flex gap-2">
@@ -1121,12 +1263,20 @@
                     {{ i18n.t('disbursements.wizard.orDragDrop') }}
                   </p>
                   <small class="text-muted">
-                    {{ i18n.t('disbursements.wizard.fileTypes') }}
+                    {{ i18n.t('disbursements.wizard.fileTypes') }} ({{ i18n.t('disbursements.wizard.maxFileSize') }}: {{ AppConstants.FileUpload.maxSizeMB }} MB)
                   </small>
                 </div>
                 <input #fileInput type="file" class="d-none" multiple (change)="onFileSelected($event)"
                   accept=".pdf,.doc,.docx,.xls,.xlsx" />
               </div>
+
+              @if (fileUploadError) {
+              <div class="alert alert-danger mt-3" role="alert">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                {{ fileUploadError }}
+              </div>
+              }
+
 
               <div *ngIf="selectedFiles.length > 0" class="mt-3">
                 <div class="d-flex justify-content-between align-items-center mb-2">

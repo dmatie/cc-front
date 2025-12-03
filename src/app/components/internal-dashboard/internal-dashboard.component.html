@@ -10,10 +10,11 @@
         <div>
           <h2 class="mb-1">
             <i class="bi bi-speedometer2 me-2 text-primary"></i>
-            {{ i18n.t('internal.dashboard.title') }}
+            {{ i18n.t(dashboardTitle) }}
           </h2>
           <p class="text-muted mb-0">
-            {{ i18n.t('internal.dashboard.welcome') }} <span *ngIf="currentUser">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+            {{ i18n.t('internal.dashboard.welcome') }} 
+            <span *ngIf="currentUser">{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
           </p>
         </div>
         <div class="badge bg-success fs-6">
@@ -84,16 +85,17 @@
     <div class="col-md-3">
       <div class="card stats-card h-100">
         <div class="card-body text-center">
-          <i class="bi bi-people text-info mb-3" style="font-size: 2.5rem;"></i>
-          <h5 class="card-title">{{ i18n.t('internal.stats.users') }}</h5>
+          <i class="bi bi-check-circle text-info mb-3" style="font-size: 2.5rem;"></i>
+          <h5 class="card-title">{{ i18n.t('internal.stats.approved_requests') }}</h5>
           <h3 class="text-info mb-2">{{ internalStats.totalUsers }}</h3>
-          <p class="text-muted mb-3">{{ i18n.t('internal.stats.users_desc') }}</p>
-          <button class="btn btn-outline-info" (click)="manageUsers()" *ngIf="isAdmin">
-            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.manage') }}
+          <p class="text-muted mb-3">{{ i18n.t('internal.stats.approved_requests_desc') }}</p>
+          <button class="btn btn-outline-info" (click)="viewApprovedAccessRequests()">
+            <i class="bi bi-arrow-right me-1"></i>{{ i18n.t('common.view') }}
           </button>
         </div>
       </div>
     </div>
+    
   </div>
 
   <!-- Actions rapides -->
@@ -115,12 +117,6 @@
               </button>
             </div>
             <div class="col-md-3">
-              <button class="btn btn-outline-success w-100" (click)="viewApprovedAccessRequests()">
-                <i class="bi bi-check-circle me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Demandes approuvées' : 'Approved Requests' }}
-              </button>
-            </div>
-            <div class="col-md-3">
               <button class="btn btn-outline-danger w-100" (click)="manageClaims()">
                 <i class="bi bi-exclamation-triangle me-2"></i>
                 {{ i18n.t('internal.actions.claims') }}
@@ -135,7 +131,7 @@
             <div class="col-md-3">
               <button class="btn btn-outline-info w-100" (click)="manageUsers()" *ngIf="isAdmin">
                 <i class="bi bi-people me-2"></i>
-                {{ i18n.t('internal.actions.users') }}
+                 {{ i18n.t('internal.actions.internal_users') }}
               </button>
             </div>
           </div>

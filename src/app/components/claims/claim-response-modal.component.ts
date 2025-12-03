@@ -5,6 +5,9 @@ import { ClaimService } from '../../services/abstract/claim-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { ClaimStatus, CreateClaimProcessDto, getClaimStatusLabel } from '../../models/claim.model';
+import { ValidationUtils } from '../../core/utils/validation.util';
+import { SanitizationUtils } from '../../core/utils/sanitization.util';
+import { AppConstants } from '../../core/constants/app-constants';
 
 @Component({
   selector: 'app-claim-response-modal',
@@ -23,6 +26,10 @@ export class ClaimResponseModalComponent {
   loading = false;
   errorMessage = '';
 
+  commentErrors: string[] = [];
+  commentTouched = false;
+  AppConstants = AppConstants;
+
   statusOptions = [
     { value: ClaimStatus.InProgress, label: 'In Progress' },
     { value: ClaimStatus.Closed, label: 'Closed' }
@@ -34,7 +41,50 @@ export class ClaimResponseModalComponent {
     public i18n: I18nService
   ) {}
 
+  onCommentChange(): void {
+      this.commentTouched = true;
+      this.validateComment();
+    }
+  
+  
+    validateComment(): void {
+      if (!this.commentTouched) {
+        return;
+      }
+  
+      const validation = ValidationUtils.validateComment(
+        this.comment,
+        this.i18n.t('claims.description')
+      );
+  
+      if (validation.isValid) {
+        this.commentErrors = [];
+      } else {
+        this.commentErrors = validation.errors.map((error) => {
+          if (error.includes('required')) {
+            return this.i18n.t('validation.comment.required');
+          }
+          if (error.includes('at least')) {
+            return this.i18n.t('validation.comment.minLength');
+          }
+          if (error.includes('not exceed')) {
+            return this.i18n.t('validation.comment.maxLength');
+          }
+          if (error.includes('invalid characters')) {
+            return this.i18n.t('validation.comment.invalidCharacters');
+          }
+          if (error.includes('dangerous content')) {
+            return this.i18n.t('validation.comment.dangerousContent');
+          }
+          return error;
+        });
+      }
+    }
+
   onSubmit(): void {
+    this.commentTouched = true;
+    this.validateComment();
+
     if (!this.isValid()) {
       this.errorMessage = this.i18n.t('claims.fillAllFields');
       return;
@@ -47,10 +97,13 @@ export class ClaimResponseModalComponent {
       ? parseInt(this.status, 10)
       : this.status as number;
 
+    const sanitizedComment = SanitizationUtils.sanitizeComment(this.comment);
+    
+
     const dto: CreateClaimProcessDto = {
       claimId: this.claimId,
       status: statusNumber,
-      comment: this.comment
+      comment: sanitizedComment
     };
 
     this.claimService.createClaimProcess(this.claimId, dto).subscribe({

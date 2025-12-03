@@ -34,7 +34,15 @@
     "inactive": "Inactive",
     "quickActions": "Quick Actions",
     "browse": "Browse",
-    "remove": "Remove"
+    "remove": "Remove",
+    "characters": "characters",
+    "validation_errors":{
+      "required": "Ce champ est requis",
+      "minlength": "La longueur minimale est de {{min}} caractères",
+      "maxlength": "La longueur maximale est de {{max}} caractères",
+      "email": "Veuillez entrer une adresse email valide",
+      "pattern": "Le format entré est invalide"
+    }
   },
   "home": {
     "title": "AfDB Client Portal",
@@ -375,7 +383,9 @@
     "dashboard": {
       "title": "Admin Dashboard",
       "welcome": "Welcome",
-      "internal_access": "Internal Access"
+      "internal_access": "Internal Access",
+      "admin_title": "Admin Dashboard",
+      "user_title": "FIFC Dashboard"
     },
     "stats": {
       "access_requests": "Access Requests",
@@ -385,14 +395,17 @@
       "disbursements": "Disbursements",
       "disbursements_desc": "to approve",
       "users": "Users",
-      "users_desc": "total in system"
+      "users_desc": "total in system",
+      "approved_requests": "Approved Requests",
+      "approved_requests_desc": "View approved access requests"
     },
     "actions": {
       "title": "Quick Actions",
       "access_requests": "Manage Access Requests",
       "claims": "Process Claims",
       "disbursements": "Approve Disbursements",
-      "users": "Manage Users"
+      "users": "Manage Users",
+      "internal_users": "Internal Users"
     },
     "info": {
       "title": "System Information",
@@ -612,10 +625,20 @@
     "business_error": "Business error",
     "unexpected_error": "An unexpected error occurred",
     "missing_ad_group": "User is missing required AD group",
+    "file":{
+      "null": "File is null",
+      "name_empty": "File name is empty",
+      "empty": "File is empty",
+      "size_exceeded": "File size exceeded",
+      "extension_not_allowed": "File extension not allowed",
+      "mimetype_not_allowed": "File MIME type not allowed"
+    },
     "access_request":{
       "email_already_exists":"An access request with this email already exists",  
       "request_not_found":"Access request not found"
-    }
+    },
+    "fileTooLarge": "Le fichier '{fileName}' est trop volumineux ({size} Mo). La taille maximale autorisée est de {maxSize} Mo.",
+    "fileTypeNotAllowed": "Le fichier '{fileName}' a un format non supporté. Seuls les fichiers PDF, Word et Excel sont autorisés."
   },
   "admin": {
     "access_requests": {
@@ -744,9 +767,12 @@
     "rejected_success": "Disbursement rejected",
     "backedtoclient_success": "Disbursement returned to client successfully",
     "updated_success": "Disbursement updated successfully",
-    "validation_errors": {noAccessPermission
+    "validation_errors": {
       "loanGrantNumber_invalid": "The loan/grant number is invalid",
-      "beneficiaryBpNumber_invalid": "The beneficiary BP number is invalid"
+      "beneficiaryBpNumber_invalid": "The beneficiary BP number is invalid",
+      "disbursement_type_not_exist": "The disbursement type does not exist",
+      "currency_not_exist": "The currency does not exist",
+      "disbursement_type_code_not_exist": "The disbursement type code does not exist"
     },
     "resubmit": {
       "button": "Resubmit Request",
@@ -810,9 +836,10 @@
       "supportingDocs": "Supporting Documents (optional)",
       "clickToSelect": "Click to select",
       "orDragDrop": "or drag and drop your files here",
-      "fileTypes": "PDF, Word, Excel (Max 10MB per file)",
-      "filesSelected": "file(s) selected",
-      "reviewNote": "Please review all information before submitting. This request will be saved as draft and you can submit it later."
+      "reviewNote": "Please review all information before submitting. This request will be saved as draft and you can submit it later.",
+      "fileTypes": "PDF, Word, Excel",
+      "maxFileSize": "Max",
+      "filesSelected": "file(s) selected (max 5 MB each)"
     },
     "typeA1": {
       "title": "Direct Payment (A1)",
@@ -898,6 +925,26 @@
       "executingAgencyAddress": "Address",
       "executingAgencyCity": "City",
       "executingAgencyCountry": "Country"
+    }
+  },
+  "validation": {
+    "required": "This field is required",
+    "minLength": "Must be at least {min} characters",
+    "maxLength": "Must not exceed {max} characters",
+    "invalidCharacters": "Contains invalid characters",
+    "dangerousContent": "Contains potentially dangerous content",
+    "invalidFormat": "Format is invalid",
+    "onlyLetters": "Can only contain letters, spaces, hyphens, and apostrophes",
+    "onlyAlphanumeric": "Can only contain letters and numbers",
+    "allowedCharacters": "Only letters, numbers, and common punctuation are allowed",
+    "controlCharacters": "Contains invalid control characters",
+    "comment": {
+      "valid": "Comment is valid",
+      "required": "Description is required",
+      "minLength": "Description must be at least 10 characters",
+      "maxLength": "Description must not exceed 5000 characters",
+      "invalidCharacters": "Description contains invalid characters. Only letters, numbers, and common punctuation are allowed",
+      "dangerousContent": "Description contains potentially dangerous content"
     }
   }
 }

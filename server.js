@@ -12,6 +12,17 @@ app.use((req, res, next) => {
   next();
 });
 
+// Remove Server header
+app.disable('x-powered-by');
+
+// Custom middleware to remove/change Server header
+app.use((req, res, next) => {
+    res.removeHeader('Server');
+    // Or set custom value
+    // res.setHeader('Server', 'MyCustomServer');
+    next();
+});
+
 app.use(express.static(path.join(__dirname, 'dist/ccapp/browser')));
 
 app.get('*', (req, res) => {

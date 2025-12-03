@@ -178,7 +178,7 @@ export class DisbursementApiService extends DisbursementService {
     );
   }
 
-  override getMyPermissions(): Observable<DisbursementPermissionsDto> {
+    override getMyPermissions(): Observable<DisbursementPermissionsDto> {
     return this.http.get<DisbursementPermissionsDto>(`${this.baseUrl}/me/permissions`).pipe(
       catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );

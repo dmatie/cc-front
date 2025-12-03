@@ -20,6 +20,7 @@ export class InternalDashboardComponent implements OnInit {
   internalStats: InternalDashboardStatsDto | null = null;
   errorMessage = '';
   isAdmin: boolean = false;
+  dashboardTitle: string = 'Internal Dashboard';
 
   constructor(
     private authService: AuthService,
@@ -32,6 +33,13 @@ export class InternalDashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+        if (this.isAdmin) {
+      this.dashboardTitle = this.i18n.t('internal.dashboard.admin_title');
+    }
+    else {
+      this.dashboardTitle = this.i18n.t('internal.dashboard.user_title');
+    }
+
     this.checkAuthAndLoadData();
   }
 

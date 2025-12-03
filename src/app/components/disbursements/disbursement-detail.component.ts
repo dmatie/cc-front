@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { DisbursementDto, DisbursementStatus, DisbursementPermissionsDto } from '../../models/disbursement.model';
+import { DisbursementDto, DisbursementPermissionsDto, DisbursementStatus } from '../../models/disbursement.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { BackendMessageTranslationService } from '../../services/backend-message-translation.service';
 import { ResubmitDisbursementModalComponent } from './resubmit-disbursement-modal.component';
 import { DuplicateDisbursementModalComponent } from './duplicate-disbursement-modal.component';
+import { getFileIcon } from '../../core/utils/helper';
 
 @Component({
   selector: 'app-disbursement-detail',
@@ -37,6 +38,7 @@ export class DisbursementDetailComponent implements OnInit {
   rejectComment = '';
   backToClientComment = '';
   additionalDocuments: File[] = [];
+  protected readonly getFileIcon = getFileIcon;
 
   constructor(
     private route: ActivatedRoute,
@@ -52,13 +54,13 @@ export class DisbursementDetailComponent implements OnInit {
     const disbursementId = this.route.snapshot.paramMap.get('id');
 
     if (!this.isInternalUser) {
-      this.loadPermissions(disbursementId);
+      this.loadDataForExternalUser(disbursementId);
     } else if (disbursementId) {
       this.loadDisbursementDetail(disbursementId);
     }
   }
 
-  loadPermissions(disbursementId: string | null): void {
+    loadDataForExternalUser(disbursementId: string | null): void {
     this.disbursementService.getMyPermissions().subscribe({
       next: (perms) => {
         this.permissions = perms;

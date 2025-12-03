@@ -1,4 +1,4 @@
-import { APP_INITIALIZER, ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, CSP_NONCE, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter, withEnabledBlockingInitialNavigation, withHashLocation } from '@angular/router';
 import { provideHttpClient, HttpClient, HTTP_INTERCEPTORS, withInterceptorsFromDi, withInterceptors } from '@angular/common/http';
 import { LOCALE_ID } from '@angular/core';
@@ -36,6 +36,11 @@ function getLocale(): string {
   return ['fr', 'en'].includes(browserLocale) ? browserLocale : 'fr';
 }
 
+function getCspNonce(): string {
+  const meta = document.querySelector('meta[property="csp-nonce"]');
+  return meta?.getAttribute('content') || '';
+}
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -46,6 +51,7 @@ export const appConfig: ApplicationConfig = {
       withInterceptors([encryptionInterceptor])
     ),
     { provide: LOCALE_ID, useValue: getLocale() },
+    { provide: CSP_NONCE, useFactory: getCspNonce },
     I18nService,
     ErrorHandlerService,
 

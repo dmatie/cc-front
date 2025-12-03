@@ -47,9 +47,31 @@
                 [(ngModel)]="comment"
                 name="comment"
                 rows="5"
+                [minlength]="AppConstants.FormValidation.COMMENT.minLength"
+                [maxlength]="AppConstants.FormValidation.COMMENT.maxLength"
                 [placeholder]="i18n.t('claims.responseCommentPlaceholder')"
                 [disabled]="loading"
+                (input)="onCommentChange()"
+                (blur)="commentTouched = true; validateComment()"
+                [class.is-invalid]="commentTouched && commentErrors.length > 0"
+                [class.is-valid]="commentTouched && commentErrors.length === 0 && comment.trim().length > 0"
                 required></textarea>
+              @if (commentTouched && commentErrors.length > 0) {
+                <div class="invalid-feedback d-block">
+                  @for (error of commentErrors; track error) {
+                    <div><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
+                  }
+                </div>
+              }
+              @if (commentTouched && commentErrors.length === 0 && comment.trim().length > 0) {
+                <div class="valid-feedback d-block">
+                  <i class="bi bi-check-circle me-1"></i>{{ i18n.t('validation.comment.valid') || 'Valid input' }}
+                </div>
+              }
+              <small class="form-text text-muted">
+                {{ comment.trim().length }} / {{ AppConstants.FormValidation.COMMENT.maxLength }} {{ i18n.t('common.characters') || 'characters' }}
+              </small>
+                
             </div>
 
             @if (errorMessage) {

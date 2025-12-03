@@ -8,6 +8,9 @@ import { I18nService } from '../../services/i18n.service';
 import { CreateClaimDto } from '../../models/claim.model';
 import { ClaimType } from '../../models/claim.model';
 import { Country } from '../../models/dropdown.model';
+import { ValidationUtils } from '../../core/utils/validation.util';
+import { SanitizationUtils } from '../../core/utils/sanitization.util';
+import { AppConstants } from '../../core/constants/app-constants';
 
 @Component({
   selector: 'app-create-claim-modal',
@@ -25,7 +28,12 @@ export class CreateClaimModalComponent implements OnInit {
   loading = false;
   errorMessage = '';
 
+  commentErrors: string[] = [];
+  commentTouched = false;
+
   claimTypes: ClaimType[] = [];
+  AppConstants = AppConstants;
+
 
   constructor(
     private claimService: ClaimService,
@@ -52,7 +60,50 @@ export class CreateClaimModalComponent implements OnInit {
     });
   }
 
+  onCommentChange(): void {
+    this.commentTouched = true;
+    this.validateComment();
+  }
+
+
+  validateComment(): void {
+    if (!this.commentTouched) {
+      return;
+    }
+
+    const validation = ValidationUtils.validateComment(
+      this.comment,
+      this.i18n.t('claims.description')
+    );
+
+    if (validation.isValid) {
+      this.commentErrors = [];
+    } else {
+      this.commentErrors = validation.errors.map((error) => {
+        if (error.includes('required')) {
+          return this.i18n.t('validation.comment.required');
+        }
+        if (error.includes('at least')) {
+          return this.i18n.t('validation.comment.minLength');
+        }
+        if (error.includes('not exceed')) {
+          return this.i18n.t('validation.comment.maxLength');
+        }
+        if (error.includes('invalid characters')) {
+          return this.i18n.t('validation.comment.invalidCharacters');
+        }
+        if (error.includes('dangerous content')) {
+          return this.i18n.t('validation.comment.dangerousContent');
+        }
+        return error;
+      });
+    }
+  }
+
   onSubmit(): void {
+    this.commentTouched = true;
+    this.validateComment();
+
     if (!this.isValid()) {
       this.errorMessage = this.i18n.t('claims.fillAllFields');
       return;
@@ -61,9 +112,11 @@ export class CreateClaimModalComponent implements OnInit {
     this.loading = true;
     this.errorMessage = '';
 
+    const sanitizedComment = SanitizationUtils.sanitizeComment(this.comment);
+
     const dto: CreateClaimDto = {
       claimTypeId: this.claimTypeId,
-      comment: this.comment
+      comment: sanitizedComment
     };
 
     this.claimService.createClaim(dto).subscribe({

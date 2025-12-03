@@ -578,7 +578,8 @@
                       <div *ngFor="let doc of disbursement.documents" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
                           <div>
-                            <i class="bi bi-file-earmark-pdf text-danger me-2"></i>
+                            @let fileIcon = getFileIcon(doc.fileName);
+                            <i class="bi {{ fileIcon.iconClass }} {{ fileIcon.colorClass }} me-2"></i>
                             <strong>{{ doc.fileName }}</strong>
                           </div>
                           <button

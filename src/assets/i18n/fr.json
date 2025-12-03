@@ -34,7 +34,15 @@
     "inactive": "Inactif",
     "quickActions": "Actions Rapides",
     "browse": "Parcourir",
-    "remove": "Supprimer"
+    "remove": "Supprimer",
+    "characters": "caractères",
+    "validation_errors":{
+      "required": "Ce champ est requis",
+      "minlength": "La longueur minimale est de {{min}} caractères",
+      "maxlength": "La longueur maximale est de {{max}} caractères",
+      "email": "Veuillez entrer une adresse email valide",
+      "pattern": "Le format entré est invalide"
+    }
   },
   "home": {
     "title": "Portail Client AfDB",
@@ -368,7 +376,9 @@
     "dashboard": {
       "title": "Dashboard Administrateur",
       "welcome": "Bienvenue",
-      "internal_access": "Accès Interne"
+      "internal_access": "Accès Interne",
+      "admin_title": "Dashboard Administrateur",
+      "user_title": "Dashboard FIFC"
     },
     "stats": {
       "access_requests": "Demandes d'Accès",
@@ -378,14 +388,17 @@
       "disbursements": "Décaissements",
       "disbursements_desc": "à approuver",
       "users": "Utilisateurs",
-      "users_desc": "total dans le système"
+      "users_desc": "total dans le système",
+      "approved_requests": "Demandes approuvées",
+      "approved_requests_desc": "Voir les demandes approuvées"
     },
     "actions": {
       "title": "Actions Rapides",
       "access_requests": "Gérer les Demandes d'Accès",
       "claims": "Traiter les Réclamations",
       "disbursements": "Approuver les Décaissements",
-      "users": "Gérer les Utilisateurs"
+      "users": "Gérer les Utilisateurs",
+      "internal_users": "Utilisateurs Internes"
     },
     "info": {
       "title": "Informations Système",
@@ -605,10 +618,20 @@
     "business_error": "Erreur métier",
     "unexpected_error": "Une erreur inattendue s'est produite",
     "missing_ad_group": "Le groupe AD requis est manquant",
+    "file":{
+      "null": "Fichier nul",
+      "name_empty": "Le nom du fichier est vide",
+      "empty": "Fichier vide",
+      "size_exceeded": "Taille du fichier dépassée",
+      "extension_not_allowed": "Extension de fichier non autorisée",
+      "mimetype_not_allowed": "Type MIME du fichier non autorisé"
+    },
     "access_request":{
       "email_already_exists":"Une demande d'accès avec cet email existe déjà",  
       "request_not_found":"Demande d'accès non trouvée"
-    }
+    },
+    "fileTooLarge": "Le fichier '{fileName}' est trop volumineux ({size} Mo). La taille maximale autorisée est de {maxSize} Mo.",
+    "fileTypeNotAllowed": "Le fichier '{fileName}' a un format non supporté. Seuls les fichiers PDF, Word et Excel sont autorisés."
   },
   "admin": {
     "access_requests": {
@@ -703,8 +726,8 @@
     "allDisbursements": "Tous les Décaissements",
     "createDisbursement": "Créer un Décaissement",
     "noDisbursements": "Aucun décaissement à afficher",
-    "noAccessPermission": "Vous n'avez pas la permission d'accéder au module Décaissement",
-    "noSubmitPermission": "Vous n'avez pas la permission de créer ou modifier des décaissements",
+    "noAccessPermission": "Vous n'avez pas la permission d'accéder au module de décaissement",
+    "noSubmitPermission": "Vous n'avez pas la permission de créer ou de modifier des décaissements",
     "disbursementDetails": "Détails du Décaissement",
     "backToList": "Retour à la Liste",
     "sapCode": "Code SAP",
@@ -739,7 +762,10 @@
     "updated_success": "Le décaissement a été mis à jour avec succès",
     "validation_errors": {
       "loanGrantNumber_invalid": "Le numéro de prêt/subvention est invalide",
-      "beneficiaryBpNumber_invalid": "Le numéro BP du bénéficiaire est invalide"
+      "beneficiaryBpNumber_invalid": "Le numéro BP du bénéficiaire est invalide",
+      "disbursement_type_not_exist": "Le type de décaissement n'existe pas",
+      "currency_not_exist": "La devise n'existe pas",
+      "disbursement_type_code_not_exist": "Le code du type de décaissement n'existe pas"
     },
     "resubmit": {
       "button": "Resoumettre la Demande",
@@ -803,9 +829,11 @@
       "supportingDocs": "Documents Justificatifs (optionnel)",
       "clickToSelect": "Cliquez pour sélectionner",
       "orDragDrop": "ou glissez-déposez vos fichiers ici",
-      "fileTypes": "PDF, Word, Excel (Max 10MB par fichier)",
-      "filesSelected": "fichier(s) sélectionné(s)",
-      "reviewNote": "Veuillez vérifier toutes les informations avant de soumettre. Cette demande sera enregistrée en tant que brouillon et vous pourrez la soumettre plus tard."
+      "reviewNote": "Veuillez vérifier toutes les informations avant de soumettre. Cette demande sera enregistrée en tant que brouillon et vous pourrez la soumettre plus tard.",
+      "fileTypes": "PDF, Word, Excel",
+      "maxFileSize": "Max",
+      "filesSelected": "fichier(s) sélectionné(s) (max 5 Mo chacun)"
+
     },
     "typeA1": {
       "title": "Paiement Direct (A1)",
@@ -891,6 +919,26 @@
       "executingAgencyAddress": "Adresse",
       "executingAgencyCity": "Ville",
       "executingAgencyCountry": "Pays"
+    }
+  },
+"validation": {
+    "required": "Ce champ est requis",
+    "minLength": "Doit contenir au moins {min} caractères",
+    "maxLength": "Ne doit pas dépasser {max} caractères",
+    "invalidCharacters": "Contient des caractères invalides",
+    "dangerousContent": "Contient du contenu potentiellement dangereux",
+    "invalidFormat": "Le format est invalide",
+    "onlyLetters": "Ne peut contenir que des lettres, espaces, tirets et apostrophes",
+    "onlyAlphanumeric": "Ne peut contenir que des lettres et des chiffres",
+    "allowedCharacters": "Seules les lettres, chiffres et ponctuation courante sont autorisés",
+    "controlCharacters": "Contient des caractères de contrôle invalides",
+    "comment": {
+      "valid":" Le commentaire est valide",
+      "required": "La description est requise",
+      "minLength": "La description doit contenir au moins 10 caractères",
+      "maxLength": "La description ne doit pas dépasser 5000 caractères",
+      "invalidCharacters": "La description contient des caractères invalides. Seules les lettres, chiffres et ponctuation courante sont autorisés",
+      "dangerousContent": "La description contient du contenu potentiellement dangereux"
     }
   }
 }

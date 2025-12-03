@@ -454,7 +454,7 @@ export class DisbursementMockService extends DisbursementService {
     return of(mockBlob).pipe(delay(300));
   }
 
-  override getMyPermissions(): Observable<DisbursementPermissionsDto> {
+    override getMyPermissions(): Observable<DisbursementPermissionsDto> {
     return of({
       canConsult: true,
       canSubmit: true
