@@ -39,20 +39,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// Build CSP directives with dynamic hashes or fallback
+// Build CSP directives with dynamic hashes
 const scriptSrcDirectives = ["'self'", "https://cdn.jsdelivr.net", "'unsafe-hashes'"];
 const styleSrcDirectives = ["'self'", "https://cdn.jsdelivr.net"];
 
+// Add script hashes if any exist (Angular typically has none - all scripts are external)
 if (cspHashes && cspHashes.scriptHashes.length > 0) {
   scriptSrcDirectives.push(...cspHashes.scriptHashes);
-} else {
-  scriptSrcDirectives.push("'unsafe-inline'");
 }
 
+// Add style hashes if any exist
 if (cspHashes && cspHashes.styleHashes.length > 0) {
   styleSrcDirectives.push(...cspHashes.styleHashes);
-} else {
-  styleSrcDirectives.push("'unsafe-inline'");
 }
 
 // Security headers with Helmet
