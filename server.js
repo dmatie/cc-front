@@ -40,17 +40,17 @@ app.use((req, res, next) => {
 });
 
 // Build CSP directives with dynamic hashes or fallback
-const scriptSrcDirectives = ["'self'"];
-const styleSrcDirectives = ["'self'"];
+const scriptSrcDirectives = ["'self'", "https://cdn.jsdelivr.net", "'unsafe-hashes'"];
+const styleSrcDirectives = ["'self'", "https://cdn.jsdelivr.net"];
 
 if (cspHashes && cspHashes.scriptHashes.length > 0) {
-  scriptSrcDirectives.push("'unsafe-hashes'", "'unsafe-eval'", ...cspHashes.scriptHashes);
+  scriptSrcDirectives.push(...cspHashes.scriptHashes);
 } else {
-  scriptSrcDirectives.push("'unsafe-inline'", "'unsafe-eval'");
+  scriptSrcDirectives.push("'unsafe-inline'");
 }
 
 if (cspHashes && cspHashes.styleHashes.length > 0) {
-  styleSrcDirectives.push("'unsafe-hashes'", ...cspHashes.styleHashes);
+  styleSrcDirectives.push(...cspHashes.styleHashes);
 } else {
   styleSrcDirectives.push("'unsafe-inline'");
 }
@@ -62,20 +62,16 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       scriptSrc: scriptSrcDirectives,
       styleSrc: styleSrcDirectives,
-      imgSrc: ["'self'", "data:", "https:"],
-      fontSrc: ["'self'", "data:"],
+      imgSrc: ["'self'", "data:"],
+      fontSrc: ["'self'", "https://cdn.jsdelivr.net"],
       connectSrc: [
         "'self'",
-        "https://*.azurewebsites.net",
-        "https://login.microsoftonline.com",
-        "https://*.msauth.net",
-        "https://*.msftauth.net"
+        "https://cdn.jsdelivr.net",
+        "https://clientconnection-backend.victoriousmeadow-cdaaa30d.eastus.azurecontainerapps.io",
+        "https://login.microsoftonline.com"
       ],
-      frameAncestors: ["'none'"],
-      baseUri: ["'self'"],
-      formAction: ["'self'"],
       objectSrc: ["'none'"],
-      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null
+      frameAncestors: ["'self'"]
     }
   },
   hsts: {
@@ -88,7 +84,7 @@ app.use(helmet({
   },
   noSniff: true,
   frameguard: {
-    action: 'deny'
+    action: 'sameorigin'
   },
   xssFilter: false,
   permittedCrossDomainPolicies: {
