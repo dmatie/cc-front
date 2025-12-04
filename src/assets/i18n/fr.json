@@ -767,6 +767,12 @@
       "currency_not_exist": "La devise n'existe pas",
       "disbursement_type_code_not_exist": "Le code du type de décaissement n'existe pas"
     },
+    "reject": {
+      "comment_label": "Raison du rejet"
+    },
+    "back_to_client": {
+      "comment_label": "Commentaire pour le retour au client"
+    },
     "resubmit": {
       "button": "Resoumettre la Demande",
       "title": "Resoumettre la Demande de Décaissement",
@@ -927,6 +933,7 @@
     "maxLength": "Ne doit pas dépasser {max} caractères",
     "invalidCharacters": "Contient des caractères invalides",
     "dangerousContent": "Contient du contenu potentiellement dangereux",
+    "dangerous_content": "Contient du contenu potentiellement dangereux",
     "invalidFormat": "Le format est invalide",
     "onlyLetters": "Ne peut contenir que des lettres, espaces, tirets et apostrophes",
     "onlyAlphanumeric": "Ne peut contenir que des lettres et des chiffres",

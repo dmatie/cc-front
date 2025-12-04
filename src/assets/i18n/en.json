@@ -774,6 +774,12 @@
       "currency_not_exist": "The currency does not exist",
       "disbursement_type_code_not_exist": "The disbursement type code does not exist"
     },
+    "reject": {
+      "comment_label": "Reason for rejection"
+    },
+    "back_to_client": {
+      "comment_label": "Comment for return to client"
+    },
     "resubmit": {
       "button": "Resubmit Request",
       "title": "Resubmit Disbursement Request",
@@ -933,6 +939,7 @@
     "maxLength": "Must not exceed {max} characters",
     "invalidCharacters": "Contains invalid characters",
     "dangerousContent": "Contains potentially dangerous content",
+    "dangerous_content": "Contains potentially dangerous content",
     "invalidFormat": "Format is invalid",
     "onlyLetters": "Can only contain letters, spaces, hyphens, and apostrophes",
     "onlyAlphanumeric": "Can only contain letters and numbers",

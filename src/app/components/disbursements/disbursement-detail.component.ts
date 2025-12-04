@@ -11,6 +11,8 @@ import { BackendMessageTranslationService } from '../../services/backend-message
 import { ResubmitDisbursementModalComponent } from './resubmit-disbursement-modal.component';
 import { DuplicateDisbursementModalComponent } from './duplicate-disbursement-modal.component';
 import { getFileIcon } from '../../core/utils/helper';
+import { ValidationUtils } from '../../core/utils/validation.util';
+import { SanitizationUtils } from '../../core/utils/sanitization.util';
 
 @Component({
   selector: 'app-disbursement-detail',
@@ -37,6 +39,8 @@ export class DisbursementDetailComponent implements OnInit {
 
   rejectComment = '';
   backToClientComment = '';
+  rejectCommentErrors: string[] = [];
+  backToClientCommentErrors: string[] = [];
   additionalDocuments: File[] = [];
   protected readonly getFileIcon = getFileIcon;
 
@@ -213,19 +217,41 @@ export class DisbursementDetailComponent implements OnInit {
   rejectDisbursement(): void {
     if (!this.disbursement || !this.rejectComment.trim()) return;
 
-    this.actionLoading = true;
+    this.rejectCommentErrors = [];
     this.errorMessage = '';
+
+    const validationResult = ValidationUtils.validateComment(
+      this.rejectComment,
+      this.i18n.t('disbursements.reject.comment_label')
+    );
+
+    if (!validationResult.isValid) {
+      this.rejectCommentErrors = validationResult.errors;
+      this.errorMessage = validationResult.errors[0];
+      return;
+    }
+
+    const sanitizedComment = SanitizationUtils.sanitizeComment(this.rejectComment);
+
+    if (!SanitizationUtils.isClean(sanitizedComment)) {
+      this.rejectCommentErrors = [this.i18n.t('validation.dangerous_content')];
+      this.errorMessage = this.i18n.t('validation.dangerous_content');
+      return;
+    }
+
+    this.actionLoading = true;
     this.successMessage = '';
 
     this.disbursementService.rejectDisbursement({
       disbursementId: this.disbursement.id,
-      comment: this.rejectComment
+      comment: sanitizedComment
     }).subscribe({
       next: (response) => {
         this.successMessage = response.message;
         this.actionLoading = false;
         this.showRejectModal = false;
         this.rejectComment = '';
+        this.rejectCommentErrors = [];
         this.loadDisbursementDetail(this.disbursement!.id);
       },
       error: (error) => {
@@ -238,13 +264,34 @@ export class DisbursementDetailComponent implements OnInit {
   backToClientDisbursement(): void {
     if (!this.disbursement || !this.backToClientComment.trim()) return;
 
-    this.actionLoading = true;
+    this.backToClientCommentErrors = [];
     this.errorMessage = '';
+
+    const validationResult = ValidationUtils.validateComment(
+      this.backToClientComment,
+      this.i18n.t('disbursements.back_to_client.comment_label')
+    );
+
+    if (!validationResult.isValid) {
+      this.backToClientCommentErrors = validationResult.errors;
+      this.errorMessage = validationResult.errors[0];
+      return;
+    }
+
+    const sanitizedComment = SanitizationUtils.sanitizeComment(this.backToClientComment);
+
+    if (!SanitizationUtils.isClean(sanitizedComment)) {
+      this.backToClientCommentErrors = [this.i18n.t('validation.dangerous_content')];
+      this.errorMessage = this.i18n.t('validation.dangerous_content');
+      return;
+    }
+
+    this.actionLoading = true;
     this.successMessage = '';
 
     this.disbursementService.backToClientDisbursement({
       disbursementId: this.disbursement.id,
-      comment: this.backToClientComment,
+      comment: sanitizedComment,
       additionalDocuments: this.additionalDocuments.length > 0 ? this.additionalDocuments : undefined
     }).subscribe({
       next: (response) => {
@@ -252,6 +299,7 @@ export class DisbursementDetailComponent implements OnInit {
         this.actionLoading = false;
         this.showBackToClientModal = false;
         this.backToClientComment = '';
+        this.backToClientCommentErrors = [];
         this.additionalDocuments = [];
         this.loadDisbursementDetail(this.disbursement!.id);
       },
