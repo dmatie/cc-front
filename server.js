@@ -41,7 +41,7 @@ app.use((req, res, next) => {
 
 // Build CSP directives with dynamic hashes
 const scriptSrcDirectives = ["'self'", "https://cdn.jsdelivr.net", "'unsafe-hashes'"];
-const styleSrcDirectives = ["'self'", "https://cdn.jsdelivr.net"];
+const styleSrcDirectives = ["'self'", "https://cdn.jsdelivr.net", "'unsafe-hashes'"];
 
 // Add script hashes if any exist (Angular typically has none - all scripts are external)
 if (cspHashes && cspHashes.scriptHashes.length > 0) {
