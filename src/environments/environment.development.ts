@@ -19,7 +19,8 @@ export const environment = {
         enabled: true,
         key: 'Pzgq08B00AhKkVVA3cfmAJnk1EtgLPbn29cltULMlVs=',
         neverEncryptPaths: [
-            '/api/disbursements'
+            '/api/disbursements',
+            '/api/accessrequests/*/submit'
         ]
     }
 };
