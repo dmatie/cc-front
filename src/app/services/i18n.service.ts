@@ -145,4 +145,17 @@ export class I18nService {
   getAvailableLocales(): string[] {
     return Array.from(this.loadedLocales);
   }
+
+  /**
+   * Retourne la valeur localisée d'une propriété d'un objet
+   * @param obj L'objet contenant les propriétés
+   * @param baseFieldName Le nom de base du champ (ex: 'countryName')
+   * @returns La valeur dans la langue actuelle
+   */
+  getLocalizedField<T>(obj: T, baseFieldName: string): string {
+    const locale = this.getCurrentLocale();
+    const localizedFieldName = locale === 'fr' ? `${baseFieldName}Fr` : baseFieldName;
+
+    return (obj as any)[localizedFieldName] || (obj as any)[baseFieldName] || '';
+  }
 }

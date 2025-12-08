@@ -18,21 +18,21 @@
         </div>
         <div class="mb-3">
           <strong class="text-muted">{{ i18n.t('request_details.function') }}:</strong>
-          <div>{{ registration?.functionName }}</div>
+          <div>{{ registration | localizedField: 'functionName' }}</div>
         </div>
       </div>
       <div class="col-md-6">
         <div class="mb-3">
           <strong class="text-muted">{{ i18n.t('request_details.country') }}:</strong>
-          <div>{{ registration?.countryName }}</div>
+          <div>{{ registration | localizedField: 'countryName' }}</div>
         </div>
         <div class="mb-3">
           <strong class="text-muted">{{ i18n.t('request_details.business_profile') }}:</strong>
-          <div>{{ registration?.businessProfileName }}</div>
+          <div>{{ registration | localizedField: 'businessProfileName' }}</div>
         </div>
         <div class="mb-3">
           <strong class="text-muted">{{ i18n.t('request_details.financing_type') }}:</strong>
-          <div>{{ registration?.financingTypeName }}</div>
+          <div>{{ registration | localizedField: 'financingTypeName' }}</div>
         </div>
       </div>
     </div>
