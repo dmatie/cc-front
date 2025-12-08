@@ -35,6 +35,16 @@ export interface RegistrationRequest {
   Projects: ProjectRequest[];
 }
 
+export interface AccessRequestProjectDto {
+  sapCode: string;
+  projectTitle: string;
+}
+
+export interface AccessRequestDocumentDto {
+  fileName: string;
+  documentUrl: string;
+}
+
 export interface AccessRequest {
   id: string;
   email: string;
@@ -46,19 +56,27 @@ export interface AccessRequest {
   processedById?: string;
   processingComments?: string;
   entraIdObjectId?: string;
-  functionId: string;
-  countryId: string;
-  businessProfileId: string;
-  financingTypeId: string;
-  functionName: string;
-  countryName: string;
-  businessProfileName: string;
-  financingTypeName: string;
+  functionId?: string;
+  countryId?: string;
+  businessProfileId?: string;
+  financingTypeId?: string;
+  functionName?: string;
+  functionNameFr?: string;
+  countryName?: string;
+  countryNameFr?: string;
+  businessProfileName?: string;
+  businessProfileNameFr?: string;
+  financingTypeName?: string;
+  financingTypeNameFr?: string;
   approversEmail: string[];
   fullName: string;
   canBeProcessed: boolean;
   isProcessed: boolean;
   hasEntraIdAccount: boolean;
+  selectedProjectCodes: string[];
+  registrationCode: string;
+  projects: AccessRequestProjectDto[];
+  documents: AccessRequestDocumentDto[];
 }
 
 export interface RegistrationResponse {
@@ -99,19 +117,28 @@ export interface AccessRequestDetail {
   email: string;
   firstName: string;
   lastName: string;
-  functionId: string;
-  countryId: string;
-  businessProfileId: string;
-  financingTypeId: string;
+  functionId?: string;
+  countryId?: string;
+  businessProfileId?: string;
+  financingTypeId?: string;
   selectedProjectCodes: string[];
   status: StatusEnum;
   processingComments?: string;
   submissionDate: Date;
   processedDate?: Date;
-  functionName: string;
-  countryName: string;
-  businessProfileName: string;
-  financingTypeName: string;
+  functionName?: string;
+  functionNameFr?: string;
+  countryName?: string;
+  countryNameFr?: string;
+  businessProfileName?: string;
+  businessProfileNameFr?: string;
+  financingTypeName?: string;
+  financingTypeNameFr?: string;
+  registrationCode?: string;
+  projects?: AccessRequestProjectDto[];
+  documents?: AccessRequestDocumentDto[];
+  fullName?: string;
+  approversEmail?: string[];
 }
 
 export interface RegistrationResponseAll {
