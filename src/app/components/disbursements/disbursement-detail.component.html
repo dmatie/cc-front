@@ -728,11 +728,31 @@
         <button type="button" class="btn-close" (click)="showRejectModal = false"></button>
       </div>
       <div class="modal-body">
+        <div *ngIf="rejectCommentErrors.length > 0" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div *ngFor="let error of rejectCommentErrors">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+          </div>
+        </div>
         <div class="mb-3">
           <label class="form-label">
-            {{ i18n.getCurrentLocale() === 'fr' ? 'Raison du rejet' : 'Reason for Rejection' }}
+            {{ i18n.t('disbursements.rejectrequest.comment_label') }} <span class="text-danger">*</span>
           </label>
-          <textarea class="form-control" rows="4" [(ngModel)]="rejectComment" [ngModelOptions]="{standalone: true}"></textarea>
+          <textarea
+            class="form-control"
+            [class.is-invalid]="rejectCommentErrors.length > 0"
+            rows="4"
+            [(ngModel)]="rejectComment"
+            [ngModelOptions]="{standalone: true}"
+            [maxlength]="AppConstants.FormValidation.COMMENT.maxLength"
+            [minlength]="AppConstants.FormValidation.COMMENT.minLength"
+            [placeholder]="i18n.t('disbursements.rejectrequest.comment_placeholder')">
+          </textarea>
+          <small class="form-text text-muted">
+            {{ i18n.t('disbursements.rejectrequest.comment_help') }}
+          </small>
+          <div *ngIf="rejectCommentErrors.length > 0" class="invalid-feedback d-block">
+            {{ rejectCommentErrors[0] }}
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -757,11 +777,31 @@
         <button type="button" class="btn-close" (click)="showBackToClientModal = false"></button>
       </div>
       <div class="modal-body">
+        <div *ngIf="backToClientCommentErrors.length > 0" class="alert alert-danger alert-dismissible fade show" role="alert">
+          <div *ngFor="let error of backToClientCommentErrors">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error }}
+          </div>
+        </div>
         <div class="mb-3">
           <label class="form-label">
-            {{ i18n.getCurrentLocale() === 'fr' ? 'Commentaire' : 'Comment' }}
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Commentaire' : 'Comment' }} <span class="text-danger">*</span>
           </label>
-          <textarea class="form-control" rows="4" [(ngModel)]="backToClientComment" [ngModelOptions]="{standalone: true}"></textarea>
+
+          <textarea
+            class="form-control"
+            [class.is-invalid]="backToClientCommentErrors.length > 0"
+            rows="4"
+            [(ngModel)]="backToClientComment"
+            [ngModelOptions]="{standalone: true}"
+            maxlength="1500"
+            placeholder="{{ i18n.getCurrentLocale() === 'fr' ? 'Entrez au moins 10 caractères...' : 'Enter at least 10 characters...' }}">
+          </textarea>
+          <small class="form-text text-muted">
+            {{ i18n.getCurrentLocale() === 'fr' ? 'Minimum 10 caractères, maximum 1500 caractères' : 'Minimum 10 characters, maximum 1500 characters' }}
+          </small>
+          <div *ngIf="backToClientCommentErrors.length > 0" class="invalid-feedback d-block">
+            {{ backToClientCommentErrors[0] }}
+          </div>
         </div>
         <div class="mb-3">
           <label class="form-label">

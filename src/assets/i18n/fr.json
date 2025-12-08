@@ -767,6 +767,14 @@
       "currency_not_exist": "La devise n'existe pas",
       "disbursement_type_code_not_exist": "Le code du type de décaissement n'existe pas"
     },
+    "back_to_client": {
+      "comment_label": "Raison du Retour au Client"
+    },
+    "rejectrequest": {
+      "comment_label": "Raison du Rejet",
+      "comment_placeholder": "Veuillez fournir la raison du rejet de cette demande de décaissement...",
+      "comment_help": "Cette raison sera communiquée au client. Soyez clair et professionnel."
+    },
     "resubmit": {
       "button": "Resoumettre la Demande",
       "title": "Resoumettre la Demande de Décaissement",

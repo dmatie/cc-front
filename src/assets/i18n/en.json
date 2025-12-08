@@ -774,6 +774,14 @@
       "currency_not_exist": "The currency does not exist",
       "disbursement_type_code_not_exist": "The disbursement type code does not exist"
     },
+    "back_to_client": {
+      "comment_label": "Comment for returning to client"
+    },
+    "rejectrequest": {
+      "comment_label": "Rejection Reason",
+      "comment_placeholder": "Please provide the reason for rejecting this disbursement request...",
+      "comment_help": "This reason will be communicated to the client. Be clear and professional."
+    },
     "resubmit": {
       "button": "Resubmit Request",
       "title": "Resubmit Disbursement Request",
