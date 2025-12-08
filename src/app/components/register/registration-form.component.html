@@ -100,7 +100,7 @@
                       {{ isLoadingFunctions ? 'Chargement...' : i18n.t('registration_form.function_placeholder') }}
                     </option>
                     <option *ngFor="let func of functions" [value]="func.id">
-                      {{ func.name }}
+                      {{ getFunctionLabel(func) }}
                     </option>
                   </select>
                   <div class="position-absolute top-50 end-0 translate-middle-y me-3" *ngIf="isLoadingFunctions">
@@ -136,7 +136,7 @@
                         [disabled]="isLoadingFinancingTypes"
                       >
                       <label class="form-check-label fw-semibold" [for]="'financing-' + type.id">
-                        {{ type.name }}
+                        {{ getFinancingTypeLabel(type) }}
                       </label>
                     </div>
                   </div>
@@ -167,7 +167,7 @@
                       {{ isLoadingCountries ? 'Chargement...' : i18n.t('registration_form.country_placeholder') }}
                     </option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                   <div class="position-absolute top-50 end-0 translate-middle-y me-3" *ngIf="isLoadingCountries">
@@ -198,7 +198,7 @@
                       {{ isLoadingBusinessProfiles ? 'Chargement...' : i18n.t('registration_form.business_profile_placeholder') }}
                     </option>
                     <option *ngFor="let profile of businessProfiles" [value]="profile.id">
-                      {{ profile.name }}
+                      {{ getBusinessProfileLabel(profile) }}
                     </option>
                   </select>
                   <div class="position-absolute top-50 end-0 translate-middle-y me-3" *ngIf="isLoadingBusinessProfiles">

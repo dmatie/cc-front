@@ -192,4 +192,8 @@ export class ApprovedAccessRequestsListComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/internal/dashboard']);
   }
+
+  getCountryLabel(country: Country): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? country.nameFr : country.name;
+  }
 }

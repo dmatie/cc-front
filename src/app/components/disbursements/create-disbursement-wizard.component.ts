@@ -578,4 +578,8 @@ export class CreateDisbursementWizardComponent implements OnInit {
 
     return false;
   }
+
+  getCountryLabel(country: Country): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? country.nameFr : country.name;
+  }
 }

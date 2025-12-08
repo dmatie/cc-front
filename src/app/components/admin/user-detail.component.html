@@ -198,7 +198,7 @@
                     (change)="onCountrySelectionChange(country.id, $event)"
                   >
                   <label class="form-check-label" [for]="'country-add-' + country.id">
-                    {{ country.name }} - [{{ country.code }}]
+                    {{ getCountryLabel(country) }} - [{{ country.code }}]
                   </label>
                 </div>
               </div>

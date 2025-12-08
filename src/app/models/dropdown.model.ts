@@ -2,6 +2,7 @@ export interface Country {
   id: string; // GUID
   code: string;
   name: string;
+  nameFr: string;
   isActive: boolean;
 }
 
@@ -9,12 +10,14 @@ export interface FinancingType {
   id: string; // GUID
   code: string;
   name: string;
+  nameFr: string;
   isActive: boolean;
 }
 
 export interface UserFunction {
   id: string;
   name: string;
+  nameFr: string;
   description: string;
   isActive: boolean;
 }
@@ -22,6 +25,7 @@ export interface UserFunction {
 export interface BusinessProfile {
   id: string;
   name: string;
+  nameFr: string;
   description: string;
   isActive: boolean;
 }

@@ -139,7 +139,7 @@
                       [disabled]="isSaving"
                     >
                     <label class="form-check-label" [for]="'country-' + country.id">
-                      {{ country.name }} - [{{ country.code }}]
+                      {{ getCountryLabel(country) }} - [{{ country.code }}]
                     </label>
                   </div>
                 </div>

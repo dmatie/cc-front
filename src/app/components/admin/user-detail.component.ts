@@ -238,4 +238,8 @@ export class UserDetailComponent implements OnInit {
   dismissError(): void {
     this.errorMessage = '';
   }
+
+  getCountryLabel(country: Country): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? country.nameFr : country.name;
+  }
 }

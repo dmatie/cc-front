@@ -343,4 +343,20 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     return fn ? fn.name : '';
   }
 
+  getCountryLabel(country: Country): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? country.nameFr : country.name;
+  }
+
+  getBusinessProfileLabel(profile: BusinessProfile): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? profile.nameFr : profile.name;
+  }
+
+  getFinancingTypeLabel(type: FinancingType): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name;
+  }
+
+  getFunctionLabel(func: UserFunction): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? func.nameFr : func.name;
+  }
+
 }

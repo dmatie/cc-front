@@ -207,4 +207,8 @@ export class AddInternalUserModalComponent implements OnInit {
       this.close();
     }
   }
+
+  getCountryLabel(country: Country): string {
+    return this.i18n.getCurrentLocale() === 'fr' ? country.nameFr : country.name;
+  }
 }

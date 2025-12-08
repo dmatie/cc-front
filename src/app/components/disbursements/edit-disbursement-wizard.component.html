@@ -279,7 +279,7 @@
                   <select class="form-select" [(ngModel)]="command.disbursementA1.beneficiaryCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
@@ -336,7 +336,7 @@
                   <select class="form-select" [(ngModel)]="command.disbursementA1.correspondentBankCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
@@ -367,7 +367,7 @@
                   <select class="form-select" [(ngModel)]="command.disbursementA1.signatoryCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
@@ -477,7 +477,7 @@
                   <select class="form-select" name="goodOrginCountryId" required [(ngModel)]="command.disbursementA2.goodOrginCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
@@ -614,7 +614,7 @@
                   <select class="form-select" name="goodOrginCountryId3" required [(ngModel)]="command.disbursementA3.goodOrginCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
@@ -811,7 +811,7 @@
                   <select class="form-select" name="beneficiaryCountryId" required [(ngModel)]="command.disbursementB1.beneficiaryCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
@@ -881,7 +881,7 @@
                   <select class="form-select" name="executingAgencyCountryId" required [(ngModel)]="command.disbursementB1.executingAgencyCountryId">
                     <option value="">{{ i18n.t('disbursements.selectCountry') }}</option>
                     <option *ngFor="let country of countries" [value]="country.id">
-                      {{ country.name }}
+                      {{ getCountryLabel(country) }}
                     </option>
                   </select>
                 </div>
