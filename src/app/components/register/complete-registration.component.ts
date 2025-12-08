@@ -37,7 +37,7 @@ export class CompleteRegistrationComponent {
 
       const email = this.emailForm.get('email')?.value;
 
-      this.registrationService.getDraftRegistrationByEmail(email).subscribe({
+      this.registrationService.getRegistrationByEmail(email).subscribe({
         next: (registration) => {
           if (registration) {
             sessionStorage.setItem('completeRegistrationData', JSON.stringify(registration));

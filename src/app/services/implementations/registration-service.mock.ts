@@ -473,24 +473,6 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
     );
   }
 
-  getDraftRegistrationByEmail(email: string): Observable<RegistrationDetail | null> {
-    console.log('📧 [MOCK] Getting draft registration by email:', email);
-
-    return of(null).pipe(
-      delay(800),
-      map(() => {
-        for (const [storedEmail, detail] of this.mockRegistrationDetails.entries()) {
-          if (storedEmail === email.toLowerCase() && detail.accessRequest.status === MapAccessRequestModelStatusToApi('pending')) {
-            console.log('📋 [MOCK] Draft registration found');
-            return detail;
-          }
-        }
-        console.log('📋 [MOCK] No draft registration found');
-        return null;
-      })
-    );
-  }
-
   submitAccessRequest(id: string, registrationCode: string, document: File): Observable<RegistrationResponse> {
     console.log('📤 [MOCK] Submitting access request:', id);
 
