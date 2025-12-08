@@ -226,8 +226,20 @@
                   <small class="text-muted">Chargement des projets...</small>
                 </div>
                 
+                <!-- Select all projects button -->
+                <div class="mb-2" *ngIf="!isLoadingProjects && projects.length > 0">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-outline-primary"
+                    (click)="areAllProjectsSelected() ? deselectAllProjects() : selectAllProjects()"
+                  >
+                    <i class="bi" [class.bi-check-square]="areAllProjectsSelected()" [class.bi-square]="!areAllProjectsSelected()" ></i>
+                    {{ areAllProjectsSelected() ? (i18n.getCurrentLocale() === 'fr' ? 'Tout désélectionner' : 'Deselect all') : (i18n.getCurrentLocale() === 'fr' ? 'Tout sélectionner' : 'Select all') }}
+                  </button>
+                </div>
+
                 <!-- Projects list -->
-                <div class="border rounded p-3" *ngIf="!isLoadingProjects && projects.length > 0" 
+                <div class="border rounded p-3" *ngIf="!isLoadingProjects && projects.length > 0"
                      style="max-height: 300px; overflow-y: auto;">
                   <div class="row g-2">
                     <div class="col-12" *ngFor="let project of projects">

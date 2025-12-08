@@ -20,6 +20,7 @@ export const StatusMapper: Record<StatusEnum, StatusType> = {
 
 export interface ProjectRequest {
   sapCode: string;
+  projectTitle: string;
 }
 
 export interface RegistrationRequest {

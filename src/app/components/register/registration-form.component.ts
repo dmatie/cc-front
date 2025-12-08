@@ -216,6 +216,15 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
       formData.financingTypeName = this.getFinancingTypeName(formData.financingTypeId);
       formData.functionName = this.getFunctionName(formData.functionId);
 
+      // Créer un mapping de sapCode => projectName
+      formData.projectNames = {};
+      this.selectedProjectCodes.forEach(code => {
+        const project = this.projects.find(p => p.sapCode === code);
+        if (project) {
+          formData.projectNames[code] = project.projectName;
+        }
+      });
+
       const email = this.registrationForm.get('email')?.value;
 
       // Envoyer le code de vérification
@@ -257,6 +266,20 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
 
   isProjectSelected(projectCode: string): boolean {
     return this.selectedProjectCodes.includes(projectCode);
+  }
+
+  selectAllProjects(): void {
+    this.selectedProjectCodes = this.projects.map(p => p.sapCode);
+    this.registrationForm.patchValue({ selectedProjectCodes: this.selectedProjectCodes });
+  }
+
+  deselectAllProjects(): void {
+    this.selectedProjectCodes = [];
+    this.registrationForm.patchValue({ selectedProjectCodes: [] });
+  }
+
+  areAllProjectsSelected(): boolean {
+    return this.projects.length > 0 && this.selectedProjectCodes.length === this.projects.length;
   }
 
   goBack(): void {

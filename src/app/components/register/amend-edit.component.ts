@@ -248,7 +248,13 @@ export class AmendEditComponent implements OnInit, OnDestroy {
       this.submitError = '';
 
       // Convertir selectedProjectCodes en Projects avec le format attendu par l'API
-      const projects = this.selectedProjectCodes.map(code => ({ sapCode: code }));
+      const projects = this.selectedProjectCodes.map(code => {
+        const project = this.projects.find(p => p.sapCode === code);
+        return {
+          sapCode: code,
+          projectTitle: project?.projectName || ''
+        };
+      });
 
       const amendRequest: AmendRegistrationRequest = {
         id: this.registration.accessRequest.id,
@@ -317,6 +323,20 @@ export class AmendEditComponent implements OnInit, OnDestroy {
 
   isProjectSelected(projectCode: string): boolean {
     return this.selectedProjectCodes.includes(projectCode);
+  }
+
+  selectAllProjects(): void {
+    this.selectedProjectCodes = this.projects.map(p => p.sapCode);
+    this.amendForm.patchValue({ selectedProjectCodes: this.selectedProjectCodes });
+  }
+
+  deselectAllProjects(): void {
+    this.selectedProjectCodes = [];
+    this.amendForm.patchValue({ selectedProjectCodes: [] });
+  }
+
+  areAllProjectsSelected(): boolean {
+    return this.projects.length > 0 && this.selectedProjectCodes.length === this.projects.length;
   }
 
   goBack(): void {
