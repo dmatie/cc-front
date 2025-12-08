@@ -212,9 +212,13 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
         : [];
 
       formData.countryName = this.getCountryName(formData.countryId);
+      formData.countryNameFr = this.getCountryNameFr(formData.countryId);
       formData.businessProfileName = this.getBusinessProfileName(formData.businessProfileId);
+      formData.businessProfileNameFr = this.getBusinessProfileNameFr(formData.businessProfileId);
       formData.financingTypeName = this.getFinancingTypeName(formData.financingTypeId);
+      formData.financingTypeNameFr = this.getFinancingTypeNameFr(formData.financingTypeId);
       formData.functionName = this.getFunctionName(formData.functionId);
+      formData.functionNameFr = this.getFunctionNameFr(formData.functionId);
 
       // Créer un mapping de sapCode => projectName
       formData.projectNames = {};
@@ -328,9 +332,19 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     return country ? country.name : '';
   }
 
+  getCountryNameFr(id: string): string {
+    const country = this.countries.find(c => c.id === id);
+    return country ? country.nameFr : '';
+  }
+
   getBusinessProfileName(id: string): string {
     const bp = this.businessProfiles.find(b => b.id === id);
     return bp ? bp.name : '';
+  }
+
+  getBusinessProfileNameFr(id: string): string {
+    const bp = this.businessProfiles.find(b => b.id === id);
+    return bp ? bp.nameFr : '';
   }
 
   getFinancingTypeName(id: string): string {
@@ -338,9 +352,19 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
     return ft ? ft.name : '';
   }
 
+  getFinancingTypeNameFr(id: string): string {
+    const ft = this.financingTypes.find(f => f.id === id);
+    return ft ? ft.nameFr : '';
+  }
+
   getFunctionName(id: string): string {
     const fn = this.functions.find(f => f.id === id);
     return fn ? fn.name : '';
+  }
+
+  getFunctionNameFr(id: string): string {
+    const fn = this.functions.find(f => f.id === id);
+    return fn ? fn.nameFr : '';
   }
 
   getCountryLabel(country: Country): string {
