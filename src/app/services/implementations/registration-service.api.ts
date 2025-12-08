@@ -268,6 +268,35 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
+  getDraftRegistrationByEmail(email: string): Observable<RegistrationDetail | null> {
+    console.log('📧 [API] Getting draft registration by email:', email);
+
+    return this.http.get<RegistrationDetail>(`${this.apiUrl}/draft/by-email/${encodeURIComponent(email)}`).pipe(
+      timeout(this.timeout),
+      map(response => response),
+      catchError(error => {
+        if (error.status === 404) {
+          return of(null);
+        }
+        return throwError(() => this.errorHandler.handleApiError(error, 'RegistrationService'));
+      })
+    );
+  }
+
+  submitAccessRequest(id: string, registrationCode: string, document: File): Observable<RegistrationResponse> {
+    console.log('📤 [API] Submitting access request:', id);
+
+    const formData = new FormData();
+    formData.append('AccessRequestId', id);
+    formData.append('RegistrationCode', registrationCode);
+    formData.append('Document', document);
+
+    return this.http.post<RegistrationResponse>(`${this.apiUrl}/${id}/submit`, formData).pipe(
+      timeout(this.timeout),
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
+    );
+  }
+
   // MÉTHODES PRIVÉES
 
   private processResponse(response: RegistrationResponse): RegistrationResponse {

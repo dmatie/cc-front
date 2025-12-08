@@ -49,6 +49,9 @@
     "subtitle": "Access your projects, reports and services securely",
     "new_user": "New User",
     "new_user_desc": "Create your account to access AfDB services",
+    "complete_registration": "Complete Registration",
+    "complete_registration_desc": "You started an access request. Please complete your registration by submitting your signed form.",
+    "complete_registration_button": "Complete Registration",
     "existing_user": "Already a Member",
     "existing_user_desc": "Sign in with your Microsoft credentials",
     "register": "Register",
@@ -320,6 +323,63 @@
       "support_desc": "Contact our support team",
       "new_request_button": "Create New Request",
       "home_button": "Back to Home"
+    }
+  },
+  "complete": {
+    "email": {
+      "title": "Complete Your Registration",
+      "subtitle": "Finalize your access request",
+      "info_title": "What you need:",
+      "info_step1": "Your registration code (received by email)",
+      "info_step2": "Your signed authorization form (PDF)",
+      "info_step3": "A few minutes to complete the process",
+      "email_label": "Email Address",
+      "email_placeholder": "your@email.com",
+      "email_help": "Enter the email used for your initial request",
+      "submit": "Find my request",
+      "searching": "Searching...",
+      "back": "Back to Home",
+      "validation": {
+        "required": "Email is required",
+        "format": "Invalid email format"
+      },
+      "search_error": "Error while searching for your request",
+      "no_request_title": "No draft request found",
+      "no_request_message": "No pending request was found with this email address. Make sure you entered the correct email or start a new registration."
+    },
+    "review": {
+      "title": "Submit Your Request",
+      "subtitle": "Review your information and submit your signed form",
+      "required_title": "Required information:",
+      "required_code": "Your registration code (6 digits received by email)",
+      "required_document": "Your signed authorization form (PDF format)",
+      "personal_info": "Your Information",
+      "email": "Email",
+      "full_name": "Full Name",
+      "function": "Function",
+      "country": "Country",
+      "business_profile": "Business Profile",
+      "financing_type": "Financing Type",
+      "projects_count": "Selected Projects",
+      "projects": "projects",
+      "code_label": "Registration Code",
+      "code_placeholder": "123456",
+      "code_help": "Enter the 6-digit code received by email",
+      "document_label": "Signed Authorization Form",
+      "document_upload": "Click to upload your document",
+      "document_help": "PDF only, maximum 10 MB",
+      "document_selected": "Document selected",
+      "document_requirements": "Please upload your signed authorization form in PDF format (max 10 MB)",
+      "back": "Back",
+      "submit": "Submit Request",
+      "submitting": "Submitting...",
+      "validation": {
+        "code_required": "Registration code is required",
+        "code_length": "Code must be exactly 6 digits",
+        "pdf_only": "Only PDF files are allowed",
+        "file_too_large": "File size must not exceed 10 MB"
+      },
+      "submit_error": "Error submitting your request"
     }
   },
   "dashboard": {

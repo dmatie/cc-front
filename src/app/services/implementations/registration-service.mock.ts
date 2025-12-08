@@ -473,6 +473,70 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
     );
   }
 
+  getDraftRegistrationByEmail(email: string): Observable<RegistrationDetail | null> {
+    console.log('📧 [MOCK] Getting draft registration by email:', email);
+
+    return of(null).pipe(
+      delay(800),
+      map(() => {
+        for (const [storedEmail, detail] of this.mockRegistrationDetails.entries()) {
+          if (storedEmail === email.toLowerCase() && detail.accessRequest.status === MapAccessRequestModelStatusToApi('pending')) {
+            console.log('📋 [MOCK] Draft registration found');
+            return detail;
+          }
+        }
+        console.log('📋 [MOCK] No draft registration found');
+        return null;
+      })
+    );
+  }
+
+  submitAccessRequest(id: string, registrationCode: string, document: File): Observable<RegistrationResponse> {
+    console.log('📤 [MOCK] Submitting access request:', id);
+
+    return of(null).pipe(
+      delay(2000),
+      map(() => {
+        for (const [email, detail] of this.mockRegistrationDetails.entries()) {
+          if (detail.accessRequest.id === id) {
+            detail.accessRequest.status = MapAccessRequestModelStatusToApi('pending');
+            detail.accessRequest.submissionDate = new Date();
+            this.mockRegistrationDetails.set(email, detail);
+
+            const accessRequest: AccessRequest = {
+              id: detail.accessRequest.id,
+              email: detail.accessRequest.email,
+              firstName: detail.accessRequest.firstName,
+              lastName: detail.accessRequest.lastName,
+              status: 1,
+              requestedDate: detail.accessRequest.submissionDate.toISOString(),
+              functionId: detail.accessRequest.functionId,
+              countryId: detail.accessRequest.countryId,
+              businessProfileId: detail.accessRequest.businessProfileId,
+              financingTypeId: detail.accessRequest.financingTypeId,
+              functionName: detail.accessRequest.functionName || '',
+              countryName: detail.accessRequest.countryName || '',
+              businessProfileName: detail.accessRequest.businessProfileName || '',
+              financingTypeName: detail.accessRequest.financingTypeName || '',
+              approversEmail: ['admin@afdb.org'],
+              fullName: `${detail.accessRequest.firstName} ${detail.accessRequest.lastName}`,
+              canBeProcessed: true,
+              isProcessed: false,
+              hasEntraIdAccount: false
+            };
+
+            return {
+              accessRequest,
+              message: 'Demande soumise avec succès'
+            };
+          }
+        }
+
+        throw new Error('Demande d\'accès non trouvée');
+      })
+    );
+  }
+
   getApprovedAccessRequests(filters: {
     countryId?: string;
     projectCode?: string;

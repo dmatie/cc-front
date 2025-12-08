@@ -1,0 +1,97 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6">
+      <div class="card shadow-lg border-0 fade-in">
+        <div class="card-header text-white text-center py-4"
+             style="background: linear-gradient(135deg, var(--success-color), var(--forest-green));">
+          <div class="mb-3">
+            <div class="bg-white bg-opacity-20 rounded-circle d-inline-flex align-items-center justify-content-center"
+                 style="width: 80px; height: 80px;">
+              <i class="bi bi-file-earmark-check" style="font-size: 2.5rem;"></i>
+            </div>
+          </div>
+          <h3 class="mb-0">{{ i18n.t('complete.email.title') }}</h3>
+          <p class="mb-0 mt-2 opacity-75">{{ i18n.t('complete.email.subtitle') }}</p>
+        </div>
+
+        <div class="card-body p-5">
+          <!-- Info Box -->
+          <div class="info-box">
+            <h5>
+              <i class="bi bi-info-circle me-2"></i>
+              {{ i18n.t('complete.email.info_title') }}
+            </h5>
+            <ul>
+              <li>{{ i18n.t('complete.email.info_step1') }}</li>
+              <li>{{ i18n.t('complete.email.info_step2') }}</li>
+              <li>{{ i18n.t('complete.email.info_step3') }}</li>
+            </ul>
+          </div>
+
+          <form [formGroup]="emailForm" (ngSubmit)="onSubmit()">
+            <div class="mb-4">
+              <label for="email" class="form-label fw-semibold">
+                <i class="bi bi-envelope me-1 text-success"></i>
+                {{ i18n.t('complete.email.email_label') }}
+                <span class="text-danger">*</span>
+              </label>
+              <input
+                type="email"
+                class="form-control form-control-lg"
+                id="email"
+                formControlName="email"
+                [placeholder]="i18n.t('complete.email.email_placeholder')"
+                [class.is-invalid]="emailForm.get('email')?.invalid && emailForm.get('email')?.touched"
+              >
+              <div class="form-text">
+                <i class="bi bi-info-circle me-1"></i>
+                {{ i18n.t('complete.email.email_help') }}
+              </div>
+              <div class="invalid-feedback" *ngIf="emailForm.get('email')?.invalid && emailForm.get('email')?.touched">
+                <span *ngIf="emailForm.get('email')?.errors?.['required']">{{ i18n.t('complete.email.validation.required') }}</span>
+                <span *ngIf="emailForm.get('email')?.errors?.['email']">{{ i18n.t('complete.email.validation.format') }}</span>
+              </div>
+            </div>
+
+            <div class="d-flex gap-3 justify-content-between">
+              <button
+                type="button"
+                class="btn btn-outline-secondary btn-lg px-4"
+                (click)="goBack()"
+              >
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.t('complete.email.back') }}
+              </button>
+              <button
+                type="submit"
+                class="btn btn-success btn-lg px-4"
+                [disabled]="emailForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="loading-spinner me-2"></span>
+                <i class="bi bi-search me-2" *ngIf="!isSubmitting"></i>
+                {{ isSubmitting ? i18n.t('complete.email.searching') : i18n.t('complete.email.submit') }}
+              </button>
+            </div>
+          </form>
+
+          <!-- Message d'erreur -->
+          <div class="alert alert-danger mt-4 fade-in" *ngIf="errorMessage">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            {{ errorMessage }}
+          </div>
+
+          <!-- Message aucune demande trouvée -->
+          <div class="alert alert-info mt-4 fade-in" *ngIf="noRequestFound">
+            <div class="d-flex align-items-start">
+              <i class="bi bi-info-circle me-3" style="font-size: 1.5rem;"></i>
+              <div>
+                <h6 class="alert-heading mb-2">{{ i18n.t('complete.email.no_request_title') }}</h6>
+                <p class="mb-0">{{ i18n.t('complete.email.no_request_message') }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

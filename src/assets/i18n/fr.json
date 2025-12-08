@@ -49,6 +49,9 @@
     "subtitle": "Accédez à vos projets, rapports et services en toute sécurité",
     "new_user": "Nouvel Utilisateur",
     "new_user_desc": "Créez votre compte pour accéder aux services AfDB",
+    "complete_registration": "Compléter l'Enregistrement",
+    "complete_registration_desc": "Vous avez commencé une demande d'accès. Veuillez terminer votre enregistrement en soumettant votre formulaire signé.",
+    "complete_registration_button": "Compléter l'Enregistrement",
     "existing_user": "Déjà Membre",
     "existing_user_desc": "Connectez-vous avec vos identifiants Microsoft",
     "register": "S'enregistrer",
@@ -313,6 +316,63 @@
       "support_desc": "Contacter notre équipe de support",
       "new_request_button": "Créer une nouvelle demande",
       "home_button": "Retour à l'accueil"
+    }
+  },
+  "complete": {
+    "email": {
+      "title": "Compléter votre Enregistrement",
+      "subtitle": "Finalisez votre demande d'accès",
+      "info_title": "Ce dont vous avez besoin :",
+      "info_step1": "Votre code d'enregistrement (reçu par email)",
+      "info_step2": "Votre formulaire d'autorisation signé (PDF)",
+      "info_step3": "Quelques minutes pour compléter le processus",
+      "email_label": "Adresse email",
+      "email_placeholder": "votre@email.com",
+      "email_help": "Saisissez l'email utilisé lors de votre demande initiale",
+      "submit": "Trouver ma demande",
+      "searching": "Recherche...",
+      "back": "Retour à l'accueil",
+      "validation": {
+        "required": "L'email est requis",
+        "format": "Format d'email invalide"
+      },
+      "search_error": "Erreur lors de la recherche de votre demande",
+      "no_request_title": "Aucune demande en attente trouvée",
+      "no_request_message": "Aucune demande en attente n'a été trouvée avec cette adresse email. Assurez-vous d'avoir saisi le bon email ou démarrez un nouvel enregistrement."
+    },
+    "review": {
+      "title": "Soumettre votre Demande",
+      "subtitle": "Vérifiez vos informations et soumettez votre formulaire signé",
+      "required_title": "Informations requises :",
+      "required_code": "Votre code d'enregistrement (6 chiffres reçus par email)",
+      "required_document": "Votre formulaire d'autorisation signé (format PDF)",
+      "personal_info": "Vos Informations",
+      "email": "Email",
+      "full_name": "Nom complet",
+      "function": "Fonction",
+      "country": "Pays",
+      "business_profile": "Profil d'entreprise",
+      "financing_type": "Type de financement",
+      "projects_count": "Projets sélectionnés",
+      "projects": "projets",
+      "code_label": "Code d'enregistrement",
+      "code_placeholder": "123456",
+      "code_help": "Saisissez le code de 6 chiffres reçu par email",
+      "document_label": "Formulaire d'autorisation signé",
+      "document_upload": "Cliquez pour télécharger votre document",
+      "document_help": "PDF uniquement, maximum 10 Mo",
+      "document_selected": "Document sélectionné",
+      "document_requirements": "Veuillez télécharger votre formulaire d'autorisation signé en format PDF (max 10 Mo)",
+      "back": "Retour",
+      "submit": "Soumettre la demande",
+      "submitting": "Envoi...",
+      "validation": {
+        "code_required": "Le code d'enregistrement est requis",
+        "code_length": "Le code doit contenir exactement 6 chiffres",
+        "pdf_only": "Seuls les fichiers PDF sont acceptés",
+        "file_too_large": "La taille du fichier ne doit pas dépasser 10 Mo"
+      },
+      "submit_error": "Erreur lors de la soumission de votre demande"
     }
   },
   "dashboard": {

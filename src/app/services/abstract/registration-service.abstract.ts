@@ -116,4 +116,20 @@ export abstract class AbstractRegistrationService {
     pageNumber?: number;
     pageSize?: number;
   }): Observable<RegistrationResponseAll>;
+
+  /**
+   * Obtenir une demande d'accès en statut Draft par email
+   * @param email Adresse email
+   * @returns Observable avec les détails de la demande ou null si non trouvée
+   */
+  abstract getDraftRegistrationByEmail(email: string): Observable<RegistrationDetail | null>;
+
+  /**
+   * Soumettre une demande d'accès avec le formulaire signé
+   * @param id Identifiant de la demande
+   * @param registrationCode Code d'enregistrement reçu par email
+   * @param document Formulaire signé (PDF)
+   * @returns Observable avec la réponse
+   */
+  abstract submitAccessRequest(id: string, registrationCode: string, document: File): Observable<RegistrationResponse>;
 }

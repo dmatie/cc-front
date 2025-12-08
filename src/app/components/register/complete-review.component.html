@@ -1,0 +1,160 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="card shadow-lg border-0 fade-in">
+        <div class="card-header text-white text-center py-4"
+             style="background: linear-gradient(135deg, var(--success-color), var(--forest-green));">
+          <h3 class="mb-0">
+            <i class="bi bi-file-earmark-check me-2"></i>
+            {{ i18n.t('complete.review.title') }}
+          </h3>
+          <p class="mb-0 mt-2 opacity-75">{{ i18n.t('complete.review.subtitle') }}</p>
+        </div>
+
+        <div class="card-body p-5">
+          <!-- Required Information -->
+          <div class="required-info">
+            <h6>
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ i18n.t('complete.review.required_title') }}
+            </h6>
+            <ul>
+              <li>{{ i18n.t('complete.review.required_code') }}</li>
+              <li>{{ i18n.t('complete.review.required_document') }}</li>
+            </ul>
+          </div>
+
+          <!-- Registration Details -->
+          <div class="review-section" *ngIf="registrationData">
+            <h5>
+              <i class="bi bi-person-badge me-2"></i>
+              {{ i18n.t('complete.review.personal_info') }}
+            </h5>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.email') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.email }}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.full_name') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.firstName }} {{ registrationData.accessRequest.lastName }}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.function') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.functionName }}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.country') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.countryName }}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.business_profile') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.businessProfileName }}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.financing_type') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.financingTypeName }}</span>
+            </div>
+            <div class="review-row">
+              <span class="review-label">{{ i18n.t('complete.review.projects_count') }}</span>
+              <span class="review-value">{{ registrationData.accessRequest.selectedProjectCodes?.length || 0 }} {{ i18n.t('complete.review.projects') }}</span>
+            </div>
+          </div>
+
+          <!-- Submission Form -->
+          <form [formGroup]="submitForm" (ngSubmit)="onSubmit()">
+            <!-- Registration Code -->
+            <div class="mb-4">
+              <label for="registrationCode" class="form-label fw-semibold">
+                <i class="bi bi-key me-1 text-success"></i>
+                {{ i18n.t('complete.review.code_label') }}
+                <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                class="form-control form-control-lg text-center"
+                id="registrationCode"
+                formControlName="registrationCode"
+                [placeholder]="i18n.t('complete.review.code_placeholder')"
+                maxlength="6"
+                [class.is-invalid]="submitForm.get('registrationCode')?.invalid && submitForm.get('registrationCode')?.touched"
+              >
+              <div class="form-text">
+                <i class="bi bi-info-circle me-1"></i>
+                {{ i18n.t('complete.review.code_help') }}
+              </div>
+              <div class="invalid-feedback" *ngIf="submitForm.get('registrationCode')?.invalid && submitForm.get('registrationCode')?.touched">
+                <span *ngIf="submitForm.get('registrationCode')?.errors?.['required']">{{ i18n.t('complete.review.validation.code_required') }}</span>
+                <span *ngIf="submitForm.get('registrationCode')?.errors?.['minlength'] || submitForm.get('registrationCode')?.errors?.['maxlength']">{{ i18n.t('complete.review.validation.code_length') }}</span>
+              </div>
+            </div>
+
+            <!-- Document Upload -->
+            <div class="mb-4">
+              <label class="form-label fw-semibold">
+                <i class="bi bi-file-earmark-pdf me-1 text-success"></i>
+                {{ i18n.t('complete.review.document_label') }}
+                <span class="text-danger">*</span>
+              </label>
+              <div class="file-input-wrapper">
+                <input
+                  type="file"
+                  id="document"
+                  accept=".pdf"
+                  (change)="onFileSelected($event)"
+                >
+                <label
+                  for="document"
+                  class="file-input-label"
+                  [class.has-file]="selectedFile"
+                >
+                  <i class="bi file-icon" [class.bi-file-earmark-pdf]="selectedFile" [class.bi-cloud-upload]="!selectedFile"></i>
+                  <div class="file-info">
+                    <h6 *ngIf="!selectedFile">{{ i18n.t('complete.review.document_upload') }}</h6>
+                    <h6 *ngIf="selectedFile">{{ fileName }}</h6>
+                    <p *ngIf="!selectedFile">{{ i18n.t('complete.review.document_help') }}</p>
+                    <p *ngIf="selectedFile" class="text-success">
+                      <i class="bi bi-check-circle me-1"></i>
+                      {{ i18n.t('complete.review.document_selected') }}
+                    </p>
+                  </div>
+                </label>
+              </div>
+              <div class="form-text">
+                <i class="bi bi-info-circle me-1"></i>
+                {{ i18n.t('complete.review.document_requirements') }}
+              </div>
+            </div>
+
+            <!-- Error Message -->
+            <div class="alert alert-danger fade-in" *ngIf="errorMessage">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="d-flex gap-3 justify-content-between mt-4">
+              <button
+                type="button"
+                class="btn btn-outline-secondary btn-lg px-4"
+                (click)="goBack()"
+                [disabled]="isSubmitting"
+              >
+                <i class="bi bi-arrow-left me-2"></i>
+                {{ i18n.t('complete.review.back') }}
+              </button>
+              <button
+                type="submit"
+                class="btn btn-success btn-lg px-4"
+                [disabled]="submitForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="loading-spinner me-2"></span>
+                <i class="bi bi-check-circle me-2" *ngIf="!isSubmitting"></i>
+                {{ isSubmitting ? i18n.t('complete.review.submitting') : i18n.t('complete.review.submit') }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
