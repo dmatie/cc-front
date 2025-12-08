@@ -25,6 +25,12 @@ export class ConfidentialityComponent {
     }
   }
 
+  proceedToCompleteRegistration(): void {
+    if (this.agreementAccepted) {
+      this.router.navigate(['/register/complete']);
+    }
+  }
+
   goBack(): void {
     this.router.navigate(['/']);
   }

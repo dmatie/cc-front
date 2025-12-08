@@ -48,10 +48,7 @@
     "title": "Portail Client AfDB",
     "subtitle": "Accédez à vos projets, rapports et services en toute sécurité",
     "new_user": "Nouvel Utilisateur",
-    "new_user_desc": "Créez votre compte pour accéder aux services AfDB",
-    "complete_registration": "Compléter l'Enregistrement",
-    "complete_registration_desc": "Vous avez commencé une demande d'accès. Veuillez terminer votre enregistrement en soumettant votre formulaire signé.",
-    "complete_registration_button": "Compléter l'Enregistrement",
+    "new_user_desc": "Créez votre compte ou complétez votre enregistrement",
     "existing_user": "Déjà Membre",
     "existing_user_desc": "Connectez-vous avec vos identifiants Microsoft",
     "register": "S'enregistrer",
@@ -115,7 +112,8 @@
     "important_desc": "L'accès sera accordé aux membres du personnel nommés et autorisés par le client.",
     "agreement": "J'ai lu les informations ci-dessus et je comprends que je suis responsable de l'utilisation et de la protection du mot de passe.",
     "back": "Retour",
-    "continue": "Continuer"
+    "new_request": "Nouvelle Demande",
+    "complete_request": "Compléter Demande"
   },
   "registration_form": {
     "title": "Formulaire d'Enregistrement",

@@ -29,7 +29,7 @@
             </p>
           </div>
 
-          <!-- Blocs Nouvel utilisateur, Compléter enregistrement et Déjà membre -->
+          <!-- Blocs Nouvel utilisateur et Déjà membre -->
           <div class="row g-4 mb-5 justify-content-center" *ngIf="!isAuthenticated">
             <div class="col-md-4">
               <div class="user-action-card card h-100 border-0 shadow-sm">
@@ -44,25 +44,6 @@
                   </p>
                   <a routerLink="/register/confidentiality" class="btn btn-primary btn-lg w-100">
                     {{ i18n.t('home.register') }}
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-md-4">
-              <div class="user-action-card card h-100 border-0 shadow-sm border-warning" style="border-width: 2px !important;">
-                <div class="card-body text-center p-4">
-                  <div class="bg-warning bg-opacity-10 rounded-circle d-inline-flex align-items-center justify-content-center mb-3"
-                       style="width: 80px; height: 80px;">
-                    <i class="bi bi-file-earmark-check text-warning" style="font-size: 2.5rem;"></i>
-                  </div>
-                  <h5 class="text-warning mb-3">{{ i18n.t('home.complete_registration') }}</h5>
-                  <p class="text-muted mb-4 small">
-                    {{ i18n.t('home.complete_registration_desc') }}
-                  </p>
-                  <a routerLink="/register/complete" class="btn btn-warning btn-lg w-100">
-                    <i class="bi bi-arrow-right-circle me-2"></i>
-                    {{ i18n.t('home.complete_registration_button') }}
                   </a>
                 </div>
               </div>

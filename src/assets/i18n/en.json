@@ -48,10 +48,7 @@
     "title": "AfDB Client Portal",
     "subtitle": "Access your projects, reports and services securely",
     "new_user": "New User",
-    "new_user_desc": "Create your account to access AfDB services",
-    "complete_registration": "Complete Registration",
-    "complete_registration_desc": "You started an access request. Please complete your registration by submitting your signed form.",
-    "complete_registration_button": "Complete Registration",
+    "new_user_desc": "Create your account or complete your registration",
     "existing_user": "Already a Member",
     "existing_user_desc": "Sign in with your Microsoft credentials",
     "register": "Register",
@@ -115,7 +112,8 @@
     "important_desc": "Access will be granted to members of staff nominated and authorized by the client.",
     "agreement": "I have read the above information and understand that I am responsible for the use and protection of the password.",
     "back": "Back",
-    "continue": "Continue"
+    "new_request": "New Request",
+    "complete_request": "Complete Request"
   },
   "registration_form": {
     "title": "Registration Form",
