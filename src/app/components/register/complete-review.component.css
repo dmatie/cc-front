@@ -1,7 +1,6 @@
 :host {
   display: block;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .container {
@@ -92,42 +91,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.review-section {
-  background-color: #f8f9fa;
-  border-radius: 10px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.review-section h5 {
-  color: var(--success-color);
-  margin-bottom: 1rem;
-  font-weight: 600;
-}
-
-.review-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #dee2e6;
-}
-
-.review-row:last-child {
-  border-bottom: none;
-}
-
-.review-label {
-  font-weight: 600;
-  color: #495057;
-  flex: 0 0 40%;
-}
-
-.review-value {
-  color: #212529;
-  flex: 0 0 60%;
-  text-align: right;
 }
 
 .file-input-wrapper {

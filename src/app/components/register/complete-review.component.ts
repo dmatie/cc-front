@@ -5,11 +5,12 @@ import { Router } from '@angular/router';
 import { I18nService } from '../../services/i18n.service';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
 import { RegistrationDetail } from '../../models/registration.model';
+import { RequestDetailsComponent } from '../request/request-details.component';
 
 @Component({
   selector: 'app-complete-review',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RequestDetailsComponent],
   templateUrl: './complete-review.component.html',
   styleUrls: ['./complete-review.component.css']
 })
