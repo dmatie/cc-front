@@ -91,7 +91,7 @@ export class CompleteReviewComponent implements OnInit {
           sessionStorage.removeItem('completeRegistrationData');
           sessionStorage.setItem('registrationRequestId', response.accessRequest.id);
           sessionStorage.setItem('registrationMessage', response.message);
-          this.router.navigate(['/register/success']);
+          this.router.navigate(['/register/complete-success']);
         },
         error: (error) => {
           this.errorMessage = error.message || this.i18n.t('complete.review.submit_error');

@@ -42,6 +42,10 @@ export const routes: Routes = [
     path: 'register/complete-review',
     loadComponent: () => import('./components/register/complete-review.component').then(m => m.CompleteReviewComponent)
   },
+  {
+    path: 'register/complete-success',
+    loadComponent: () => import('./components/register/complete-success.component').then(m => m.CompleteSuccessComponent)
+  },
 
   // Routes pour le processus d'amendement
   { 

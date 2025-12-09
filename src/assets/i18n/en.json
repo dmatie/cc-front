@@ -207,6 +207,33 @@
     "next_steps_desc": "You will receive an email with your login credentials once your request is approved.",
     "home_button": "Back to Home"
   },
+  "complete_success": {
+    "title": "Request Submitted",
+    "subtitle": "Your access request has been submitted successfully",
+    "step": "Submission Complete",
+    "success_title": "Request submitted successfully!",
+    "request_number": "Request number:",
+    "message1": "Your access request has been submitted and will be reviewed by our team.",
+    "message2": "Please monitor your emails for updates on the process.",
+    "next_steps_title": "Next Steps",
+    "step1_title": "Request Review",
+    "step1_desc": "Our team will review your request and the provided documents to verify compliance.",
+    "step2_title": "Monitor Your Emails",
+    "step2_desc": "You will receive email notifications regarding the progress of your access request.",
+    "step3_title": "Microsoft Invitation",
+    "step3_desc": "If your request is approved, you will receive a Microsoft invitation email to configure your authentication.",
+    "step4_title": "Access Configuration",
+    "step4_desc": "Once your authentication is configured, your platform access will be activated and you will be able to log in.",
+    "signature": "The AfDB Team",
+    "admin": "Client Connection Administration",
+    "processing": "Processing",
+    "processing_time": "24-48 hours",
+    "notification": "Notification",
+    "notification_method": "By email",
+    "access": "Access",
+    "access_method": "Microsoft Invitation",
+    "home_button": "Back to Home"
+  },
   "amend": {
     "email": {
       "title": "Amend a Request",

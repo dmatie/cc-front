@@ -201,6 +201,33 @@
     "next_steps_desc": "Vous recevrez un email avec vos identifiants de connexion une fois votre demande approuvée.",
     "home_button": "Retour à l'accueil"
   },
+  "complete_success": {
+    "title": "Demande Soumise",
+    "subtitle": "Votre demande d'accès a été soumise avec succès",
+    "step": "Soumission complète",
+    "success_title": "Demande soumise avec succès !",
+    "request_number": "Numéro de demande :",
+    "message1": "Votre demande d'accès a été soumise et sera analysée par notre équipe.",
+    "message2": "Veuillez suivre vos emails pour connaître la suite du processus.",
+    "next_steps_title": "Prochaines étapes",
+    "step1_title": "Analyse de votre demande",
+    "step1_desc": "Notre équipe va analyser votre demande et les documents fournis pour vérifier leur conformité.",
+    "step2_title": "Suivez vos emails",
+    "step2_desc": "Vous recevrez des notifications par email concernant l'évolution de votre demande d'accès.",
+    "step3_title": "Invitation Microsoft",
+    "step3_desc": "Si votre demande est acceptée, vous recevrez un email d'invitation de Microsoft pour configurer votre authentification.",
+    "step4_title": "Configuration des accès",
+    "step4_desc": "Une fois votre authentification configurée, vos accès à la plateforme seront activés et vous pourrez vous connecter.",
+    "signature": "L'équipe AfDB",
+    "admin": "Administration Client Connection",
+    "processing": "Traitement",
+    "processing_time": "24-48 heures",
+    "notification": "Notification",
+    "notification_method": "Par email",
+    "access": "Accès",
+    "access_method": "Invitation Microsoft",
+    "home_button": "Retour à l'accueil"
+  },
   "amend": {
     "email": {
       "title": "Modifier une Demande",
