@@ -70,8 +70,9 @@ export class MockDropdownService extends AbstractDropdownService {
     { id: 'b4c5d6e7-f8g9-0123-bcde-456789012345', code: 'ZW', name: 'Zimbabwe', nameFr: 'Zimbabwe', isActive: true }
   ];
 
-  // MOCK USER FUNCTIONS
-  private mockFunctions: UserFunction[] = [
+
+  // MOCK BUSINESS PROFILES
+ private mockFunctions: UserFunction[] = [
     {
       id: '11111111-2222-3333-4444-555555555555',
       name: 'Project Accountant',

@@ -33,7 +33,7 @@ export const routes: Routes = [
     loadComponent: () => import('./components/register/registration-success.component').then(m => m.RegistrationSuccessComponent)
   },
 
-  // Routes pour compléter une demande d'accès en statut Draft
+    // Routes pour compléter une demande d'accès en statut Draft
   {
     path: 'register/complete',
     loadComponent: () => import('./components/register/complete-registration.component').then(m => m.CompleteRegistrationComponent)
@@ -43,10 +43,9 @@ export const routes: Routes = [
     loadComponent: () => import('./components/register/complete-review.component').then(m => m.CompleteReviewComponent)
   },
   {
-    path: 'register/complete-success',
+      path: 'register/complete-success',
     loadComponent: () => import('./components/register/complete-success.component').then(m => m.CompleteSuccessComponent)
   },
-
   // Routes pour le processus d'amendement
   { 
     path: 'register/amend', 

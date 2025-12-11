@@ -325,7 +325,7 @@ export class AmendEditComponent implements OnInit, OnDestroy {
     return this.selectedProjectCodes.includes(projectCode);
   }
 
-  selectAllProjects(): void {
+   selectAllProjects(): void {
     this.selectedProjectCodes = this.projects.map(p => p.sapCode);
     this.amendForm.patchValue({ selectedProjectCodes: this.selectedProjectCodes });
   }

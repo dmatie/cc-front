@@ -45,6 +45,7 @@
                 class="form-control form-control-lg text-center"
                 id="registrationCode"
                 formControlName="registrationCode"
+                style="font-size: 1.5rem; letter-spacing: 0.5rem;"
                 [placeholder]="i18n.t('complete.review.code_placeholder')"
                 maxlength="6"
                 [class.is-invalid]="submitForm.get('registrationCode')?.invalid && submitForm.get('registrationCode')?.touched"

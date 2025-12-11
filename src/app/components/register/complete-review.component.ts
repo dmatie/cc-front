@@ -16,6 +16,7 @@ import { RequestDetailsComponent } from '../request/request-details.component';
 })
 export class CompleteReviewComponent implements OnInit {
   registrationData: RegistrationDetail | null = null;
+  registrationForView : any;
   submitForm: FormGroup;
   isSubmitting = false;
   errorMessage = '';
@@ -43,6 +44,17 @@ export class CompleteReviewComponent implements OnInit {
 
     try {
       this.registrationData = JSON.parse(savedData);
+      this.registrationForView = this.registrationData;
+      this.registrationForView.accessRequest.projectNames = {};
+
+      this.registrationData?.accessRequest.selectedProjectCodes.forEach(code => {
+        const project = this.registrationData?.accessRequest.projects?.find(p => p.sapCode === code);
+        if (project) {
+          this.registrationForView.accessRequest.projectNames[code] = project.projectTitle;
+        }
+      });
+
+
     } catch (error) {
       console.error('Error parsing registration data:', error);
       this.router.navigate(['/register/complete']);

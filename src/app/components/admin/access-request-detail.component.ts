@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { AbstractRegistrationService } from '../../services/abstract/registration-service.abstract';
 import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
-import { ApproveRequest, RegistrationDetail, RejectRequest, StatusEnum } from '../../models/registration.model';
+import { AccessRequestDocumentDto, ApproveRequest, RegistrationDetail, RejectRequest, StatusEnum } from '../../models/registration.model';
 import { RequestDetailsComponent } from '../request/request-details.component';
 import { RejectModalComponent } from '../shared/reject-modal.component';
 
@@ -25,6 +25,7 @@ export class AccessRequestDetailComponent implements OnInit {
   isProcessing = false;
   showRejectModal = false;
   isPending = false;
+ uploadedDocument: AccessRequestDocumentDto | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,12 +52,26 @@ export class AccessRequestDetailComponent implements OnInit {
         if (registration) {
           this.registration = registration;
           this.registrationViewData = registration.accessRequest;
+
+      this.registrationViewData.projectNames = {};
+
+      this.registration?.accessRequest.selectedProjectCodes.forEach(code => {
+        const project = this.registration?.accessRequest.projects?.find(p => p.sapCode === code);
+        if (project) {
+          this.registrationViewData.projectNames[code] = project.projectTitle;
+        }
+      });
+
+
+       if (registration.accessRequest.documents && registration.accessRequest.documents.length > 0) {
+            this.uploadedDocument = registration.accessRequest.documents[0];
+          }
+
+
           this.isPending = registration.accessRequest.status === StatusEnum.Pending;
 
           if (!this.isPending) {
-            this.errorMessage = this.i18n.getCurrentLocale() === 'fr'
-              ? 'Cette demande a déjà été traitée et ne peut plus être approuvée ou rejetée.'
-              : 'This request has already been processed and can no longer be approved or rejected.';
+            this.errorMessage = this.i18n.t('admin.access_request_detail.already_processed');
           }
         } else {
           this.errorMessage = this.i18n.t('admin.access_request_detail.not_found');
@@ -178,5 +193,29 @@ export class AccessRequestDetailComponent implements OnInit {
       default:
         return isFr ? 'Inconnu' : 'Unknown';
     }
+  }
+
+    downloadDocument(): void {
+    if (!this.requestId) {
+      return;
+    }
+
+    this.registrationService.downloadSignedForm(this.requestId).subscribe({
+      next: (blob) => {
+        const fileName = this.uploadedDocument?.fileName || 'signed-form.pdf';
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: (error) => {
+        console.error('Error downloading document:', error);
+        this.errorMessage = this.i18n.getCurrentLocale() === 'fr'
+          ? 'Erreur lors du téléchargement du document'
+          : 'Error downloading document';
+      }
+    });
   }
 }

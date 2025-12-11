@@ -20,7 +20,8 @@ export const environment = {
         key: 'Pzgq08B00AhKkVVA3cfmAJnk1EtgLPbn29cltULMlVs=',
         neverEncryptPaths: [
             '/api/disbursements',
-            '/api/accessrequests/*/submit'
+            '/api/accessrequests/*/submit',
+            '/api/accessrequests/downloadsignedform'
         ]
     }
 };

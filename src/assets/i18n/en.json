@@ -35,8 +35,9 @@
     "quickActions": "Quick Actions",
     "browse": "Browse",
     "remove": "Remove",
+    "select_all": "Select all",
     "characters": "characters",
-    "validation_errors":{
+    "validation_errors": {
       "required": "Ce champ est requis",
       "minlength": "La longueur minimale est de {{min}} caractères",
       "maxlength": "La longueur maximale est de {{max}} caractères",
@@ -48,26 +49,37 @@
     "title": "AfDB Client Portal",
     "subtitle": "Access your projects, reports and services securely",
     "new_user": "New User",
-    "new_user_desc": "Create your account or complete your registration",
+    "new_user_desc": "Create your account or finalize your registration",
     "existing_user": "Already a Member",
     "existing_user_desc": "Sign in with your Microsoft credentials",
     "register": "Register",
     "login": "Sign in with Microsoft",
     "secured_connection": "Secured connection via Microsoft",
-    "microsoft_connection":"Microsoft connection",
-    "microsoft_connection_desc":"Use your Microsoft credentials to access your AfDB client portal",
+    "microsoft_connection": "Microsoft connection",
+    "microsoft_connection_desc": "Use your Microsoft credentials to access your AfDB client portal",
     "amend_request": "Amend a request",
     "approval_process": "Approval Process",
     "info": "All registration requests are subject to an approval process to ensure the security of our systems.",
     "features": {
-      "our_services":"Our Services",
-      "our_services_desc":"Discover the tools available to you",
+      "our_services": "Our Services",
+      "our_services_desc": "Discover the tools available to you",
       "reports": "Financial Reports",
       "reports_desc": "Access your financial reports and documents",
       "claims": "Customer Support",
       "claims_desc": "Submit your claims and assistance requests",
       "withdrawals": "Disbursement Management",
       "withdrawals_desc": "Manage your disbursement requests"
+    },
+    "footer":{
+      "useful_links": "Useful Links",
+      "resources": "Resources",
+      "contacts": "Contacts",
+      "user_manual": "User Manual",
+      "faq": "Frequently Asked Questions",
+      "disbursement_handbook": "Disbursment handbook",
+      "debt_servicing_handbook": "Debt servicing handbook",
+      "email": "Email",
+      "helpdesk": "Helpdesk"
     }
   },
   "login": {
@@ -112,6 +124,7 @@
     "important_desc": "Access will be granted to members of staff nominated and authorized by the client.",
     "agreement": "I have read the above information and understand that I am responsible for the use and protection of the password.",
     "back": "Back",
+    "continue": "Continue",
     "new_request": "New Request",
     "complete_request": "Complete Request"
   },
@@ -128,10 +141,12 @@
     "country_placeholder": "Select your country",
     "business_profile": "Business Profile",
     "business_profile_placeholder": "Select your profile",
-    "financing_type": "Financing Type",
+    "financing_type": "Organization Type",
     "projects_requested": "Requested Projects",
     "submit": "Submit Request",
     "submitting": "Submitting...",
+    "select_all": "Select all",
+    "deselect_all": "Deselect all",
     "back": "Back",
     "validation": {
       "email": "Valid email required",
@@ -140,7 +155,7 @@
       "function": "Function required",
       "country": "Country required",
       "business_profile": "Business profile required",
-      "financing_type": "Financing type required",
+      "financing_type": "Organization Type required",
       "projects": "At least one project must be selected",
       "email_required": "Email is required",
       "email_format": "Invalid email format"
@@ -156,7 +171,7 @@
     "function": "Function",
     "country": "Country",
     "business_profile": "Business profile",
-    "financing_type": "Financing type",
+    "financing_type": "Organization Type",
     "selected_projects": "Selected projects",
     "submitted": "Submitted on",
     "status": "Status",
@@ -179,7 +194,7 @@
     "function": "Function",
     "country": "Country",
     "business_profile": "Business Profile",
-    "financing_type": "Financing Type",
+    "financing_type": "Organization Type",
     "projects_requested": "Requested Projects",
     "business_justification": "Business Justification",
     "edit": "Edit",
@@ -189,12 +204,12 @@
     "missing_data": "Registration data is missing. Please start the process again."
   },
   "registration_success": {
-    "title": "Request Sent",
+    "title": "Request Submitted",
     "subtitle": "Your access request has been submitted successfully",
     "step": "Step 4 of 4 - Confirmation",
     "success_title": "Request submitted successfully!",
     "message1": "Your access request has been sent to our security team.",
-    "message2": "You will receive a confirmation email once your account is approved.",
+    "message2": "You will receive an email with your registration code and the authorization form to be signed.",
     "signature": "The AfDB Team",
     "admin": "Client Connection Administration",
     "processing": "Processing",
@@ -205,7 +220,16 @@
     "access_method": "Secure credentials",
     "next_steps": "Next steps:",
     "next_steps_desc": "You will receive an email with your login credentials once your request is approved.",
-    "home_button": "Back to Home"
+    "home_button": "Back to Home",
+    "registration_code": "Registration Code",
+    "receive_code": "Receive registration code",
+    "receive_code_desc": "You will receive by email a registration code along with an authorization form.",
+    "form_signature": "Authorization form signature",
+    "form_signature_desc": "Have the authorization form signed by authorized persons in your organization.",
+    "submit_form": "Upload the signed form",
+    "submit_form_desc": "Send the signed authorization form to our security team to finalize the approval process.",
+    "sign_process": "signature",
+    "sign_process_desc": "Authorization form"
   },
   "complete_success": {
     "title": "Request Submitted",
@@ -245,6 +269,8 @@
       "submit": "Search my request",
       "searching": "Searching...",
       "back": "Back",
+      "select_all": "Select all",
+      "deselect_all": "Deselect all",
       "validation": {
         "required": "Email is required",
         "format": "Invalid email format"
@@ -254,7 +280,6 @@
       "no_request_title": "No request found",
       "no_request_message": "No rejected access request was found with this email.",
       "create_new": "Create a new request"
-
     },
     "otp": {
       "title": "Verification Code",
@@ -262,7 +287,7 @@
       "step": "Step 2 of 4 - Verification",
       "code_sent": "A verification code has been sent to",
       "code_label": "Verification Code",
-      "code_placeholder": "123456",
+      "code_placeholder": "------",
       "code_help": "Enter the 6-digit code received by email",
       "submit": "Verify Code",
       "verifying": "Verifying...",
@@ -289,7 +314,7 @@
       "function": "Function",
       "country": "Country",
       "business_profile": "Business profile",
-      "financing_type": "Financing type",
+      "financing_type": "Organization Type",
       "selected_projects": "Selected projects",
       "submitted": "Submitted on",
       "rejected": "Rejected on",
@@ -302,7 +327,6 @@
       "abandoning": "Abandoning...",
       "loading": "Loading details...",
       "home_button": "Home"
-
     },
     "edit": {
       "title": "Edit Request",
@@ -318,7 +342,7 @@
       "country_placeholder": "Select your country",
       "business_profile": "Business Profile",
       "business_profile_placeholder": "Select your profile",
-      "financing_type": "Financing Type",
+      "financing_type": "Organization Type",
       "financing_type_placeholder": "Select the type",
       "projects": "Requested Projects",
       "loading_projects": "Loading projects...",
@@ -333,7 +357,7 @@
         "function": "Function required",
         "country": "Country required",
         "business_profile": "Business profile required",
-        "financing_type": "Financing type required",
+        "financing_type": "Organization Type required",
         "projects": "At least one project must be selected"
       }
     },
@@ -384,11 +408,11 @@
       "function": "Function",
       "country": "Country",
       "business_profile": "Business Profile",
-      "financing_type": "Financing Type",
+      "financing_type": "Organization Type",
       "projects_count": "Selected Projects",
       "projects": "projects",
       "code_label": "Registration Code",
-      "code_placeholder": "123456",
+      "code_placeholder": "_ _ _ _ _ _",
       "code_help": "Enter the 6-digit code received by email",
       "document_label": "Signed Authorization Form",
       "document_upload": "Click to upload your document",
@@ -561,7 +585,7 @@
       "function": "Function",
       "country": "Country",
       "businessProfile": "Business Profile",
-      "financingType": "Financing Type"
+      "financingType": "Organization Type"
     },
     "status": {
       "pending": "Pending",
@@ -691,7 +715,7 @@
     "function_required": "Position is required",
     "country_required": "Country is required",
     "business_profile_required": "Business profile is required",
-    "financing_type_required": "Financing type is required",
+    "financing_type_required": "Organization Type is required",
     "invalid_credentials": "Invalid credentials",
     "account_locked": "Account locked",
     "token_expired": "Session expired",
@@ -710,7 +734,7 @@
     "business_error": "Business error",
     "unexpected_error": "An unexpected error occurred",
     "missing_ad_group": "User is missing required AD group",
-    "file":{
+    "file": {
       "null": "File is null",
       "name_empty": "File name is empty",
       "empty": "File is empty",
@@ -718,9 +742,12 @@
       "extension_not_allowed": "File extension not allowed",
       "mimetype_not_allowed": "File MIME type not allowed"
     },
-    "access_request":{
-      "email_already_exists":"An access request with this email already exists",  
-      "request_not_found":"Access request not found"
+    "access_request": {
+      "email_already_exists": "An access request with this email already exists",
+      "request_not_found": "Access request not found",
+      "document_required": "Signed document is required",
+      "only_pdf_allowed": "Only PDF files are allowed",
+      "code_not_found": "Access request code not found"
     },
     "fileTooLarge": "Le fichier '{fileName}' est trop volumineux ({size} Mo). La taille maximale autorisée est de {maxSize} Mo.",
     "fileTypeNotAllowed": "Le fichier '{fileName}' a un format non supporté. Seuls les fichiers PDF, Word et Excel sont autorisés."
@@ -736,7 +763,7 @@
       "table": {
         "name": "Name",
         "email": "Email",
-        "financing_type": "Financing Type",
+        "financing_type": "Organization Type",
         "submission_date": "Submission Date",
         "status": "Status",
         "actions": "Actions"
@@ -759,7 +786,11 @@
       "approve_success": "The request has been successfully approved",
       "reject_success": "The request has been rejected",
       "approve_error": "Error approving request",
-      "reject_error": "Error rejecting request"
+      "reject_error": "Error rejecting request",
+      "already_processed": "This request has already been processed and can no longer be approved or rejected.",
+      "uploaded_document_title": "Signed Authorization Form",
+      "uploaded_document_desc": "Signed PDF document submitted with the request",
+      "download_button": "Download"
     },
     "reject_modal": {
       "title": "Reject Request",

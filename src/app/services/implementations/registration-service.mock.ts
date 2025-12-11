@@ -40,9 +40,14 @@ export class MockRegistrationService extends AbstractRegistrationService {
       submissionDate: new Date('2024-01-15'),
       processedDate: new Date('2024-01-18'),
       functionName: 'Project Accountant',
+      functionNameFr: 'Comptable de projet',
       countryName: 'Algeria',
+      countryNameFr: 'Algérie',
       businessProfileName: 'Government Agency',
-      financingTypeName: 'Public'
+      businessProfileNameFr: 'Agence gouvernementale',
+      financingTypeName: 'Public',
+      financingTypeNameFr: 'Public',
+      projects :[]
     };
 
     const rejectedRequestDeatil: RegistrationDetail = {
@@ -83,22 +88,18 @@ export class MockRegistrationService extends AbstractRegistrationService {
           businessProfileId: request.businessProfileId,
           financingTypeId: request.financingTypeId,
           functionName: this.getMockFunctionName(request.functionId),
-          functionNameFr: this.getMockFunctionName(request.functionId),
           countryName: this.getMockCountryName(request.countryId),
-          countryNameFr: this.getMockCountryName(request.countryId),
           businessProfileName: this.getMockBusinessProfileName(request.businessProfileId),
-          businessProfileNameFr: this.getMockBusinessProfileName(request.businessProfileId),
           financingTypeName: this.getMockFinancingTypeName(request.financingTypeId),
-          financingTypeNameFr: this.getMockFinancingTypeName(request.financingTypeId),
           approversEmail: ['admin@afdb.org', 'supervisor@afdb.org'],
           fullName: `${request.firstName} ${request.lastName}`,
           canBeProcessed: true,
           isProcessed: false,
           hasEntraIdAccount: false,
           selectedProjectCodes: request.selectedProjectCodes || [],
-          registrationCode: this.generateRegistrationCode(),
-          projects: request.Projects || [],
+          projects:  [],
           documents: [],
+          registrationCode: ''
         };
         
         // Stocker la demande pour le suivi
@@ -119,6 +120,18 @@ export class MockRegistrationService extends AbstractRegistrationService {
 
         console.log('✅ [MOCK] Registration submitted successfully:', response);
         return response;
+      })
+    );
+  }
+
+  downloadSignedForm(requestId: string): Observable<Blob> {
+    console.log('📥 [MOCK] Downloading signed form for request:', requestId);
+
+    return of(null).pipe(
+      delay(500),
+      map(() => {
+        const pdfContent = '%PDF-1.4\n1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /Resources << /Font << /F1 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >> >> >> /MediaBox [0 0 612 792] /Contents 4 0 R >>\nendobj\n4 0 obj\n<< /Length 44 >>\nstream\nBT\n/F1 12 Tf\n100 700 Td\n(Mock Signed Form) Tj\nET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f\n0000000009 00000 n\n0000000056 00000 n\n0000000115 00000 n\n0000000310 00000 n\ntrailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n404\n%%EOF';
+        return new Blob([pdfContent], { type: 'application/pdf' });
       })
     );
   }
@@ -463,22 +476,18 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
           businessProfileId: request.businessProfileId,
           financingTypeId: request.financingTypeId,
           functionName: this.getMockFunctionName(request.functionId),
-          functionNameFr: this.getMockFunctionName(request.functionId),
           countryName: this.getMockCountryName(request.countryId),
-          countryNameFr: this.getMockCountryName(request.countryId),
           businessProfileName: this.getMockBusinessProfileName(request.businessProfileId),
-          businessProfileNameFr: this.getMockBusinessProfileName(request.businessProfileId),
           financingTypeName: this.getMockFinancingTypeName(request.financingTypeId),
-          financingTypeNameFr: this.getMockFinancingTypeName(request.financingTypeId),
           approversEmail: ['admin@afdb.org'],
           fullName: `${request.firstName} ${request.lastName}`,
           canBeProcessed: true,
           isProcessed: false,
           hasEntraIdAccount: false,
           selectedProjectCodes: request.selectedProjectCodes || [],
-          registrationCode: this.generateRegistrationCode(),
-          projects: request.Projects || [],
+          projects:  [],
           documents: [],
+          registrationCode: ''
         };
         
         return {
@@ -513,22 +522,18 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
               businessProfileId: detail.accessRequest.businessProfileId,
               financingTypeId: detail.accessRequest.financingTypeId,
               functionName: detail.accessRequest.functionName || '',
-              functionNameFr: detail.accessRequest.functionNameFr || '',
               countryName: detail.accessRequest.countryName || '',
-              countryNameFr: detail.accessRequest.countryNameFr || '',
               businessProfileName: detail.accessRequest.businessProfileName || '',
-              businessProfileNameFr: detail.accessRequest.businessProfileNameFr || '',
               financingTypeName: detail.accessRequest.financingTypeName || '',
-              financingTypeNameFr: detail.accessRequest.financingTypeNameFr || '',
               approversEmail: ['admin@afdb.org'],
               fullName: `${detail.accessRequest.firstName} ${detail.accessRequest.lastName}`,
               canBeProcessed: true,
               isProcessed: false,
               hasEntraIdAccount: false,
               selectedProjectCodes: detail.accessRequest.selectedProjectCodes || [],
-              registrationCode: detail.accessRequest.registrationCode || this.generateRegistrationCode(),
-              projects: detail.accessRequest.projects || [],
-              documents: detail.accessRequest.documents || [],
+              projects:  [],
+              documents: [],
+              registrationCode: registrationCode
             };
 
             return {
@@ -569,9 +574,14 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
             submissionDate: new Date('2024-01-10'),
             processedDate: new Date('2024-01-12'),
             functionName: 'Project Accountant',
+            functionNameFr: 'Comptable de projet',
             countryName: 'Morocco',
+            countryNameFr: 'Maroc',
             businessProfileName: 'Government Agency',
-            financingTypeName: 'Public'
+            businessProfileNameFr: 'Agence gouvernementale',
+            financingTypeName: 'Public',
+            financingTypeNameFr: 'Public',
+            projects :[]
           },
           {
             id: 'REQ-APPROVED-002',
@@ -587,9 +597,14 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
             submissionDate: new Date('2024-01-08'),
             processedDate: new Date('2024-01-10'),
             functionName: 'Project Manager',
+            functionNameFr: 'Chef de projet',
             countryName: 'Tunisia',
+            countryNameFr: 'Tunisie',
             businessProfileName: 'Public Institution',
-            financingTypeName: 'Public'
+            businessProfileNameFr: 'Institution publique',
+            financingTypeName: 'Public',
+            financingTypeNameFr: 'Public',
+            projects: []
           }
         ];
 
@@ -630,12 +645,6 @@ getAllRegistrations(filter?: { status?: string; dateFrom?: Date; dateTo?: Date; 
     const timestamp = Date.now().toString(36);
     const random = Math.random().toString(36).substr(2, 5);
     return `REQ-${timestamp}-${random}`.toUpperCase();
-  }
-
-  private generateRegistrationCode(): string {
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 5);
-    return `REG-${timestamp}-${random}`.toUpperCase();
   }
 
   private getMockFunctionName(functionId: string): string {

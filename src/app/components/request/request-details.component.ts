@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { I18nService } from '../../services/i18n.service';
+import { AbstractProjectsService } from '../../services/abstract/projects-service.abstract';
 import { LocalizedFieldPipe } from '../../core/utils/localized-field.pipe';
 
 @Component({

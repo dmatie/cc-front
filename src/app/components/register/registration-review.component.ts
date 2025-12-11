@@ -71,7 +71,7 @@ export class RegistrationReviewComponent implements OnInit {
     }
   }
 
-    goHome(): void {
+  goHome(): void {
     this.router.navigate(['/home']);
   }
 
@@ -123,7 +123,7 @@ export class RegistrationReviewComponent implements OnInit {
     }
 
     // Convertir selectedProjectCodes en Projects avec le format attendu par l'API
-    const projects = selectedProjectCodes.map(code => {
+     const projects = selectedProjectCodes.map(code => {
       const projectName = this.registration.projectNames?.[code] || '';
       return {
         sapCode: code,

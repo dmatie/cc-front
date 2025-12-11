@@ -125,4 +125,11 @@ export abstract class AbstractRegistrationService {
    * @returns Observable avec la réponse
    */
   abstract submitAccessRequest(id: string, registrationCode: string, document: File): Observable<RegistrationResponse>;
+
+  /**
+   * Télécharger le formulaire d'autorisation signé
+   * @param requestId Identifiant de la demande
+   * @returns Observable avec le fichier PDF
+   */
+  abstract downloadSignedForm(requestId: string): Observable<Blob>;
 }

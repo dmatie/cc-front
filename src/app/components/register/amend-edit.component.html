@@ -95,7 +95,7 @@
                 >
                   <option value="">{{ i18n.t('amend.edit.function_placeholder') }}</option>
                   <option *ngFor="let func of functions" [value]="func.id">
-                    {{ getFunctionLabel(func) }}
+                    {{  getFunctionLabel(func) }}
                   </option>
                 </select>
               </div>
@@ -114,7 +114,7 @@
                 >
                   <option value="">{{ i18n.t('amend.edit.financing_type_placeholder') }}</option>
                   <option *ngFor="let type of financingTypes" [value]="type.id">
-                    {{ getFinancingTypeLabel(type) }}
+                    {{  getFinancingTypeLabel(type) }}
                   </option>
                 </select>
               </div>
@@ -136,7 +136,7 @@
                 >
                   <option value="">{{ i18n.t('amend.edit.country_placeholder') }}</option>
                   <option *ngFor="let country of countries" [value]="country.id">
-                    {{ getCountryLabel(country) }}
+                    {{  getCountryLabel(country) }}
                   </option>
                 </select>
               </div>
@@ -155,7 +155,7 @@
                 >
                   <option value="">{{ i18n.t('amend.edit.business_profile_placeholder') }}</option>
                   <option *ngFor="let profile of businessProfiles" [value]="profile.id">
-                    {{ getBusinessProfileLabel(profile) }}
+                    {{  getBusinessProfileLabel(profile) }}
                   </option>
                 </select>
               </div>
@@ -174,7 +174,7 @@
                   <small class="text-muted">{{ i18n.t('amend.edit.loading_projects') }}</small>
                 </div>
                 
-                <!-- Select all projects button -->
+              <!-- Select all projects button -->
                 <div class="mb-2" *ngIf="!isLoadingProjects && projects.length > 0">
                   <button
                     type="button"
@@ -182,12 +182,12 @@
                     (click)="areAllProjectsSelected() ? deselectAllProjects() : selectAllProjects()"
                   >
                     <i class="bi" [class.bi-check-square]="areAllProjectsSelected()" [class.bi-square]="!areAllProjectsSelected()"></i>
-                    {{ areAllProjectsSelected() ? (i18n.getCurrentLocale() === 'fr' ? 'Tout désélectionner' : 'Deselect all') : (i18n.getCurrentLocale() === 'fr' ? 'Tout sélectionner' : 'Select all') }}
+                    {{ areAllProjectsSelected() ? ( i18n.t('amend.edit.deselect_all')) : (i18n.t('amend.edit.select_all')) }}
                   </button>
                 </div>
 
                 <div class="border rounded p-3" *ngIf="!isLoadingProjects && projects.length > 0"
-                     style="max-height: 300px; overflow-y: auto;">
+                  style="max-height: 300px; overflow-y: auto;">
                   <div class="row g-2">
                     <div class="col-12" *ngFor="let project of projects">
                       <div class="form-check">

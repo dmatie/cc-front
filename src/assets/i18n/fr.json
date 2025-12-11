@@ -35,8 +35,9 @@
     "quickActions": "Actions Rapides",
     "browse": "Parcourir",
     "remove": "Supprimer",
+    "select_all": "Sélectionner tout",
     "characters": "caractères",
-    "validation_errors":{
+    "validation_errors": {
       "required": "Ce champ est requis",
       "minlength": "La longueur minimale est de {{min}} caractères",
       "maxlength": "La longueur maximale est de {{max}} caractères",
@@ -48,26 +49,37 @@
     "title": "Portail Client AfDB",
     "subtitle": "Accédez à vos projets, rapports et services en toute sécurité",
     "new_user": "Nouvel Utilisateur",
-    "new_user_desc": "Créez votre compte ou complétez votre enregistrement",
+    "new_user_desc": "Créez votre compte ou finalisez votre inscription",
     "existing_user": "Déjà Membre",
     "existing_user_desc": "Connectez-vous avec vos identifiants Microsoft",
     "register": "S'enregistrer",
     "login": "Se connecter avec Microsoft",
     "secured_connection": "Connexion sécurisée via Microsoft",
-    "microsoft_connection":"Connexion Microsoft",
-    "microsoft_connection_desc":"Utilisez vos identifiants Microsoft pour accéder à votre portail client AfDB",
+    "microsoft_connection": "Connexion Microsoft",
+    "microsoft_connection_desc": "Utilisez vos identifiants Microsoft pour accéder à votre portail client AfDB",
     "amend_request": "Modifier une demande",
     "approval_process": "Processus d'Approbation",
     "info": "Toutes les demandes d'enregistrement sont soumises à un processus d'approbation pour garantir la sécurité de nos systèmes.",
     "features": {
-      "our_services":"Nos Services",
-      "our_services_desc":"Découvrez les outils mis à votre disposition",
+      "our_services": "Nos Services",
+      "our_services_desc": "Découvrez les outils mis à votre disposition",
       "reports": "Rapports Financiers",
       "reports_desc": "Consultez vos rapports et documents financiers",
       "claims": "Support Client",
       "claims_desc": "Soumettez vos réclamations et demandes d'assistance",
       "withdrawals": "Gestion des Décaissements",
       "withdrawals_desc": "Gérez vos demandes de décaissement"
+    },
+    "footer":{
+      "useful_links": "Liens Utiles",
+      "resources": "Ressources",
+      "contacts": "Contacts",
+      "user_manual": "Guide Utilisateur",
+      "faq": "Foire aux Questions",
+      "disbursement_handbook": "Manuel de décaissement",
+      "debt_servicing_handbook": "Manuel du service de la dette",
+      "email": "Email",
+      "helpdesk": "Support"
     }
   },
   "login": {
@@ -112,8 +124,9 @@
     "important_desc": "L'accès sera accordé aux membres du personnel nommés et autorisés par le client.",
     "agreement": "J'ai lu les informations ci-dessus et je comprends que je suis responsable de l'utilisation et de la protection du mot de passe.",
     "back": "Retour",
+    "continue": "Continuer",
     "new_request": "Nouvelle Demande",
-    "complete_request": "Compléter Demande"
+    "complete_request": "Compléter la Demande"
   },
   "registration_form": {
     "title": "Formulaire d'Enregistrement",
@@ -128,11 +141,13 @@
     "country_placeholder": "Sélectionnez votre pays",
     "business_profile": "Profil d'entreprise",
     "business_profile_placeholder": "Sélectionnez votre profil",
-    "financing_type": "Type de financement",
+    "financing_type": "Type de d'organisation",
     "projects_requested": "Projets demandés",
     "submit": "Soumettre la demande",
     "submitting": "Envoi en cours...",
     "back": "Retour",
+    "select_all": "Tout sélectionner",
+    "deselect_all": "Tout désélectionner",
     "validation": {
       "email": "Email requis et valide",
       "first_name": "Prénom requis (min. 2 caractères)",
@@ -140,7 +155,7 @@
       "function": "Fonction requise",
       "country": "Pays requis",
       "business_profile": "Profil d'entreprise requis",
-      "financing_type": "Type de financement requis",
+      "financing_type": "Type de d'organisation requis",
       "projects": "Au moins un projet doit être sélectionné",
       "email_required": "L'email est requis",
       "email_format": "Format d'email invalide"
@@ -156,7 +171,7 @@
     "function": "Fonction",
     "country": "Pays",
     "business_profile": "Profil d'entreprise",
-    "financing_type": "Type de financement",
+    "financing_type": "Type de d'organisation",
     "selected_projects": "Projets sélectionnés",
     "submitted": "Soumise le",
     "status": "Statut",
@@ -174,7 +189,7 @@
     "function": "Fonction",
     "country": "Pays",
     "business_profile": "Profil d'entreprise",
-    "financing_type": "Type de financement",
+    "financing_type": "Type de d'organisation",
     "projects_requested": "Projets demandés",
     "edit": "Modifier",
     "submit": "Soumettre la demande",
@@ -183,12 +198,12 @@
     "missing_data": "Données de registration manquantes. Veuillez recommencer le processus."
   },
   "registration_success": {
-    "title": "Demande Envoyée",
-    "subtitle": "Votre demande d'accès a été soumise avec succès",
+    "title": "Demande Enrregistrée",
+    "subtitle": "Votre demande d'accès a été enregistrée avec succès",
     "step": "Étape 4 sur 4 - Confirmation",
-    "success_title": "Demande soumise avec succès !",
+    "success_title": "Demande enregistrée avec succès !",
     "message1": "Votre demande d'accès a été envoyée à notre équipe de sécurité.",
-    "message2": "Vous recevrez un email de confirmation une fois votre compte approuvé.",
+    "message2": "Vous recevrez un email avec votre code d'enregistrement le formulaire d'autorisation à faire signer.",
     "signature": "L'équipe AfDB",
     "admin": "Administration Client Connection",
     "processing": "Traitement",
@@ -199,7 +214,16 @@
     "access_method": "Identifiants sécurisés",
     "next_steps": "Prochaines étapes :",
     "next_steps_desc": "Vous recevrez un email avec vos identifiants de connexion une fois votre demande approuvée.",
-    "home_button": "Retour à l'accueil"
+    "home_button": "Retour à l'accueil",
+    "registration_code": "Code de Demande",
+    "receive_code": "Recevoir le code d'enregistrement",
+    "receive_code_desc": "Vous recevrez par email un code d'enregistrement ainsi qu'un formulaire d'autorisation.",
+    "form_signature": "Signature du formulaire d'autorisation",
+    "form_signature_desc": "Faites signer le formulaire d'autorisation par les personnes autorisées de votre organisation.",
+    "submit_form": "Upload du formulaire signé",
+    "submit_form_desc": "Envoyez le formulaire d'autorisation signé à notre équipe de sécurité pour finaliser le processus d'approbation.",
+    "sign_process": "signature",
+    "sign_process_desc": "Formulaire d'autorisation"
   },
   "complete_success": {
     "title": "Demande Soumise",
@@ -239,6 +263,8 @@
       "submit": "Rechercher ma demande",
       "searching": "Recherche...",
       "back": "Retour",
+      "select_all": "Tout sélectionner",
+      "deselect_all": "Tout désélectionner",
       "validation": {
         "required": "L'email est requis",
         "format": "Format d'email invalide"
@@ -255,7 +281,7 @@
       "step": "Étape 2 sur 4 - Vérification",
       "code_sent": "Un code de vérification a été envoyé à",
       "code_label": "Code de vérification",
-      "code_placeholder": "123456",
+      "code_placeholder": "------",
       "code_help": "Saisissez le code de 6 chiffres reçu par email",
       "submit": "Vérifier le code",
       "verifying": "Vérification...",
@@ -282,7 +308,7 @@
       "function": "Fonction",
       "country": "Pays",
       "business_profile": "Profil d'entreprise",
-      "financing_type": "Type de financement",
+      "financing_type": "Type de d'organisation",
       "selected_projects": "Projets sélectionnés",
       "submitted": "Soumise le",
       "rejected": "Rejetée le",
@@ -295,7 +321,6 @@
       "abandoning": "Abandon...",
       "loading": "Chargement des détails...",
       "home_button": "Accueil"
-
     },
     "edit": {
       "title": "Modifier la Demande",
@@ -311,7 +336,7 @@
       "country_placeholder": "Sélectionnez votre pays",
       "business_profile": "Profil d'entreprise",
       "business_profile_placeholder": "Sélectionnez votre profil",
-      "financing_type": "Type de financement",
+      "financing_type": "Type de d'organisation",
       "financing_type_placeholder": "Sélectionnez le type",
       "projects": "Projets demandés",
       "loading_projects": "Chargement des projets...",
@@ -326,7 +351,7 @@
         "function": "Fonction requise",
         "country": "Pays requis",
         "business_profile": "Profil d'entreprise requis",
-        "financing_type": "Type de financement requis",
+        "financing_type": "Type de d'organisation requis",
         "projects": "Au moins un projet doit être sélectionné"
       }
     },
@@ -377,11 +402,11 @@
       "function": "Fonction",
       "country": "Pays",
       "business_profile": "Profil d'entreprise",
-      "financing_type": "Type de financement",
+      "financing_type": "Type de d'organisation",
       "projects_count": "Projets sélectionnés",
       "projects": "projets",
       "code_label": "Code d'enregistrement",
-      "code_placeholder": "123456",
+      "code_placeholder": "_ _ _ _ _ _",
       "code_help": "Saisissez le code de 6 chiffres reçu par email",
       "document_label": "Formulaire d'autorisation signé",
       "document_upload": "Cliquez pour télécharger votre document",
@@ -554,7 +579,7 @@
       "function": "Fonction",
       "country": "Pays",
       "businessProfile": "Profil d'Entreprise",
-      "financingType": "Type de Financement"
+      "financingType": "Type d'organisation"
     },
     "status": {
       "pending": "En Attente",
@@ -684,7 +709,7 @@
     "function_required": "La fonction est requise",
     "country_required": "Le pays est requis",
     "business_profile_required": "Le profil d'entreprise est requis",
-    "financing_type_required": "Le type de financement est requis",
+    "financing_type_required": "Le Type de d'organisation est requis",
     "invalid_credentials": "Identifiants invalides",
     "account_locked": "Compte verrouillé",
     "token_expired": "Session expirée",
@@ -703,7 +728,7 @@
     "business_error": "Erreur métier",
     "unexpected_error": "Une erreur inattendue s'est produite",
     "missing_ad_group": "Le groupe AD requis est manquant",
-    "file":{
+    "file": {
       "null": "Fichier nul",
       "name_empty": "Le nom du fichier est vide",
       "empty": "Fichier vide",
@@ -711,9 +736,12 @@
       "extension_not_allowed": "Extension de fichier non autorisée",
       "mimetype_not_allowed": "Type MIME du fichier non autorisé"
     },
-    "access_request":{
-      "email_already_exists":"Une demande d'accès avec cet email existe déjà",  
-      "request_not_found":"Demande d'accès non trouvée"
+    "access_request": {
+      "email_already_exists": "Une demande d'accès avec cet email existe déjà",
+      "request_not_found": "Demande d'accès non trouvée",
+      "document_required": "Le document signé est requis",
+      "only_pdf_allowed": "Seuls les fichiers PDF sont autorisés",
+      "code_not_found": "Code de demande d'accès non trouvé"
     },
     "fileTooLarge": "Le fichier '{fileName}' est trop volumineux ({size} Mo). La taille maximale autorisée est de {maxSize} Mo.",
     "fileTypeNotAllowed": "Le fichier '{fileName}' a un format non supporté. Seuls les fichiers PDF, Word et Excel sont autorisés."
@@ -729,7 +757,7 @@
       "table": {
         "name": "Nom",
         "email": "Email",
-        "financing_type": "Type de financement",
+        "financing_type": "Type de d'organisation",
         "submission_date": "Date de soumission",
         "status": "Statut",
         "actions": "Actions"
@@ -752,7 +780,11 @@
       "approve_success": "La demande a été approuvée avec succès",
       "reject_success": "La demande a été rejetée",
       "approve_error": "Erreur lors de l'approbation",
-      "reject_error": "Erreur lors du rejet"
+      "reject_error": "Erreur lors du rejet",
+      "already_processed": "Cette demande a déjà été traitée et ne peut plus être approuvée ou rejetée.",
+      "uploaded_document_title": "Formulaire d'autorisation signé",
+      "uploaded_document_desc": "Document PDF signé et soumis avec la demande",
+      "download_button": "Télécharger"
     },
     "reject_modal": {
       "title": "Rejeter la demande",
@@ -926,7 +958,6 @@
       "fileTypes": "PDF, Word, Excel",
       "maxFileSize": "Max",
       "filesSelected": "fichier(s) sélectionné(s) (max 5 Mo chacun)"
-
     },
     "typeA1": {
       "title": "Paiement Direct (A1)",
@@ -1014,7 +1045,7 @@
       "executingAgencyCountry": "Pays"
     }
   },
-"validation": {
+  "validation": {
     "required": "Ce champ est requis",
     "minLength": "Doit contenir au moins {min} caractères",
     "maxLength": "Ne doit pas dépasser {max} caractères",
@@ -1026,7 +1057,7 @@
     "allowedCharacters": "Seules les lettres, chiffres et ponctuation courante sont autorisés",
     "controlCharacters": "Contient des caractères de contrôle invalides",
     "comment": {
-      "valid":" Le commentaire est valide",
+      "valid": " Le commentaire est valide",
       "required": "La description est requise",
       "minLength": "La description doit contenir au moins 10 caractères",
       "maxLength": "La description ne doit pas dépasser 5000 caractères",

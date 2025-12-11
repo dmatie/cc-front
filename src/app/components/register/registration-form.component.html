@@ -217,7 +217,7 @@
               <div class="col-12 mb-4">
                 <label class="form-label fw-semibold">
                   {{ i18n.t('registration_form.projects_requested') }}
-                  <span class="text-danger">*</span>
+                  
                 </label>
                 
                 <!-- Loading state -->
@@ -225,7 +225,7 @@
                   <div class="loading-spinner me-2"></div>
                   <small class="text-muted">Chargement des projets...</small>
                 </div>
-                
+
                 <!-- Select all projects button -->
                 <div class="mb-2" *ngIf="!isLoadingProjects && projects.length > 0">
                   <button
@@ -234,12 +234,11 @@
                     (click)="areAllProjectsSelected() ? deselectAllProjects() : selectAllProjects()"
                   >
                     <i class="bi" [class.bi-check-square]="areAllProjectsSelected()" [class.bi-square]="!areAllProjectsSelected()" ></i>
-                    {{ areAllProjectsSelected() ? (i18n.getCurrentLocale() === 'fr' ? 'Tout désélectionner' : 'Deselect all') : (i18n.getCurrentLocale() === 'fr' ? 'Tout sélectionner' : 'Select all') }}
+                    {{ areAllProjectsSelected() ? (i18n.t('registration_form.deselect_all')) : (i18n.t('registration_form.select_all')) }}
                   </button>
                 </div>
-
                 <!-- Projects list -->
-                <div class="border rounded p-3" *ngIf="!isLoadingProjects && projects.length > 0"
+                <div class="border rounded p-3" *ngIf="!isLoadingProjects && projects.length > 0" 
                      style="max-height: 300px; overflow-y: auto;">
                   <div class="row g-2">
                     <div class="col-12" *ngFor="let project of projects">

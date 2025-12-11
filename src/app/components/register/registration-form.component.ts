@@ -37,6 +37,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
   isLoadingBusinessProfiles = false;
   isLoadingFinancingTypes = false;
   isLoadingProjects = false;
+  isProjectAllSelected = false;
 
   constructor(
     private fb: FormBuilder,
@@ -119,7 +120,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
         this.isLoadingProjects = false;
       },
       error: (error) => {
-          console.error('Error loading projects:', error);
+        console.error('Error loading projects:', error);
         this.isLoadingProjects = false;
         this.projects = [];
       }
@@ -372,6 +373,7 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
   }
 
   getBusinessProfileLabel(profile: BusinessProfile): string {
+    console.log('Getting label for business profile:', profile);
     return this.i18n.getCurrentLocale() === 'fr' ? profile.nameFr : profile.name;
   }
 
@@ -382,5 +384,4 @@ export class RegistrationFormComponent implements OnInit, OnDestroy {
   getFunctionLabel(func: UserFunction): string {
     return this.i18n.getCurrentLocale() === 'fr' ? func.nameFr : func.name;
   }
-
 }

@@ -1,5 +1,6 @@
 .hero-section {
-  background: linear-gradient(135deg, rgba(248, 249, 250, 0.8) 0%, rgba(233, 236, 239, 0.8) 100%);
+  background: url('../../../assets/img/afdb_building.jpg') no-repeat;
+  background-size: cover;
 }
 
 .features-section {
@@ -32,4 +33,17 @@
 .feature-service-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.home-footer-menu ul li a{
+  color: #000;
+  text-decoration: none;
+}
+.home-footer-menu ul li a:hover{
+  color: #000;
+  text-decoration: underline;
+}
+
+.home-footer-menu h5{
+  color: #0d6efd;
 }

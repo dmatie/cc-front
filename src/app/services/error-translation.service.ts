@@ -23,6 +23,9 @@ export class ErrorTranslationService {
       //AccessRequest Errors
       'ERR.AccessRequest.EmailAlreadyExists': 'errors.access_request.email_already_exists',
       'ERR.AccessRequest.RequestAlreadyExists': 'errors.access_request.email_already_exists',
+      'ERR.AccessRequest.DocumentRequired': 'errors.access_request.document_required',
+      'ERR.AccessRequest.OnlyPdfAllowed': 'errors.access_request.only_pdf_allowed',
+      'ERR.AccessRequest.CodeNotFound': 'errors.access_request.code_not_found',
 
 
       //File Upload Errors

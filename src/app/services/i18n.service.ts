@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import * as fr from '../../assets/i18n/fr.json';
+import * as en from '../../assets/i18n/en.json';
 
 @Injectable({
   providedIn: 'root'
@@ -22,25 +24,12 @@ export class I18nService {
   /**
    * Charge les traductions pour une locale donnée
    */
-  private loadTranslations(locale: string): Promise<void> {
+  private loadTranslations(locale: string): void {
     if (this.loadedLocales.has(locale)) {
-      return Promise.resolve();
+      return ;
     }
-
-    return new Promise((resolve, reject) => {
-      this.http.get(`/assets/i18n/${locale}.json`).subscribe({
-        next: (translations) => {
-          this.translations[locale] = translations;
-          this.loadedLocales.add(locale);
-          console.log(`✅ Translations loaded for locale: ${locale}`);
-          resolve();
-        },
-        error: (error) => {
-          console.error(`❌ Failed to load translations for locale: ${locale}`, error);
-          reject(error);
-        }
-      });
-    });
+    this.translations[locale] = locale === 'fr' ? fr : en;
+    this.loadedLocales.add(locale);
   }
 
   /**

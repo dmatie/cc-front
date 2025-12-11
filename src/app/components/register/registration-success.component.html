@@ -29,14 +29,11 @@
               <div class="text-start w-100">
                 <h5 class="alert-heading mb-3">{{ i18n.t('registration_success.success_title') }}</h5>
                 <div class="mb-3" *ngIf="requestId">
-                  <strong>Numéro de demande :</strong>
+                  <strong>{{ i18n.t('registration_success.registration_code') }} :</strong>
                   <code class="bg-light px-2 py-1 rounded">{{ requestId }}</code>
                 </div>
                 <p class="mb-2" *ngIf="customMessage">
                   {{ customMessage }}
-                </p>
-                <p class="mb-2">
-                  {{ i18n.t('registration_success.message1') }}
                 </p>
                 <p class="mb-3">
                   {{ i18n.t('registration_success.message2') }}
@@ -46,7 +43,7 @@
                 <div class="border-top border-success pt-3 mt-3">
                   <h6 class="mb-3">
                     <i class="bi bi-list-check me-2"></i>
-                    {{ i18n.getCurrentLocale() === 'fr' ? 'Prochaines étapes' : 'Next Steps' }}
+                    {{ i18n.t('registration_success.next_steps') }}
                   </h6>
                   <ul class="list-unstyled mb-0">
                     <li class="mb-3 d-flex align-items-start">
@@ -55,11 +52,9 @@
                         <strong class="text-success">1</strong>
                       </div>
                       <div>
-                        <strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Réception du code d\'enregistrement' : 'Receive registration code' }}</strong>
+                        <strong>{{ i18n.t('registration_success.receive_code') }}</strong>
                         <p class="text-muted mb-0 mt-1" style="font-size: 0.9rem;">
-                          {{ i18n.getCurrentLocale() === 'fr'
-                            ? 'Vous recevrez par email un code d\'enregistrement ainsi qu\'un formulaire d\'autorisation.'
-                            : 'You will receive a registration code and an authorization form by email.' }}
+                          {{ i18n.t('registration_success.receive_code_desc') }}
                         </p>
                       </div>
                     </li>
@@ -69,11 +64,9 @@
                         <strong class="text-success">2</strong>
                       </div>
                       <div>
-                        <strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Signature du formulaire' : 'Form signature' }}</strong>
+                        <strong>{{ i18n.t('registration_success.form_signature') }}</strong>
                         <p class="text-muted mb-0 mt-1" style="font-size: 0.9rem;">
-                          {{ i18n.getCurrentLocale() === 'fr'
-                            ? 'Faites signer le formulaire d\'autorisation par les personnes autorisées de votre organisation.'
-                            : 'Have the authorization form signed by the authorized persons in your organization.' }}
+                          {{ i18n.t('registration_success.form_signature_desc') }}
                         </p>
                       </div>
                     </li>
@@ -83,11 +76,9 @@
                         <strong class="text-success">3</strong>
                       </div>
                       <div>
-                        <strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Upload du formulaire signé' : 'Upload signed form' }}</strong>
+                        <strong>{{ i18n.t('registration_success.submit_form') }}</strong>
                         <p class="text-muted mb-0 mt-1" style="font-size: 0.9rem;">
-                          {{ i18n.getCurrentLocale() === 'fr'
-                            ? 'Une fois le formulaire signé, revenez sur la plateforme, saisissez votre code d\'enregistrement et téléchargez le formulaire signé.'
-                            : 'Once the form is signed, return to the platform, enter your registration code and upload the signed form.' }}
+                          {{ i18n.t('registration_success.submit_form_desc') }}
                         </p>
                       </div>
                     </li>
@@ -105,18 +96,19 @@
           <div class="row g-3 mb-4">
             <div class="col-md-4">
               <div class="bg-light rounded p-3">
-                <i class="bi bi-clock text-primary mb-2" style="font-size: 1.5rem;"></i>
-                <h6 class="mb-1">{{ i18n.t('registration_success.processing') }}</h6>
-                <small class="text-muted">{{ i18n.t('registration_success.processing_time') }}</small>
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="bg-light rounded p-3">
                 <i class="bi bi-envelope text-warning mb-2" style="font-size: 1.5rem;"></i>
                 <h6 class="mb-1">{{ i18n.t('registration_success.notification') }}</h6>
                 <small class="text-muted">{{ i18n.t('registration_success.notification_method') }}</small>
               </div>
             </div>
+            <div class="col-md-4">
+              <div class="bg-light rounded p-3">
+                <i class="bi bi-pencil-fill text-primary mb-2" style="font-size: 1.5rem;"></i>
+                <h6 class="mb-1">{{ i18n.t('registration_success.sign_process') }}</h6>
+                <small class="text-muted">{{ i18n.t('registration_success.sign_process_desc') }}</small>
+              </div>
+            </div>
+
             <div class="col-md-4">
               <div class="bg-light rounded p-3">
                 <i class="bi bi-key text-success mb-2" style="font-size: 1.5rem;"></i>

@@ -248,7 +248,7 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     );
   }
 
-    getApprovedAccessRequests(filters: {
+  getApprovedAccessRequests(filters: {
     countryId?: string;
     projectCode?: string;
     pageNumber?: number;
@@ -277,6 +277,17 @@ export class ApiRegistrationService extends AbstractRegistrationService {
     formData.append('Document', document);
 
     return this.http.post<RegistrationResponse>(`${this.apiUrl}/${id}/submit`, formData).pipe(
+      timeout(this.timeout),
+      catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
+    );
+  }
+
+  downloadSignedForm(requestId: string): Observable<Blob> {
+    console.log('📥 [API] Downloading signed form for request:', requestId);
+
+    return this.http.get(`${this.apiUrl}/downloadsignedform?Id=${requestId}`, {
+      responseType: 'blob'
+    }).pipe(
       timeout(this.timeout),
       catchError(this.errorHandler.handleApiErrorRx('RegistrationService'))
     );

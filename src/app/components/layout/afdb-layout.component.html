@@ -39,25 +39,25 @@
 <footer class="afdb-footer">
   <div class="container">
     <div class="row">
-      <div class="col-md-4">
-        <h5>Menu</h5>
-        <ul class="footer-links">
-          <li><a href="#">User manual</a></li>
-          <li><a href="#">Frequently Asked Questions</a></li>
+      <div class="col-md-4 home-footer-menu">
+        <h5 >{{ i18n.t('home.footer.useful_links') }}</h5>
+        <ul>
+            <li><a href="https://clientconnection.afdb.org/sitepages/anon/home.aspx">{{ i18n.t('home.footer.user_manual') }}</a></li>
+            <li><a href="https://clientconnection.afdb.org/sitepages/anon/home.aspx">{{ i18n.t('home.footer.faq') }}</a></li>
         </ul>
       </div>
-      <div class="col-md-4">
-        <h5>Resources</h5>
-        <ul class="footer-links">
-          <li><a href="#">Disbursement handbook</a></li>
-          <li><a href="#">Debt servicing handbook</a></li>
+      <div class="col-md-4 home-footer-menu">
+        <h5>Ressources</h5>
+        <ul>
+            <li><a href="https://www.afdb.org/en/documents/document/disbursement-handbook-54419">{{ i18n.t('home.footer.disbursement_handbook') }}</a></li>
+            <li><a href="https://www.afdb.org/fileadmin/uploads/afdb/Documents/Financial-Information/DEBT_SERVICING_HANDBOOK_FFCO.pdf">{{ i18n.t('home.footer.debt_servicing_handbook') }}</a></li>
         </ul>
       </div>
-      <div class="col-md-4">
-        <h5>Contacts</h5>
-        <ul class="footer-links">
-          <li>e-Mail : <a href="mailto:clientconnection@afdb.org">clientconnection@afdb.org</a></li>
-          <li>Helpdesk : (00 225) 20 26 50 22</li>
+      <div class="col-md-4 home-footer-menu">
+        <h5>{{ i18n.t('home.footer.contacts') }}</h5>
+        <ul>
+            <li>{{ i18n.t('home.footer.email') }}: clientconnection@afdb.org</li>
+            <li>{{ i18n.t('home.footer.helpdesk') }}: (+225) 27 20 265 964</li>
         </ul>
       </div>
     </div>
