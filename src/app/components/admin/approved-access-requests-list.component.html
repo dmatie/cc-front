@@ -129,9 +129,9 @@
                         <strong>{{ request.firstName }} {{ request.lastName }}</strong>
                       </td>
                       <td>{{ request.email }}</td>
-                      <td>{{ request.countryName }}</td>
+                      <td>{{ request | localizedField: 'countryName' }}</td>
                       <td>
-                        <small class="text-muted">{{ request.businessProfileName }}</small>
+                        <small class="text-muted">{{ request | localizedField: 'businessProfileName' }}</small>
                       </td>
                       <td class="text-center">
                         <span class="badge bg-primary rounded-pill">

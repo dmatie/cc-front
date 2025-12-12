@@ -10,11 +10,12 @@ import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.com
 import { AccessRequestDetail, RegistrationResponseAll } from '../../models/registration.model';
 import { Country } from '../../models/dropdown.model';
 import { Project } from '../../models/project.model';
+import { LocalizedFieldPipe } from '../../core/utils/localized-field.pipe';
 
 @Component({
   selector: 'app-approved-access-requests-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent],
+  imports: [CommonModule, FormsModule, AuthenticatedNavbarComponent, LocalizedFieldPipe],
   templateUrl: './approved-access-requests-list.component.html',
   styleUrl: './approved-access-requests-list.component.css'
 })

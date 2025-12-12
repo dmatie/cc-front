@@ -5,11 +5,12 @@ import { AbstractRegistrationService } from '../../services/abstract/registratio
 import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { RegistrationDetail, AccessRequestDetail, StatusEnum } from '../../models/registration.model';
+import { LocalizedFieldPipe } from '../../core/utils/localized-field.pipe';
 
 @Component({
   selector: 'app-approved-access-request-detail',
   standalone: true,
-  imports: [CommonModule, AuthenticatedNavbarComponent, RouterLink],
+  imports: [CommonModule, AuthenticatedNavbarComponent, RouterLink, LocalizedFieldPipe],
   templateUrl: './approved-access-request-detail.component.html',
   styleUrl: './approved-access-request-detail.component.css'
 })

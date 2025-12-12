@@ -6,11 +6,12 @@ import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
 import { RegistrationDetail, AccessRequestDetail, StatusEnum } from '../../models/registration.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
+import { LocalizedFieldPipe } from '../../core/utils/localized-field.pipe';
 
 @Component({
   selector: 'app-access-request-summary',
   standalone: true,
-  imports: [CommonModule, AuthenticatedNavbarComponent, RouterLink],
+  imports: [CommonModule, AuthenticatedNavbarComponent, RouterLink, LocalizedFieldPipe],
   templateUrl: './access-request-summary.component.html',
   styleUrls: ['./access-request-summary.component.css']
 })

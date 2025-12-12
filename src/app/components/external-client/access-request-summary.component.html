@@ -73,7 +73,7 @@
                     </div>
                     <div class="mb-0">
                       <label class="text-muted small">{{ i18n.t('registration.form.function') }}</label>
-                      <div><strong>{{ accessRequest.functionName }}</strong></div>
+                      <div><strong>{{ accessRequest | localizedField: 'functionName' }}</strong></div>
                     </div>
                   </div>
                 </div>
@@ -90,16 +90,16 @@
                     <div class="row mb-3">
                       <div class="col-md-6">
                         <label class="text-muted small">{{ i18n.t('registration.form.country') }}</label>
-                        <div><strong>{{ accessRequest.countryName }}</strong></div>
+                        <div><strong>{{ accessRequest | localizedField: 'countryName' }}</strong></div>
                       </div>
                       <div class="col-md-6">
                         <label class="text-muted small">{{ i18n.t('registration.form.businessProfile') }}</label>
-                        <div><strong>{{ accessRequest.businessProfileName }}</strong></div>
+                        <div><strong>{{ accessRequest | localizedField: 'businessProfileName' }}</strong></div>
                       </div>
                     </div>
                     <div class="mb-0">
                       <label class="text-muted small">{{ i18n.t('registration.form.financingType') }}</label>
-                      <div><strong>{{ accessRequest.financingTypeName }}</strong></div>
+                      <div><strong>{{ accessRequest | localizedField: 'financingTypeName' }}</strong></div>
                     </div>
                   </div>
                 </div>
@@ -109,23 +109,28 @@
                   <div class="card-header bg-white">
                     <h5 class="mb-0">
                       <i class="bi bi-folder me-2"></i>
-                      {{ i18n.t('accessRequest.summary.projects') }} ({{ accessRequest.selectedProjectCodes?.length || 0 }})
+                      {{ i18n.t('accessRequest.summary.projects') }} ({{ accessRequest.projects?.length || 0 }})
                     </h5>
                   </div>
                   <div class="card-body">
-                    <div *ngIf="!accessRequest.selectedProjectCodes || accessRequest.selectedProjectCodes.length === 0" class="text-muted text-center py-4">
+                    <div *ngIf="!accessRequest.projects || accessRequest.projects.length === 0" class="text-muted text-center py-4">
                       <i class="bi bi-inbox fs-1"></i>
                       <p class="mt-2">{{ i18n.t('accessRequest.summary.noProjects') }}</p>
                     </div>
 
                     <div class="list-group">
-                      <div *ngFor="let sapCode of accessRequest.selectedProjectCodes" class="list-group-item">
-                        <div class="d-flex justify-content-between align-items-center">
-                          <div>
-                            <h6 class="mb-0">
-                              <i class="bi bi-code-square me-2"></i>
-                              <strong>{{ i18n.t('projects.sapCode') }}:</strong> {{ sapCode }}
-                            </h6>
+                      <div *ngFor="let project of accessRequest.projects" class="list-group-item">
+                        <div class="d-flex justify-content-between align-items-start">
+                          <div class="flex-grow-1">
+                            <div class="d-flex align-items-center mb-2">
+                              <i class="bi bi-code-square text-primary me-2"></i>
+                              <strong>{{ i18n.t('projects.sapCode') }}:</strong>
+                              <span class="ms-2 badge bg-secondary">{{ project.sapCode }}</span>
+                            </div>
+                            <div class="text-muted small">
+                              <i class="bi bi-file-text me-2"></i>
+                              <strong>{{ i18n.getCurrentLocale() === 'fr' ? 'Titre' : 'Title' }}:</strong> {{ project.projectTitle }}
+                            </div>
                           </div>
                           <span class="badge bg-primary">
                             <i class="bi bi-check-circle me-1"></i>{{ i18n.t('common.active') }}
