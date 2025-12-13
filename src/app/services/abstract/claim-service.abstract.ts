@@ -12,7 +12,9 @@ import {
 
 export abstract class ClaimService {
   abstract getClaims(params?: ClaimQueryParams): Observable<GetClaimsResponse>;
+  abstract getClaimsWithFilters(params: ClaimQueryParams): Observable<GetClaimsResponse>;
   abstract getClaimsByUser(params: UserClaimQueryParams): Observable<GetClaimsResponse>;
+  abstract getClaimsByUserFiltered(params: UserClaimQueryParams): Observable<GetClaimsResponse>;
   abstract getClaimById(id: string): Observable<GetClaimResponse>;
   abstract createClaim(dto: CreateClaimDto): Observable<CreateClaimResponse>;
   abstract createClaimProcess(claimId: string, dto: CreateClaimProcessDto): Observable<Claim>;

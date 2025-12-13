@@ -47,6 +47,37 @@ export class ClaimServiceApi extends ClaimService {
     );
   }
 
+  getClaimsWithFilters(params: ClaimQueryParams): Observable<GetClaimsResponse> {
+    let httpParams = new HttpParams();
+
+    if (params.status !== undefined && params.status !== null) {
+      httpParams = httpParams.set('Status', params.status.toString());
+    }
+    if (params.claimTypeId) {
+      httpParams = httpParams.set('ClaimTypeId', params.claimTypeId);
+    }
+    if (params.countryId) {
+      httpParams = httpParams.set('CountryId', params.countryId);
+    }
+    if (params.createdFrom) {
+      httpParams = httpParams.set('CreatedFrom', params.createdFrom);
+    }
+    if (params.createdTo) {
+      httpParams = httpParams.set('CreatedTo', params.createdTo);
+    }
+    if (params.pageNumber) {
+      httpParams = httpParams.set('PageNumber', params.pageNumber.toString());
+    }
+    if (params.pageSize) {
+      httpParams = httpParams.set('PageSize', params.pageSize.toString());
+    }
+
+    const url = `${this.apiUrl}/with-filters`;
+    return this.http.get<GetClaimsResponse>(url, { params: httpParams }).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
+  }
+
   getClaimsByUser(params: UserClaimQueryParams): Observable<GetClaimsResponse> {
     let httpParams = new HttpParams();
 
@@ -61,6 +92,37 @@ export class ClaimServiceApi extends ClaimService {
     }
 
     const url = `${this.apiUrl}/by-user`;
+    return this.http.get<GetClaimsResponse>(url, { params: httpParams }).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
+    );
+  }
+
+  getClaimsByUserFiltered(params: UserClaimQueryParams): Observable<GetClaimsResponse> {
+    let httpParams = new HttpParams();
+
+    if (params.status !== undefined && params.status !== null) {
+      httpParams = httpParams.set('Status', params.status.toString());
+    }
+    if (params.claimTypeId) {
+      httpParams = httpParams.set('ClaimTypeId', params.claimTypeId);
+    }
+    if (params.countryId) {
+      httpParams = httpParams.set('CountryId', params.countryId);
+    }
+    if (params.createdFrom) {
+      httpParams = httpParams.set('CreatedFrom', params.createdFrom);
+    }
+    if (params.createdTo) {
+      httpParams = httpParams.set('CreatedTo', params.createdTo);
+    }
+    if (params.pageNumber) {
+      httpParams = httpParams.set('PageNumber', params.pageNumber.toString());
+    }
+    if (params.pageSize) {
+      httpParams = httpParams.set('PageSize', params.pageSize.toString());
+    }
+
+    const url = `${this.apiUrl}/by-user-filtered`;
     return this.http.get<GetClaimsResponse>(url, { params: httpParams }).pipe(
       catchError(this.errorHandler.handleApiErrorRx('ClaimService'))
     );

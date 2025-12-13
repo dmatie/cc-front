@@ -87,7 +87,42 @@ export class ClaimServiceMock extends ClaimService {
       totalCount: filtered.length,
       pageNumber: 1,
       pageSize: filtered.length,
-      totalPages: 1
+      totalPages: 1,
+      hasPreviousPage: false,
+      hasNextPage: false
+    };
+
+    return of(claims).pipe(delay(300));
+  }
+
+  getClaimsWithFilters(params: ClaimQueryParams): Observable<GetClaimsResponse> {
+    let filtered = [...this.mockClaims];
+
+    if (params.status !== undefined && params.status !== null) {
+      filtered = filtered.filter(c => c.status === params.status);
+    }
+    if (params.claimTypeId) {
+      filtered = filtered.filter(c => c.claimTypeId === params.claimTypeId);
+    }
+    if (params.countryId) {
+      filtered = filtered.filter(c => c.countryId === params.countryId);
+    }
+
+    const pageNumber = params.pageNumber || 1;
+    const pageSize = params.pageSize || 10;
+    const totalPages = Math.ceil(filtered.length / pageSize);
+    const start = (pageNumber - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedClaims = filtered.slice(start, end);
+
+    let claims: GetClaimsResponse = {
+      claims: paginatedClaims,
+      totalCount: filtered.length,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      totalPages: totalPages,
+      hasPreviousPage: pageNumber > 1,
+      hasNextPage: pageNumber < totalPages
     };
 
     return of(claims).pipe(delay(300));
@@ -105,7 +140,42 @@ export class ClaimServiceMock extends ClaimService {
       totalCount: filtered.length,
       pageNumber: 1,
       pageSize: filtered.length,
-      totalPages: 1
+      totalPages: 1,
+      hasPreviousPage: false,
+      hasNextPage: false
+    };
+
+    return of(claims).pipe(delay(300));
+  }
+
+  getClaimsByUserFiltered(params: UserClaimQueryParams): Observable<GetClaimsResponse> {
+    let filtered = this.mockClaims.filter(c => c.userId === 'guid-mock-user');
+
+    if (params.status !== undefined && params.status !== null) {
+      filtered = filtered.filter(c => c.status === params.status);
+    }
+    if (params.claimTypeId) {
+      filtered = filtered.filter(c => c.claimTypeId === params.claimTypeId);
+    }
+    if (params.countryId) {
+      filtered = filtered.filter(c => c.countryId === params.countryId);
+    }
+
+    const pageNumber = params.pageNumber || 1;
+    const pageSize = params.pageSize || 10;
+    const totalPages = Math.ceil(filtered.length / pageSize);
+    const start = (pageNumber - 1) * pageSize;
+    const end = start + pageSize;
+    const paginatedClaims = filtered.slice(start, end);
+
+    let claims: GetClaimsResponse = {
+      claims: paginatedClaims,
+      totalCount: filtered.length,
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      totalPages: totalPages,
+      hasPreviousPage: pageNumber > 1,
+      hasNextPage: pageNumber < totalPages
     };
 
     return of(claims).pipe(delay(300));

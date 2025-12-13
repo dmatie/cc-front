@@ -72,6 +72,10 @@ export interface CreateClaimProcessDto {
 
 export interface ClaimQueryParams {
   status?: ClaimStatus;
+  claimTypeId?: string;
+  countryId?: string;
+  createdFrom?: string;
+  createdTo?: string;
   pageNumber?: number;
   pageSize?: number;
 }
@@ -81,6 +85,8 @@ export interface UserClaimQueryParams extends ClaimQueryParams {
 
 export interface GetClaimsResponse extends PaginationFields {
   claims: Claim[];
+  hasPreviousPage?: boolean;
+  hasNextPage?: boolean;
 }
 
 export interface GetClaimResponse {

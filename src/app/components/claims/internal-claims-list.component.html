@@ -1,7 +1,6 @@
 <app-authenticated-navbar [title]="i18n.t('internal.nav.title')" [userType]="'internal'">
 </app-authenticated-navbar>
 
-
 <div class="container py-5">
   <div class="row justify-content-center">
     <div class="col-12 col-lg-12">
@@ -51,38 +50,85 @@
             </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="col-md-3">
-              <label class="form-label">{{ i18n.t('claims.filterByStatus') }}</label>
-              <select class="form-select" [(ngModel)]="selectedStatus" (change)="onStatusFilterChange()">
-                <option *ngFor="let option of statusOptions" [value]="option.value">
-                  {{ option.value === 'ALL' ? i18n.t('claims.status.all') : getStatusLabel(option.value) }}
+          <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+              <label class="form-label fw-bold">
+                <i class="bi bi-funnel me-1"></i>
+                {{ i18n.t('claims.filterByStatus') }}
+              </label>
+              <select class="form-select" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+                <option [ngValue]="null">{{ i18n.t('claims.status.all') }}</option>
+                <option *ngFor="let option of statusOptions" [ngValue]="option.value">
+                  {{ getStatusLabel(option.value) }}
                 </option>
               </select>
             </div>
-          </div>
 
-          <div *ngIf="loading" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+            <div class="col-md-3 mb-3">
+              <label class="form-label fw-bold">
+                <i class="bi bi-tag me-1"></i>
+                {{ i18n.t('claims.claimType') }}
+              </label>
+              <select class="form-select" [(ngModel)]="selectedClaimTypeId" (change)="onFilterChange()">
+                <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Tous les types' : 'All Types' }}</option>
+                <option *ngFor="let type of claimTypes" [value]="type.id">
+                  {{ type | localizedField: 'name' }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3 mb-3">
+              <label class="form-label fw-bold">
+                <i class="bi bi-geo-alt me-1"></i>
+                {{ i18n.t('claims.country') }}
+              </label>
+              <select class="form-select" [(ngModel)]="selectedCountryId" (change)="onFilterChange()">
+                <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Tous les pays' : 'All Countries' }}</option>
+                <option *ngFor="let country of countries" [value]="country.id">
+                  {{ country | localizedField: 'name' }}
+                </option>
+              </select>
+            </div>
+
+            <div class="col-md-3 mb-3 d-flex align-items-end">
+              <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                {{ i18n.getCurrentLocale() === 'fr' ? 'Réinitialiser' : 'Reset' }}
+              </button>
             </div>
           </div>
 
           @if (errorMessage) {
-              <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle me-2"></i>
-                {{ errorMessage }}
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+          }
+
+          @if (loading) {
+            <div class="text-center py-5">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+              </div>
+            </div>
+          }
+
+          @if (!loading && !errorMessage) {
+            <div class="alert alert-info mb-4">
+              <i class="bi bi-info-circle me-2"></i>
+              {{ i18n.getCurrentLocale() === 'fr'
+                ? 'Total : ' + totalCount + ' réclamation(s)'
+                : 'Total: ' + totalCount + ' claim(s)' }}
+            </div>
+
+            @if (claims.length === 0) {
+              <div class="alert alert-warning text-center py-5">
+                <i class="bi bi-inbox fs-1 d-block mb-3"></i>
+                <h5>{{ i18n.t('claims.noClaims') }}</h5>
               </div>
             }
 
-
-          <div *ngIf="!loading && filteredClaims.length === 0" class="alert alert-info">
-            <i class="bi bi-info-circle me-2"></i>
-            {{ i18n.t('claims.noClaims') }}
-          </div>
-
-          <div *ngIf="!loading && filteredClaims.length > 0" class="row">
-            <div class="col-12">
+            @if (claims.length > 0) {
               <div class="card shadow-sm">
                 <div class="card-body p-0">
                   <div class="table-responsive">
@@ -98,10 +144,9 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let claim of filteredClaims" style="cursor: pointer;">
+                        <tr *ngFor="let claim of claims" style="cursor: pointer;">
                           <td (click)="viewClaimDetail(claim.id)">
-                            <strong>{{ i18n.getCurrentLocale() === 'fr' ? claim.claimTypeNameFr : claim.claimTypeName
-                              }}</strong>
+                            <strong>{{ claim | localizedField: 'claimTypeName' }}</strong>
                             <div class="text-muted small text-truncate" style="max-width: 300px;">
                               {{ claim.comment }}
                             </div>
@@ -128,8 +173,36 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
+
+              <nav *ngIf="totalPages > 1" class="mt-4">
+                <ul class="pagination justify-content-center">
+                  <li class="page-item" [class.disabled]="!hasPreviousPage">
+                    <button class="page-link" (click)="previousPage()">
+                      <i class="bi bi-chevron-left"></i>
+                      {{ i18n.getCurrentLocale() === 'fr' ? 'Précédent' : 'Previous' }}
+                    </button>
+                  </li>
+
+                  <li *ngFor="let page of getPageNumbers()"
+                      class="page-item"
+                      [class.active]="page === currentPage"
+                      [class.disabled]="page === -1">
+                    <button *ngIf="page !== -1" class="page-link" (click)="goToPage(page)">
+                      {{ page }}
+                    </button>
+                    <span *ngIf="page === -1" class="page-link">...</span>
+                  </li>
+
+                  <li class="page-item" [class.disabled]="!hasNextPage">
+                    <button class="page-link" (click)="nextPage()">
+                      {{ i18n.getCurrentLocale() === 'fr' ? 'Suivant' : 'Next' }}
+                      <i class="bi bi-chevron-right"></i>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            }
+          }
 
         </div>
 
