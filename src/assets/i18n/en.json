@@ -37,6 +37,15 @@
     "remove": "Remove",
     "select_all": "Select all",
     "characters": "characters",
+    "all": "All",
+    "apply": "Apply",
+    "clear": "Clear",
+    "showing": "Showing",
+    "to": "to",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next",
+    "selectOption": "Select an option",
     "validation_errors": {
       "required": "Ce champ est requis",
       "minlength": "La longueur minimale est de {{min}} caractères",
@@ -459,8 +468,8 @@
       "disbursements_desc": "active requests",
       "claims": "Claims",
       "claims_desc": "pending",
-      "training": "Training & Resources",
-      "training_desc": "Access training materials"
+      "additionalDocuments": "Additional Documents",
+      "additionalDocuments_desc": "Manage your additional documents"
     },
     "actions": {
       "title": "Quick Actions",
@@ -506,7 +515,9 @@
       "users": "Users",
       "users_desc": "total in system",
       "approved_requests": "Approved Requests",
-      "approved_requests_desc": "View approved access requests"
+      "approved_requests_desc": "View approved access requests",
+      "additionalDocuments": "Additional Documents",
+      "additionalDocuments_desc": "View additional documents uploaded by clients"
     },
     "actions": {
       "title": "Quick Actions",
@@ -526,6 +537,47 @@
       "documentation": "Documentation",
       "documentation_desc": "Admin guides",
       "access": "Access"
+    }
+  },
+  "additionalDocuments": {
+    "title": "Additional Documents",
+    "noDocuments": "No documents found",
+    "uploadDocument": "Upload Document",
+    "download": "Download",
+    "filters": {
+      "year": "Year",
+      "status": "Status",
+      "type": "Document Type",
+      "sapCode": "SAP Code"
+    },
+    "status": {
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "consulted": "Consulted"
+    },
+    "table": {
+      "name": "Document Name",
+      "type": "Type",
+      "sapCode": "SAP Code",
+      "loanNumber": "Loan Number",
+      "status": "Status",
+      "createdAt": "Uploaded At",
+      "file": "File",
+      "submittedBy": "Submitted By"
+    },
+    "upload": {
+      "title": "Upload Document",
+      "documentType": "Document Type",
+      "documentName": "Document Name",
+      "documentNamePlaceholder": "Enter document name",
+      "project": "Project",
+      "loanNumber": "Loan Number",
+      "file": "File",
+      "fileHelp": "Accepted formats: PDF, Word, Excel, Images",
+      "maxSize": "Maximum size",
+      "submit": "Upload",
+      "invalidForm": "Please fill in all required fields",
+      "fileTooLarge": "File size exceeds the maximum allowed size"
     }
   },
   "no_access": {

@@ -91,4 +91,8 @@ export class InternalDashboardComponent implements OnInit {
   manageUsers(): void {
     this.router.navigate(['/admin/users']);
   }
+
+  manageAdditionalDocuments(): void {
+    this.router.navigate(['/admin/additional-documents']);
+  }
 }

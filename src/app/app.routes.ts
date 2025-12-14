@@ -186,6 +186,20 @@ export const routes: Routes = [
     canActivate: [() => inject(InternalUserGuard).canActivate()]
   },
 
+  // Additional Documents - External users
+  {
+    path: 'client/additional-documents',
+    loadComponent: () => import('./components/additional-documents/external-additional-documents-list.component').then(m => m.ExternalAdditionalDocumentsListComponent),
+    canActivate: [() => inject(ExternalUserGuard).canActivate()]
+  },
+
+  // Additional Documents - Internal users
+  {
+    path: 'admin/additional-documents',
+    loadComponent: () => import('./components/additional-documents/internal-additional-documents-list.component').then(m => m.InternalAdditionalDocumentsListComponent),
+    canActivate: [() => inject(InternalUserGuard).canActivate()]
+  },
+
   // Route par défaut (404)
   {
     path: '**',

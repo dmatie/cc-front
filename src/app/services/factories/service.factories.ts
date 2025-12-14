@@ -22,6 +22,9 @@ import { DashboardServiceMock } from '../implementations/dashboard-service.mock'
 import { AbstractUserManagementService } from '../abstract/user-management-service.abstract';
 import { UserManagementServiceApi } from '../implementations/user-management-service.api';
 import { UserManagementServiceMock } from '../implementations/user-management-service.mock';
+import { OtherDocumentService } from '../abstract/other-document-service.abstract';
+import { OtherDocumentApiService } from '../implementations/other-document-service.api';
+import { OtherDocumentMockService } from '../implementations/other-document-service.mock';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { MsalInterceptorConfiguration } from '@azure/msal-angular';
 
@@ -121,6 +124,20 @@ export function userManagementServiceFactory(http: HttpClient, errorHandler: Err
   } else {
     console.log('🔧 [FACTORY] Using API User Management Service');
     return new UserManagementServiceApi(http, errorHandler);
+  }
+}
+
+/**
+ * Factory pour le service other documents
+ * Retourne l'implémentation appropriée selon l'environnement
+ */
+export function otherDocumentServiceFactory(): OtherDocumentService {
+  if (environment.features.enableMockData) {
+    console.log('🔧 [FACTORY] Using MOCK Other Document Service');
+    return new OtherDocumentMockService();
+  } else {
+    console.log('🔧 [FACTORY] Using API Other Document Service');
+    return new OtherDocumentApiService();
   }
 }
 

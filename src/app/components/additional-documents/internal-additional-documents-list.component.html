@@ -1,0 +1,154 @@
+<app-authenticated-navbar [title]="i18n.t('nav.home')" [userType]="'internal'">
+</app-authenticated-navbar>
+
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">
+            <i class="bi bi-file-earmark-text me-2"></i>
+            {{ i18n.t('additionalDocuments.title') }}
+          </h4>
+          <button class="btn btn-light btn-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>{{ i18n.t('common.back') }}
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <label class="form-label">{{ i18n.t('additionalDocuments.filters.year') }}</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedYear" />
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">{{ i18n.t('additionalDocuments.filters.status') }}</label>
+              <select class="form-select" [(ngModel)]="selectedStatus">
+                <option [ngValue]="undefined">{{ i18n.t('common.all') }}</option>
+                <option [ngValue]="1">{{ i18n.t('additionalDocuments.status.draft') }}</option>
+                <option [ngValue]="2">{{ i18n.t('additionalDocuments.status.submitted') }}</option>
+                <option [ngValue]="3">{{ i18n.t('additionalDocuments.status.consulted') }}</option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">{{ i18n.t('additionalDocuments.filters.type') }}</label>
+              <select class="form-select" [(ngModel)]="selectedTypeId">
+                <option [ngValue]="undefined">{{ i18n.t('common.all') }}</option>
+                <option *ngFor="let type of documentTypes" [ngValue]="type.id">
+                  {{ i18n.getCurrentLocale() === 'fr' ? type.nameFr : type.name }}
+                </option>
+              </select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">{{ i18n.t('additionalDocuments.filters.sapCode') }}</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedSAPCode" placeholder="P-XX-XXX-XXX" />
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-start align-items-center mb-3">
+            <button class="btn btn-primary btn-sm me-2" (click)="applyFilters()">
+              <i class="bi bi-funnel me-2"></i>{{ i18n.t('common.apply') }}
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" (click)="clearFilters()">
+              <i class="bi bi-x-circle me-2"></i>{{ i18n.t('common.clear') }}
+            </button>
+          </div>
+
+          <div *ngIf="loading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">{{ i18n.t('common.loading') }}</span>
+            </div>
+          </div>
+
+          @if (errorMessage) {
+            <div class="alert alert-danger">
+              <i class="bi bi-exclamation-triangle me-2"></i>
+              {{ errorMessage }}
+            </div>
+          }
+
+          <div *ngIf="!loading && documents.length === 0 && !errorMessage" class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            {{ i18n.t('additionalDocuments.noDocuments') }}
+          </div>
+
+          <div *ngIf="!loading && documents.length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead class="table-light">
+                <tr>
+                  <th>{{ i18n.t('additionalDocuments.table.name') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.type') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.sapCode') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.loanNumber') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.submittedBy') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.status') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.createdAt') }}</th>
+                  <th>{{ i18n.t('additionalDocuments.table.file') }}</th>
+                  <th class="text-end">{{ i18n.t('common.actions') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let document of documents">
+                  <td><strong>{{ document.name }}</strong></td>
+                  <td>{{ getDocumentTypeName(document) }}</td>
+                  <td>{{ document.sapCode }}</td>
+                  <td>{{ document.loanNumber }}</td>
+                  <td>{{ getUserFullName(document) }}</td>
+                  <td>
+                    <span [class]="getStatusClass(document.status)">
+                      {{ getStatusLabel(document.status) }}
+                    </span>
+                  </td>
+                  <td>{{ document.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                  <td>
+                    <span *ngIf="document.files.length > 0">
+                      <i [class]="'bi ' + getFileIcon(document.files[0].contentType) + ' me-2'"></i>
+                      {{ document.files[0].fileName }}
+                    </span>
+                  </td>
+                  <td class="text-end">
+                    <button
+                      *ngIf="document.files.length > 0"
+                      class="btn btn-sm btn-outline-primary"
+                      (click)="downloadDocument(document.id, document.files[0].fileName)"
+                      [title]="i18n.t('additionalDocuments.download')"
+                    >
+                      <i class="bi bi-download"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div *ngIf="!loading && documents.length > 0" class="d-flex justify-content-between align-items-center mt-3">
+            <div>
+              <span class="text-muted">
+                {{ i18n.t('common.showing') }} {{ ((pageNumber - 1) * pageSize) + 1 }}
+                {{ i18n.t('common.to') }} {{ Math.min(pageNumber * pageSize, totalCount) }}
+                {{ i18n.t('common.of') }} {{ totalCount }}
+              </span>
+            </div>
+            <nav>
+              <ul class="pagination mb-0">
+                <li class="page-item" [class.disabled]="pageNumber === 1">
+                  <button class="page-link" (click)="previousPage()" [disabled]="pageNumber === 1">
+                    {{ i18n.t('common.previous') }}
+                  </button>
+                </li>
+                <li class="page-item active">
+                  <span class="page-link">{{ pageNumber }} / {{ totalPages }}</span>
+                </li>
+                <li class="page-item" [class.disabled]="pageNumber === totalPages">
+                  <button class="page-link" (click)="nextPage()" [disabled]="pageNumber === totalPages">
+                    {{ i18n.t('common.next') }}
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+.modal {
+  display: block;
+}
+
+.required::after {
+  content: ' *';
+  color: red;
+}
+
+.form-text {
+  font-size: 0.875rem;
+}
+
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15rem;
+}

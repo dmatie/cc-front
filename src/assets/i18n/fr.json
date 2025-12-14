@@ -37,6 +37,15 @@
     "remove": "Supprimer",
     "select_all": "Sélectionner tout",
     "characters": "caractères",
+    "all": "Tous",
+    "apply": "Appliquer",
+    "clear": "Effacer",
+    "showing": "Affichage",
+    "to": "à",
+    "of": "sur",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "selectOption": "Sélectionner une option",
     "validation_errors": {
       "required": "Ce champ est requis",
       "minlength": "La longueur minimale est de {{min}} caractères",
@@ -453,8 +462,8 @@
       "disbursements_desc": "demandes actives",
       "claims": "Réclamations",
       "claims_desc": "en attente",
-      "training": "Formation & Ressources",
-      "training_desc": "Accéder aux supports de formation"
+      "additionalDocuments": "Documents Additionnels",
+      "additionalDocuments_desc": "Gérer vos documents additionnels"
     },
     "actions": {
       "title": "Actions Rapides",
@@ -500,7 +509,9 @@
       "users": "Utilisateurs",
       "users_desc": "total dans le système",
       "approved_requests": "Demandes approuvées",
-      "approved_requests_desc": "Voir les demandes approuvées"
+      "approved_requests_desc": "Voir les demandes approuvées",
+      "additionalDocuments": "Documents Additionnels",
+      "additionalDocuments_desc": "Voir les documents additionnels soumis par les clients"
     },
     "actions": {
       "title": "Actions Rapides",
@@ -520,6 +531,47 @@
       "documentation": "Documentation",
       "documentation_desc": "Guides administrateur",
       "access": "Accéder"
+    }
+  },
+  "additionalDocuments": {
+    "title": "Documents Additionnels",
+    "noDocuments": "Aucun document trouvé",
+    "uploadDocument": "Téléverser un Document",
+    "download": "Télécharger",
+    "filters": {
+      "year": "Année",
+      "status": "Statut",
+      "type": "Type de Document",
+      "sapCode": "Code SAP"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "submitted": "Soumis",
+      "consulted": "Consulté"
+    },
+    "table": {
+      "name": "Nom du Document",
+      "type": "Type",
+      "sapCode": "Code SAP",
+      "loanNumber": "Numéro de Prêt",
+      "status": "Statut",
+      "createdAt": "Téléversé le",
+      "file": "Fichier",
+      "submittedBy": "Soumis par"
+    },
+    "upload": {
+      "title": "Téléverser un Document",
+      "documentType": "Type de Document",
+      "documentName": "Nom du Document",
+      "documentNamePlaceholder": "Saisir le nom du document",
+      "project": "Projet",
+      "loanNumber": "Numéro de Prêt",
+      "file": "Fichier",
+      "fileHelp": "Formats acceptés : PDF, Word, Excel, Images",
+      "maxSize": "Taille maximale",
+      "submit": "Téléverser",
+      "invalidForm": "Veuillez remplir tous les champs obligatoires",
+      "fileTooLarge": "La taille du fichier dépasse la taille maximale autorisée"
     }
   },
   "no_access": {
