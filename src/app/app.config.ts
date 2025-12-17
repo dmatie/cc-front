@@ -18,11 +18,11 @@ import { ClaimService } from './services/abstract/claim-service.abstract';
 import { DisbursementService } from './services/abstract/disbursement-service.abstract';
 import { AbstractDashboardService } from './services/abstract/dashboard-service.abstract';
 import { AbstractUserManagementService } from './services/abstract/user-management-service.abstract';
-import { OtherDocumentService } from './services/abstract/other-document-service.abstract';
 import { MSAL_INSTANCE, MsalService } from '@azure/msal-angular';
 import { AuthInterceptor } from './interceptors/auth-interceptor';
 import { ApiErrorInterceptor } from './interceptors/api-error-interceptor';
 import { encryptionInterceptor } from './interceptors/encryption-interceptor';
+import { OtherDocumentService } from './services/abstract/other-document-service.abstract';
 
 // Register locales
 registerLocaleData(localeEn, 'en');

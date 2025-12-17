@@ -50,12 +50,19 @@
             <input
               type="text"
               class="form-control"
+              [class.is-invalid]="documentNameError"
               [(ngModel)]="documentName"
               name="documentName"
               [disabled]="loading"
               [placeholder]="i18n.t('additionalDocuments.upload.documentNamePlaceholder')"
+              (input)="validateDocumentName()"
+              (blur)="validateDocumentName()"
               required
             />
+            <div *ngIf="documentNameError" class="invalid-feedback d-block">
+              <i class="bi bi-exclamation-circle me-1"></i>
+              {{ documentNameError }}
+            </div>
           </div>
 
           <div class="mb-3">

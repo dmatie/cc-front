@@ -29,9 +29,11 @@
               </label>
               <select class="form-select" [(ngModel)]="selectedStatus" (change)="onFilterChange()">
                 <option [ngValue]="null">{{ i18n.t('claims.status.all') }}</option>
-                <option *ngFor="let option of statusOptions" [ngValue]="option.value">
+                @for (option of statusOptions; track $index) {
+                <option [ngValue]="option.value">
                   {{ getStatusLabel(option.value) }}
                 </option>
+                }
               </select>
             </div>
 
@@ -41,10 +43,12 @@
                 {{ i18n.t('claims.claimType') }}
               </label>
               <select class="form-select" [(ngModel)]="selectedClaimTypeId" (change)="onFilterChange()">
-                <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Tous les types' : 'All Types' }}</option>
-                <option *ngFor="let type of claimTypes" [value]="type.id">
+                <option value="">{{ i18n.t('claims.all_types') }}</option>
+                @for (type of claimTypes; track $index) {
+                <option [value]="type.id">
                   {{ type | localizedField: 'name' }}
                 </option>
+                }
               </select>
             </div>
 
@@ -54,17 +58,19 @@
                 {{ i18n.t('claims.country') }}
               </label>
               <select class="form-select" [(ngModel)]="selectedCountryId" (change)="onFilterChange()">
-                <option value="">{{ i18n.getCurrentLocale() === 'fr' ? 'Tous les pays' : 'All Countries' }}</option>
-                <option *ngFor="let country of countries" [value]="country.id">
+                <option value="">{{ i18n.t('claims.all_countries') }}</option>
+                @for (country of countries; track $index) {
+                <option [value]="country.id">
                   {{ country | localizedField: 'name' }}
                 </option>
+                }
               </select>
             </div>
 
             <div class="col-md-3 mb-3 d-flex align-items-end">
               <button class="btn btn-outline-secondary w-100" (click)="resetFilters()">
                 <i class="bi bi-arrow-clockwise me-2"></i>
-                {{ i18n.getCurrentLocale() === 'fr' ? 'Réinitialiser' : 'Reset' }}
+                {{ i18n.t('common.reset_filters') }}
               </button>
             </div>
           </div>
@@ -87,9 +93,7 @@
           @if (!loading && !errorMessage) {
             <div class="alert alert-info mb-4">
               <i class="bi bi-info-circle me-2"></i>
-              {{ i18n.getCurrentLocale() === 'fr'
-                ? 'Total : ' + totalCount + ' réclamation(s)'
-                : 'Total: ' + totalCount + ' claim(s)' }}
+              {{  i18n.t('claims.totalClaims', { count: totalCount }) }}
             </div>
 
             @if (claims.length === 0) {
@@ -114,7 +118,8 @@
                         </tr>
                       </thead>
                       <tbody>
-                        <tr *ngFor="let claim of claims" style="cursor: pointer;">
+                        @for (claim of claims; track $index) {
+                        <tr style="cursor: pointer;">
                           <td (click)="viewClaimDetail(claim.id)">
                             <strong>{{ claim | localizedField: 'claimTypeName' }}</strong>
                             <div class="text-muted small text-truncate" style="max-width: 300px;">
@@ -137,39 +142,48 @@
                             </button>
                           </td>
                         </tr>
+                        }
                       </tbody>
                     </table>
                   </div>
                 </div>
               </div>
 
-              <nav *ngIf="totalPages > 1" class="mt-4">
+              @if(totalPages > 1) {
+              <nav class="mt-4">
                 <ul class="pagination justify-content-center">
                   <li class="page-item" [class.disabled]="!hasPreviousPage">
                     <button class="page-link" (click)="previousPage()">
                       <i class="bi bi-chevron-left"></i>
-                      {{ i18n.getCurrentLocale() === 'fr' ? 'Précédent' : 'Previous' }}
+                      {{ i18n.t('common.previous') }}
                     </button>
                   </li>
 
-                  <li *ngFor="let page of getPageNumbers()"
+                  @for (page of getPageNumbers(); track $index) {
+                  <li
                       class="page-item"
                       [class.active]="page === currentPage"
                       [class.disabled]="page === -1">
-                    <button *ngIf="page !== -1" class="page-link" (click)="goToPage(page)">
-                      {{ page }}
-                    </button>
-                    <span *ngIf="page === -1" class="page-link">...</span>
+                      @if(page !== -1) {
+                      <button class="page-link" (click)="goToPage(page)">
+                        {{ page }}
+                      </button>
+                      }
+                      @if(page === -1) {
+                      <span class="page-link">...</span>
+                      }
                   </li>
+                  }
 
                   <li class="page-item" [class.disabled]="!hasNextPage">
                     <button class="page-link" (click)="nextPage()">
-                      {{ i18n.getCurrentLocale() === 'fr' ? 'Suivant' : 'Next' }}
+                      {{ i18n.t('common.next') }}
                       <i class="bi bi-chevron-right"></i>
                     </button>
                   </li>
                 </ul>
               </nav>
+              }
             }
           }
 

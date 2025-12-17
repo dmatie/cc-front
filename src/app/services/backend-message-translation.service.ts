@@ -18,7 +18,9 @@ export class BackendMessageTranslationService {
     'MSG.DISBURSEMENT.APPROVED_SUCCESS': 'disbursements.approved_success',
     'MSG.DISBURSEMENT.REJECTED_SUCCESS': 'disbursements.rejected_success',
     'MSG.DISBURSEMENT.BACKED_TO_CLIENT_SUCCESS': 'disbursements.backedtoclient_success',
-    'MSG.DISBURSEMENT.UPDATED_SUCCESS': 'disbursements.updated_success'
+    'MSG.DISBURSEMENT.UPDATED_SUCCESS': 'disbursements.updated_success',
+    'MSG.OtherDocument.CreatedSuccess': 'additionalDocuments.created_success',
+    'MSG.AccessRequest.Submitted':' accessrequest.submitted',
   };
 
 

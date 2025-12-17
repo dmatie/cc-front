@@ -12,6 +12,7 @@ import {
 } from '../../models/other-document.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { UploadDocumentModalComponent } from './upload-document-modal.component';
+import { getFileIcon } from '../../core/utils/helper';
 
 @Component({
   selector: 'app-external-additional-documents-list',
@@ -39,6 +40,9 @@ export class ExternalAdditionalDocumentsListComponent implements OnInit {
   totalPages = 0;
 
   Math = Math;
+
+  protected readonly getFileIcon = getFileIcon;
+  
 
   constructor(
     private otherDocumentService: OtherDocumentService,
@@ -175,12 +179,12 @@ export class ExternalAdditionalDocumentsListComponent implements OnInit {
     }
   }
 
-  getFileIcon(contentType: string): string {
+  /*getFileIcon(contentType: string): string {
     if (contentType.includes('pdf')) {
       return 'bi-file-pdf text-danger';
     } else if (contentType.includes('word') || contentType.includes('document')) {
       return 'bi-file-word text-primary';
-    } else if (contentType.includes('excel') || contentType.includes('spreadsheet')) {
+    } else if (contentType.includes('excel') || contentType.includes('spreadsheetml')) {
       return 'bi-file-excel text-success';
     } else if (contentType.includes('image')) {
       return 'bi-file-image text-info';
@@ -189,7 +193,7 @@ export class ExternalAdditionalDocumentsListComponent implements OnInit {
     } else {
       return 'bi-file-earmark text-secondary';
     }
-  }
+  }*/
 
   getDocumentTypeName(doc: OtherDocumentDto): string {
     if (doc.otherDocumentType) {

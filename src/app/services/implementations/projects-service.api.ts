@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { catchError, timeout, retry, map } from 'rxjs/operators';
 import { AbstractProjectsService } from '../abstract/projects-service.abstract';
-import { Project, ProjectsResponse, ProjectFilter, ProjectStats } from '../../models/project.model';
+import { Project, ProjectsResponse, ProjectFilter, ProjectStats, GetProjectLoanNumberResponse } from '../../models/project.model';
 import { environment } from '../../../environments/environment';
 import { ErrorHandlerService } from '../error-handler.service';
 
@@ -112,6 +112,15 @@ export class ApiProjectsService extends AbstractProjectsService {
       })
     );
   }
+
+  override getProjectLoanNumbers(sapCode: string): Observable<GetProjectLoanNumberResponse> {
+    return this.http.get<GetProjectLoanNumberResponse>(
+      `${this.apiUrl}/loans/${sapCode}`
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('ProjectsService'))
+    );
+  }
+
 
   // MÉTHODES PRIVÉES
 

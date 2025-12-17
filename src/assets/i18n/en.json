@@ -43,15 +43,16 @@
     "showing": "Showing",
     "to": "to",
     "of": "of",
+    "selectOption": "Select an option",
     "previous": "Previous",
     "next": "Next",
-    "selectOption": "Select an option",
+    "reset_filters": "Reset filters",
     "validation_errors": {
-      "required": "Ce champ est requis",
-      "minlength": "La longueur minimale est de {{min}} caractères",
-      "maxlength": "La longueur maximale est de {{max}} caractères",
-      "email": "Veuillez entrer une adresse email valide",
-      "pattern": "Le format entré est invalide"
+      "required": "This field is required",
+      "minlength": "Minimum length is {{min}} characters",
+      "maxlength": "Maximum length is {{max}} characters",
+      "email": "Please enter a valid email address",
+      "pattern": "The entered format is invalid"
     }
   },
   "home": {
@@ -79,7 +80,7 @@
       "withdrawals": "Disbursement Management",
       "withdrawals_desc": "Manage your disbursement requests"
     },
-    "footer":{
+    "footer": {
       "useful_links": "Useful Links",
       "resources": "Resources",
       "contacts": "Contacts",
@@ -468,6 +469,8 @@
       "disbursements_desc": "active requests",
       "claims": "Claims",
       "claims_desc": "pending",
+      "training": "Training & Resources",
+      "training_desc": "Access training materials",
       "additionalDocuments": "Additional Documents",
       "additionalDocuments_desc": "Manage your additional documents"
     },
@@ -476,7 +479,8 @@
       "request_disbursement": "Request Disbursement",
       "create_claim": "Create Claim",
       "download_report": "Download Report",
-      "contact_support": "Contact Support"
+      "contact_support": "Contact Support",
+      "additional_documents": "Additional Documents"
     },
     "info": {
       "title": "Useful Information",
@@ -525,7 +529,8 @@
       "claims": "Process Claims",
       "disbursements": "Approve Disbursements",
       "users": "Manage Users",
-      "internal_users": "Internal Users"
+      "internal_users": "Internal Users",
+      "additional_documents": "Additional Documents"
     },
     "info": {
       "title": "System Information",
@@ -544,6 +549,7 @@
     "noDocuments": "No documents found",
     "uploadDocument": "Upload Document",
     "download": "Download",
+    "created_success": "Document uploaded successfully",
     "filters": {
       "year": "Year",
       "status": "Status",
@@ -577,7 +583,9 @@
       "maxSize": "Maximum size",
       "submit": "Upload",
       "invalidForm": "Please fill in all required fields",
-      "fileTooLarge": "File size exceeds the maximum allowed size"
+      "fileTooLarge": "File size exceeds the maximum allowed size",
+      "invalidCharacters": "The document name contains invalid characters. Only letters, numbers, spaces, and basic punctuation are allowed.",
+      "dangerousCharacters": "The document name contains potentially dangerous characters. Please remove any special characters or scripts."
     }
   },
   "no_access": {
@@ -627,7 +635,8 @@
   },
   "projects": {
     "sapCode": "SAP Code",
-    "country": "Country"
+    "country": "Country",
+    "name": "Project title"
   },
   "registration": {
     "form": {
@@ -753,6 +762,32 @@
       "submitted": "Submitted",
       "requestCreated": "Request created",
       "processed": "Processed by administrator"
+    },
+    "approved_list": {
+      "title": "Approved Access Requests",
+      "countries": "Countries",
+      "project": "Project",
+      "all_countries": "All Countries",
+      "select_country": "Select a country first",
+      "loading": "Loading...",
+      "projects_loading": "Loading projects...",
+      "all_projects": "All Projects",
+      "select_project": "Select a project first",
+      "reset_filters": "Reset Filters",
+      "total_requests": "Total : {{count}} approved request(s)",
+      "noRequests": "No approved requests found",
+      "noRequestsDesc": "Try adjusting your filters to see more results.",
+      "table": {
+        "name": "Name",
+        "email": "Email",
+        "country": "Country",
+        "project": "Project",
+        "business_profile": "Profile",
+        "submission_date": "Submission Date",
+        "approval_date": "Approval Date",
+        "status": "Status",
+        "actions": "Actions"
+      }
     }
   },
   "errors": {
@@ -888,6 +923,10 @@
     "selectStatus": "Select status",
     "filterByStatus": "Filter by Status",
     "submitting": "Submitting...",
+    "all_countries": "All Countries",
+    "all_types": "All Types",
+    "all_statuses": "All Statuses",
+    "totalClaims": "Total : {{count}} claim(s)",
     "status": {
       "all": "All Status",
       "submitted": "Submitted",
@@ -904,6 +943,7 @@
     "noAccessPermission": "You do not have permission to access the Disbursement module",
     "noSubmitPermission": "You do not have permission to create or modify disbursements",
     "disbursementDetails": "Disbursement Details",
+    "back": "Back to Dashboard",
     "backToList": "Back to List",
     "sapCode": "SAP Code",
     "loanGrantNumber": "Loan/Grant Number",

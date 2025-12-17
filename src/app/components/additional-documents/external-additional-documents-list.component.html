@@ -16,21 +16,12 @@
         </div>
 
         <div class="card-body">
-          <div class="row mb-4">
-            <div class="col-md-3">
+          <div class="row mb-3 align-items-end">
+            <div class="col-md-2">
               <label class="form-label">{{ i18n.t('additionalDocuments.filters.year') }}</label>
               <input type="text" class="form-control" [(ngModel)]="selectedYear" />
             </div>
-            <div class="col-md-3">
-              <label class="form-label">{{ i18n.t('additionalDocuments.filters.status') }}</label>
-              <select class="form-select" [(ngModel)]="selectedStatus">
-                <option [ngValue]="undefined">{{ i18n.t('common.all') }}</option>
-                <option [ngValue]="1">{{ i18n.t('additionalDocuments.status.draft') }}</option>
-                <option [ngValue]="2">{{ i18n.t('additionalDocuments.status.submitted') }}</option>
-                <option [ngValue]="3">{{ i18n.t('additionalDocuments.status.consulted') }}</option>
-              </select>
-            </div>
-            <div class="col-md-3">
+            <div class="col-md-4">
               <label class="form-label">{{ i18n.t('additionalDocuments.filters.type') }}</label>
               <select class="form-select" [(ngModel)]="selectedTypeId">
                 <option [ngValue]="undefined">{{ i18n.t('common.all') }}</option>
@@ -43,10 +34,7 @@
               <label class="form-label">{{ i18n.t('additionalDocuments.filters.sapCode') }}</label>
               <input type="text" class="form-control" [(ngModel)]="selectedSAPCode" placeholder="P-XX-XXX-XXX" />
             </div>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
+            <div class="col-md-3">
               <button class="btn btn-primary btn-sm me-2" (click)="applyFilters()">
                 <i class="bi bi-funnel me-2"></i>{{ i18n.t('common.apply') }}
               </button>
@@ -54,6 +42,9 @@
                 <i class="bi bi-x-circle me-2"></i>{{ i18n.t('common.clear') }}
               </button>
             </div>
+          </div>
+
+          <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-success" (click)="openUploadModal()">
               <i class="bi bi-upload me-2"></i>{{ i18n.t('additionalDocuments.uploadDocument') }}
             </button>
@@ -105,7 +96,8 @@
                   <td>{{ document.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
                   <td>
                     <span *ngIf="document.files.length > 0">
-                      <i [class]="'bi ' + getFileIcon(document.files[0].contentType) + ' me-2'"></i>
+                      @let fileIcon = getFileIcon(document.files[0].fileName);
+                      <i [class]="'bi ' + fileIcon.iconClass + ' ' + fileIcon.colorClass"></i>
                       {{ document.files[0].fileName }}
                     </span>
                   </td>

@@ -6,7 +6,6 @@ import {
   CreateOtherDocumentCommand,
   CreateOtherDocumentResponse,
   OtherDocumentTypeDto,
-  GetProjectLoanNumberResponse
 } from '../../models/other-document.model';
 
 export abstract class OtherDocumentService {
@@ -25,6 +24,4 @@ export abstract class OtherDocumentService {
   abstract getOtherDocumentTypes(): Observable<OtherDocumentTypeDto[]>;
 
   abstract downloadFile(otherDocumentId: string): Observable<Blob>;
-
-  abstract getProjectLoanNumbers(sapCode: string): Observable<GetProjectLoanNumberResponse>;
 }

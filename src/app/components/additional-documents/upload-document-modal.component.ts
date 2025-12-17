@@ -8,9 +8,11 @@ import { I18nService } from '../../services/i18n.service';
 import {
   CreateOtherDocumentCommand,
   OtherDocumentTypeDto,
-  ProjectLoanNumberDto
 } from '../../models/other-document.model';
 import { AccessRequestProjectDto } from '../../models/registration.model';
+import { AbstractProjectsService } from '../../services/abstract/projects-service.abstract';
+import { ProjectLoanNumberDto } from '../../models/project.model';
+import { SanitizationUtils } from '../../core/utils/sanitization.util';
 
 @Component({
   selector: 'app-upload-document-modal',
@@ -34,6 +36,7 @@ export class UploadDocumentModalComponent implements OnInit {
   loadingLoanNumbers = false;
   errorMessage = '';
   successMessage = '';
+  documentNameError = '';
 
   documentTypes: OtherDocumentTypeDto[] = [];
   projects: AccessRequestProjectDto[] = [];
@@ -44,6 +47,7 @@ export class UploadDocumentModalComponent implements OnInit {
 
   constructor(
     private otherDocumentService: OtherDocumentService,
+    private projectsService: AbstractProjectsService  ,
     private registrationService: AbstractRegistrationService,
     private authService: AuthService,
     public i18n: I18nService
@@ -105,7 +109,7 @@ export class UploadDocumentModalComponent implements OnInit {
 
   loadLoanNumbers(): void {
     this.loadingLoanNumbers = true;
-    this.otherDocumentService.getProjectLoanNumbers(this.selectedProjectSAPCode).subscribe({
+    this.projectsService.getProjectLoanNumbers(this.selectedProjectSAPCode).subscribe({
       next: (response) => {
         this.loanNumbers = response.projectLoanNumbers;
         this.loadingLoanNumbers = false;
@@ -130,7 +134,11 @@ export class UploadDocumentModalComponent implements OnInit {
         return;
       }
 
-      this.selectedFile = file;
+      const fileExtension = file.name.substring(file.name.lastIndexOf('.'));
+      const fileNameWithoutExt = file.name.substring(0, file.name.lastIndexOf('.'));
+      const sanitizedFileName = SanitizationUtils.sanitizeFileName(fileNameWithoutExt) + fileExtension;
+
+      this.selectedFile = new File([file], sanitizedFileName, { type: file.type });
       this.errorMessage = '';
     }
   }
@@ -138,7 +146,7 @@ export class UploadDocumentModalComponent implements OnInit {
   isFormValid(): boolean {
     return (
       this.documentTypeId !== '' &&
-      this.documentName.trim() !== '' &&
+      this.isDocumentNameValid() &&
       this.selectedProjectSAPCode !== '' &&
       this.selectedLoanNumber !== '' &&
       this.selectedFile !== null
@@ -155,9 +163,11 @@ export class UploadDocumentModalComponent implements OnInit {
     this.errorMessage = '';
     this.successMessage = '';
 
+    const sanitizedDocumentName = SanitizationUtils.sanitizeInput(this.documentName);
+
     const command: CreateOtherDocumentCommand = {
       otherDocumentTypeId: this.documentTypeId,
-      name: this.documentName.trim(),
+      name: sanitizedDocumentName,
       sapCode: this.selectedProjectSAPCode,
       loanNumber: this.selectedLoanNumber,
       files: [this.selectedFile!]
@@ -188,5 +198,30 @@ export class UploadDocumentModalComponent implements OnInit {
 
   getProjectDisplay(project: AccessRequestProjectDto): string {
     return `${project.sapCode} - ${project.projectTitle}`;
+  }
+
+  validateDocumentName(): void {
+    if (!this.documentName) {
+      this.documentNameError = '';
+      return;
+    }
+
+    const sanitized = SanitizationUtils.sanitizeInput(this.documentName);
+
+    if (sanitized !== this.documentName) {
+      this.documentNameError = this.i18n.t('additionalDocuments.upload.invalidCharacters');
+      return;
+    }
+
+    if (!SanitizationUtils.isClean(this.documentName)) {
+      this.documentNameError = this.i18n.t('additionalDocuments.upload.dangerousCharacters');
+      return;
+    }
+
+    this.documentNameError = '';
+  }
+
+  isDocumentNameValid(): boolean {
+    return this.documentName.trim() !== '' && this.documentNameError === '';
   }
 }

@@ -26,3 +26,13 @@ export interface ProjectStats {
   activeProjects: number;
   projectsByCountry: { [countryCode: string]: number };
 }
+
+export interface ProjectLoanNumberDto {
+  sapCode: string;
+  loanNumber: string;
+}
+
+export interface GetProjectLoanNumberResponse {
+  projectLoanNumbers: ProjectLoanNumberDto[];
+  totalCount: number;
+}

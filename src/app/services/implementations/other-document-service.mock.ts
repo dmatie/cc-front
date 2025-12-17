@@ -10,7 +10,6 @@ import {
   OtherDocumentTypeDto,
   OtherDocumentDto,
   OtherDocumentStatus,
-  GetProjectLoanNumberResponse
 } from '../../models/other-document.model';
 
 @Injectable()
@@ -109,11 +108,6 @@ export class OtherDocumentMockService extends OtherDocumentService {
     }
   ];
 
-  private mockProjectLoanNumbers = [
-    { sapCode: 'P-MA-AAA-001', loanNumber: 'LG-2024-001' },
-    { sapCode: 'P-MA-AAA-001', loanNumber: 'LG-2024-002' },
-    { sapCode: 'P-TN-BBB-002', loanNumber: 'LG-2024-003' }
-  ];
 
   override getOtherDocumentsByUserFiltered(
     query: GetOtherDocumentsByUserFilteredQuery
@@ -218,12 +212,4 @@ export class OtherDocumentMockService extends OtherDocumentService {
     return of(mockBlob).pipe(delay(500));
   }
 
-  override getProjectLoanNumbers(sapCode: string): Observable<GetProjectLoanNumberResponse> {
-    const filtered = this.mockProjectLoanNumbers.filter(p => p.sapCode === sapCode);
-    const response: GetProjectLoanNumberResponse = {
-      projectLoanNumbers: filtered,
-      totalCount: filtered.length
-    };
-    return of(response).pipe(delay(300));
-  }
 }

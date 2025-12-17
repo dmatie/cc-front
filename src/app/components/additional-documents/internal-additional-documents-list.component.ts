@@ -11,6 +11,7 @@ import {
   GetOtherDocumentsWithFiltersQuery
 } from '../../models/other-document.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
+import { getFileIcon } from '../../core/utils/helper';
 
 @Component({
   selector: 'app-internal-additional-documents-list',
@@ -37,6 +38,9 @@ export class InternalAdditionalDocumentsListComponent implements OnInit {
   totalPages = 0;
 
   Math = Math;
+
+  protected readonly getFileIcon = getFileIcon;
+  
 
   constructor(
     private otherDocumentService: OtherDocumentService,
@@ -160,12 +164,12 @@ export class InternalAdditionalDocumentsListComponent implements OnInit {
     }
   }
 
-  getFileIcon(contentType: string): string {
+  /*getFileIcon(contentType: string): string {
     if (contentType.includes('pdf')) {
       return 'bi-file-pdf text-danger';
     } else if (contentType.includes('word') || contentType.includes('document')) {
       return 'bi-file-word text-primary';
-    } else if (contentType.includes('excel') || contentType.includes('spreadsheet')) {
+    } else if (contentType.includes('excel') || contentType.includes('spreadsheetml')) {
       return 'bi-file-excel text-success';
     } else if (contentType.includes('image')) {
       return 'bi-file-image text-info';
@@ -174,7 +178,7 @@ export class InternalAdditionalDocumentsListComponent implements OnInit {
     } else {
       return 'bi-file-earmark text-secondary';
     }
-  }
+  }*/
 
   getDocumentTypeName(doc: OtherDocumentDto): string {
     if (doc.otherDocumentType) {

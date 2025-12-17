@@ -52,7 +52,7 @@
                       </td>
                       <td>{{ request.email }}</td>
                       <td class="text-center">
-                        <span class="badge badge-sm bg-secondary">{{ request.financingTypeName }}</span>
+                        <span class="badge badge-sm bg-secondary">{{ request | localizedField: 'financingTypeName' }}</span>
                       </td>
                       <td class="text-center">{{ request.submissionDate | date:'short' }}</td>
                       <td class="text-center">

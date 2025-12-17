@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
 import { delay, map, catchError } from 'rxjs/operators';
 import { AbstractProjectsService } from '../abstract/projects-service.abstract';
-import { Project, ProjectsResponse, ProjectFilter, ProjectStats } from '../../models/project.model';
+import { Project, ProjectsResponse, ProjectFilter, ProjectStats, GetProjectLoanNumberResponse } from '../../models/project.model';
 
 /**
  * Implémentation mock du service projets
@@ -52,6 +52,14 @@ export class MockProjectsService extends AbstractProjectsService {
     { sapCode: "P-ZA-F80-001", projectName: "Transition Énergétique", countryCode: "ZA", managingCountryCode: "ZA" },
     { sapCode: "P-ZA-F81-002", projectName: "Inclusion Financière", countryCode: "ZA", managingCountryCode: "ZA" }
   ];
+
+
+    private mockProjectLoanNumbers = [
+      { sapCode: 'P-MA-AAA-001', loanNumber: 'LG-2024-001' },
+      { sapCode: 'P-MA-AAA-001', loanNumber: 'LG-2024-002' },
+      { sapCode: 'P-TN-BBB-002', loanNumber: 'LG-2024-003' }
+    ];
+  
 
   getProjectsByCountry(countryCode: string, pageNumber: number = 1, pageSize: number = 10): Observable<ProjectsResponse> {
     console.log('🏗️ [MOCK] Fetching projects for country:', countryCode);
@@ -204,6 +212,17 @@ export class MockProjectsService extends AbstractProjectsService {
       map(() => this.mockProjects.some(project => project.sapCode === sapCode))
     );
   }
+
+  
+  override getProjectLoanNumbers(sapCode: string): Observable<GetProjectLoanNumberResponse> {
+    const filtered = this.mockProjectLoanNumbers.filter(p => p.sapCode === sapCode);
+    const response: GetProjectLoanNumberResponse = {
+      projectLoanNumbers: filtered,
+      totalCount: filtered.length
+    };
+    return of(response).pipe(delay(300));
+  }
+
 
   // MÉTHODES PRIVÉES
 

@@ -6,11 +6,13 @@ import { I18nService } from '../../services/i18n.service';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { RegistrationDetail, RegistrationResponseAll, StatusMapper } from '../../models/registration.model';
 import { AuthService } from '../../services/auth.service';
+import { LocalizedFieldPipe } from '../../core/utils/localized-field.pipe';
+
 
 @Component({
   selector: 'app-access-request-list',
   standalone: true,
-  imports: [CommonModule, AuthenticatedNavbarComponent],
+  imports: [CommonModule, AuthenticatedNavbarComponent, LocalizedFieldPipe],
   templateUrl: './access-request-list.component.html',
   styleUrl: './access-request-list.component.css'
 })

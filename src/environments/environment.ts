@@ -19,7 +19,8 @@ export const environment = {
         neverEncryptPaths: [
             '/api/disbursements',
             '/api/accessrequests/*/submit',
-            '/api/accessrequests/downloadsignedform'
+            '/api/accessrequests/downloadsignedform',
+            '/api/otherdocuments'
         ]
     }
 };

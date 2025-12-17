@@ -1,7 +1,7 @@
 export const environment = {
     production: false,
-    apiUrl: 'https://clientconnection-backend.victoriousmeadow-cdaaa30d.eastus.azurecontainerapps.io/api', // URL de développement
-    //apiUrl: 'https://localhost:7501/api', // URL de développement
+   // apiUrl: 'https://clientconnection-backend.victoriousmeadow-cdaaa30d.eastus.azurecontainerapps.io/api', // URL de développement
+    apiUrl: 'https://localhost:7501/api', // URL de développement
     azureAd: {
         clientId: '6ea7798e-7e05-452a-a8b2-13909a0566d0', 
         authority: 'https://login.microsoftonline.com/727339d1-16ec-43cb-b6c3-5001fec5e907',
@@ -20,7 +20,8 @@ export const environment = {
         neverEncryptPaths: [
             '/api/disbursements',
             '/api/accessrequests/*/submit',
-            '/api/accessrequests/downloadsignedform'
+            '/api/accessrequests/downloadsignedform',
+            '/api/otherdocuments'
         ]
     }
 };

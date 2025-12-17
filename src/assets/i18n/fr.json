@@ -43,9 +43,10 @@
     "showing": "Affichage",
     "to": "à",
     "of": "sur",
+    "selectOption": "Sélectionner une option",
     "previous": "Précédent",
     "next": "Suivant",
-    "selectOption": "Sélectionner une option",
+    "reset_filters": "Réinitialiser les filtres",
     "validation_errors": {
       "required": "Ce champ est requis",
       "minlength": "La longueur minimale est de {{min}} caractères",
@@ -79,7 +80,7 @@
       "withdrawals": "Gestion des Décaissements",
       "withdrawals_desc": "Gérez vos demandes de décaissement"
     },
-    "footer":{
+    "footer": {
       "useful_links": "Liens Utiles",
       "resources": "Ressources",
       "contacts": "Contacts",
@@ -462,6 +463,8 @@
       "disbursements_desc": "demandes actives",
       "claims": "Réclamations",
       "claims_desc": "en attente",
+      "training": "Formation & Ressources",
+      "training_desc": "Accéder aux supports de formation",
       "additionalDocuments": "Documents Additionnels",
       "additionalDocuments_desc": "Gérer vos documents additionnels"
     },
@@ -470,7 +473,8 @@
       "request_disbursement": "Demander un Décaissement",
       "create_claim": "Créer une Réclamation",
       "download_report": "Télécharger un Rapport",
-      "contact_support": "Contacter le Support"
+      "contact_support": "Contacter le Support",
+      "additional_documents": "Documents Additionnels"
     },
     "info": {
       "title": "Informations Utiles",
@@ -519,7 +523,8 @@
       "claims": "Traiter les Réclamations",
       "disbursements": "Approuver les Décaissements",
       "users": "Gérer les Utilisateurs",
-      "internal_users": "Utilisateurs Internes"
+      "internal_users": "Utilisateurs Internes",
+      "additional_documents": "Documents Additionnels"
     },
     "info": {
       "title": "Informations Système",
@@ -538,6 +543,7 @@
     "noDocuments": "Aucun document trouvé",
     "uploadDocument": "Téléverser un Document",
     "download": "Télécharger",
+    "created_success": "Document téléversé avec succès",
     "filters": {
       "year": "Année",
       "status": "Statut",
@@ -571,7 +577,9 @@
       "maxSize": "Taille maximale",
       "submit": "Téléverser",
       "invalidForm": "Veuillez remplir tous les champs obligatoires",
-      "fileTooLarge": "La taille du fichier dépasse la taille maximale autorisée"
+      "fileTooLarge": "La taille du fichier dépasse la taille maximale autorisée",
+      "invalidCharacters": "Le nom du document contient des caractères non valides. Seuls les lettres, les chiffres, les espaces et la ponctuation de base sont autorisés.",
+      "dangerousCharacters": "Le nom du document contient des caractères potentiellement dangereux. Veuillez supprimer tous les caractères spéciaux ou scripts."
     }
   },
   "no_access": {
@@ -621,7 +629,8 @@
   },
   "projects": {
     "sapCode": "Code SAP",
-    "country": "Pays"
+    "country": "Pays",
+    "name": "Titre du Projet"
   },
   "registration": {
     "form": {
@@ -747,6 +756,32 @@
       "submitted": "Soumise",
       "requestCreated": "Demande créée",
       "processed": "Traitée par l'administrateur"
+    },
+    "approved_list": {
+      "title": "Demandes d'Accès Approuvées",
+      "countries": "Pays",
+      "project": "Projet",
+      "all_countries": "Tous les pays",
+      "select_country": "Sélectionner d'abord un pays",
+      "loading": "Chargement...",
+      "projects_loading": "Chargement des projets...",
+      "all_projects": "Tous les projets",
+      "select_project": "Sélectionner d'abord un projet",
+      "reset_filters": "Réinitialiser les filtres",
+      "total_requests": "Total : {{count}} demande(s) approuvée(s)",
+      "noRequests": "Aucune demande approuvée trouvée",
+      "noRequestsDesc": "Essayez de modifier vos filtres pour voir plus de résultats.",
+      "table": {
+        "name": "Nom",
+        "email": "Email",
+        "country": "Pays",
+        "project": "Projet",
+        "business_profile": "Profil",
+        "submission_date": "Date de soumission",
+        "approval_date": "Date d'approbation",
+        "status": "Statut",
+        "actions": "Actions"
+      }
     }
   },
   "errors": {
@@ -882,6 +917,10 @@
     "selectStatus": "Sélectionner le statut",
     "filterByStatus": "Filtrer par Statut",
     "submitting": "Envoi en cours...",
+    "all_countries": "Tous les Pays",
+    "all_types": "Tous les Types",
+    "all_statuses": "Tous les Statuts",
+    "totalClaims": "Total : {{count}} réclamation(s)",
     "status": {
       "all": "Tous les Statuts",
       "submitted": "Soumis",
@@ -899,6 +938,7 @@
     "noSubmitPermission": "Vous n'avez pas la permission de créer ou de modifier des décaissements",
     "disbursementDetails": "Détails du Décaissement",
     "backToList": "Retour à la Liste",
+    "back": "Retour au Tableau de Bord",
     "sapCode": "Code SAP",
     "loanGrantNumber": "Numéro de Prêt/Subvention",
     "disbursementType": "Type de Décaissement",

@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { Project, ProjectsResponse, ProjectFilter, ProjectStats } from '../../models/project.model';
+import { Project, ProjectsResponse, ProjectFilter, ProjectStats, GetProjectLoanNumberResponse } from '../../models/project.model';
 
 /**
  * Service abstrait pour la gestion des projets
@@ -56,4 +56,6 @@ export abstract class AbstractProjectsService {
    * @returns Observable avec true si le projet existe, false sinon
    */
   abstract projectExists(sapCode: string): Observable<boolean>;
+
+  abstract getProjectLoanNumbers(sapCode: string): Observable<GetProjectLoanNumberResponse>;
 }

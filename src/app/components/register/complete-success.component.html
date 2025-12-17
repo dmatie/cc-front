@@ -27,13 +27,6 @@
               <i class="bi bi-envelope-check text-success me-3 mt-1" style="font-size: 1.5rem;"></i>
               <div class="text-start w-100">
                 <h5 class="alert-heading mb-3">{{ i18n.t('complete_success.success_title') }}</h5>
-                <div class="mb-3" *ngIf="requestId">
-                  <strong>{{ i18n.t('complete_success.request_number') }}</strong>
-                  <code class="bg-light px-2 py-1 rounded">{{ requestId }}</code>
-                </div>
-                <p class="mb-2" *ngIf="customMessage">
-                  {{ customMessage }}
-                </p>
                 <p class="mb-2">
                   {{ i18n.t('complete_success.message1') }}
                 </p>

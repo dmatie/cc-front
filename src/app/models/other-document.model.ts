@@ -97,12 +97,3 @@ export interface CreateOtherDocumentResponse {
   message: string;
 }
 
-export interface ProjectLoanNumberDto {
-  sapCode: string;
-  loanNumber: string;
-}
-
-export interface GetProjectLoanNumberResponse {
-  projectLoanNumbers: ProjectLoanNumberDto[];
-  totalCount: number;
-}

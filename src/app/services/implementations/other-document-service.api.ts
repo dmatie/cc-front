@@ -10,7 +10,6 @@ import {
   CreateOtherDocumentCommand,
   CreateOtherDocumentResponse,
   OtherDocumentTypeDto,
-  GetProjectLoanNumberResponse
 } from '../../models/other-document.model';
 import { ErrorHandlerService } from '../error-handler.service';
 
@@ -131,14 +130,6 @@ export class OtherDocumentApiService extends OtherDocumentService {
       params,
       responseType: 'blob'
     }).pipe(
-      catchError(this.errorHandler.handleApiErrorRx('OtherDocumentService'))
-    );
-  }
-
-  override getProjectLoanNumbers(sapCode: string): Observable<GetProjectLoanNumberResponse> {
-    return this.http.get<GetProjectLoanNumberResponse>(
-      `${this.projectsUrl}/loans/${sapCode}`
-    ).pipe(
       catchError(this.errorHandler.handleApiErrorRx('OtherDocumentService'))
     );
   }
