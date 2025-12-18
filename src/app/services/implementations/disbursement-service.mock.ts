@@ -21,6 +21,9 @@ import {
   CurrencyDto,
   DisbursementStatus,
   DisbursementPermissionsDto,
+  AddDisbursementDocumentsCommand,
+  AddDisbursementDocumentsResponse,
+  DeleteDisbursementDocumentResponse,
 } from '../../models/disbursement.model';
 
 @Injectable()
@@ -454,10 +457,62 @@ export class DisbursementMockService extends DisbursementService {
     return of(mockBlob).pipe(delay(300));
   }
 
-    override getMyPermissions(): Observable<DisbursementPermissionsDto> {
+  override getMyPermissions(): Observable<DisbursementPermissionsDto> {
     return of({
       canConsult: true,
       canSubmit: true
+    }).pipe(delay(300));
+  }
+
+  override addDisbursementDocuments(
+    command: AddDisbursementDocumentsCommand
+  ): Observable<AddDisbursementDocumentsResponse> {
+    const disbursement = this.mockDisbursements.find(d => d.id === command.disbursementId);
+
+    if (!disbursement) {
+      return throwError(() => new Error('Disbursement not found'));
+    }
+
+    const newDocuments = command.documents.map((file, index) => ({
+      id: `doc-${Date.now()}-${index}`,
+      disbursementId: command.disbursementId,
+      fileName: file.name,
+      fileUrl: `mock-url/${file.name}`,
+      contentType: file.type,
+      fileSize: file.size,
+      uploadedAt: new Date().toISOString(),
+      createdBy: 'mock.user@example.com',
+      createdAt: new Date().toISOString()
+    }));
+
+    disbursement.documents.push(...newDocuments);
+
+    return of({
+      message: 'Documents uploaded successfully',
+      disbursement: disbursement
+    }).pipe(delay(500));
+  }
+
+  override deleteDisbursementDocument(
+    disbursementId: string,
+    documentId: string
+  ): Observable<DeleteDisbursementDocumentResponse> {
+    const disbursement = this.mockDisbursements.find(d => d.id === disbursementId);
+
+    if (!disbursement) {
+      return throwError(() => new Error('Disbursement not found'));
+    }
+
+    const documentIndex = disbursement.documents.findIndex(d => d.id === documentId);
+
+    if (documentIndex === -1) {
+      return throwError(() => new Error('Document not found'));
+    }
+
+    disbursement.documents.splice(documentIndex, 1);
+
+    return of({
+      message: 'Document deleted successfully'
     }).pipe(delay(300));
   }
 }

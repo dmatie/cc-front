@@ -18,6 +18,9 @@ import {
   DisbursementTypeDto,
   CurrencyDto,
   DisbursementPermissionsDto,
+  AddDisbursementDocumentsCommand,
+  AddDisbursementDocumentsResponse,
+  DeleteDisbursementDocumentResponse,
 } from '../../models/disbursement.model';
 
 export abstract class DisbursementService {
@@ -64,5 +67,14 @@ export abstract class DisbursementService {
     fileName: string
   ): Observable<Blob>;
 
-   abstract getMyPermissions(): Observable<DisbursementPermissionsDto>;
+  abstract getMyPermissions(): Observable<DisbursementPermissionsDto>;
+
+  abstract addDisbursementDocuments(
+    command: AddDisbursementDocumentsCommand
+  ): Observable<AddDisbursementDocumentsResponse>;
+
+  abstract deleteDisbursementDocument(
+    disbursementId: string,
+    documentId: string
+  ): Observable<DeleteDisbursementDocumentResponse>;
 }

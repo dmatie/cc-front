@@ -566,7 +566,7 @@
                   </div>
                 </div>
 
-                <div *ngIf="disbursement.documents.length > 0" class="card shadow-sm mb-4">
+                <div class="card shadow-sm mb-4">
                   <div class="card-header bg-white">
                     <h5 class="mb-0">
                       <i class="bi bi-paperclip me-2"></i>
@@ -574,23 +574,106 @@
                     </h5>
                   </div>
                   <div class="card-body">
-                    <div class="list-group">
+                    <div *ngIf="disbursement.documents.length > 0" class="list-group mb-4">
                       <div *ngFor="let doc of disbursement.documents" class="list-group-item">
                         <div class="d-flex justify-content-between align-items-center">
-                          <div>
+                          <div class="flex-grow-1">
                             @let fileIcon = getFileIcon(doc.fileName);
                             <i class="bi {{ fileIcon.iconClass }} {{ fileIcon.colorClass }} me-2"></i>
                             <strong>{{ doc.fileName }}</strong>
+                            <div class="text-muted small mt-1">
+                              {{ getFileSize(doc.fileSize) }} - {{ i18n.getCurrentLocale() === 'fr' ? 'Ajouté le' : 'Added on' }} {{ doc.uploadedAt | date: 'short' }}
+                            </div>
                           </div>
-                          <button
-                            type="button"
-                            class="btn btn-sm btn-outline-primary"
-                            (click)="downloadDocument(doc.fileName)"
-                            [disabled]="loading">
-                            <i class="bi bi-download me-1"></i>
-                            {{ i18n.getCurrentLocale() === 'fr' ? 'Télécharger' : 'Download' }}
-                          </button>
+                          <div class="d-flex gap-2">
+                            <button
+                              type="button"
+                              class="btn btn-sm btn-outline-primary"
+                              (click)="downloadDocument(doc.fileName)"
+                              [disabled]="loading">
+                              <i class="bi bi-download me-1"></i>
+                              {{ i18n.getCurrentLocale() === 'fr' ? 'Télécharger' : 'Download' }}
+                            </button>
+                            <button
+                              *ngIf="!isInternalUser && canDeleteDocument(doc)"
+                              type="button"
+                              class="btn btn-sm btn-outline-danger"
+                              (click)="deleteDocument(doc)"
+                              [disabled]="deletingDocumentId === doc.id">
+                              <i class="bi bi-trash me-1"></i>
+                              {{ deletingDocumentId === doc.id ? (i18n.getCurrentLocale() === 'fr' ? 'Suppression...' : 'Deleting...') : (i18n.getCurrentLocale() === 'fr' ? 'Supprimer' : 'Delete') }}
+                            </button>
+                          </div>
                         </div>
+                      </div>
+                    </div>
+
+                    <div *ngIf="disbursement.documents.length === 0" class="alert alert-info mb-4">
+                      <i class="bi bi-info-circle me-2"></i>
+                      {{ i18n.getCurrentLocale() === 'fr' ? 'Aucun document disponible' : 'No documents available' }}
+                    </div>
+
+                    <div *ngIf="!isInternalUser">
+                      <hr class="my-4">
+                      <h6 class="mb-3">
+                        <i class="bi bi-cloud-upload me-2"></i>
+                        {{ i18n.getCurrentLocale() === 'fr' ? 'Ajouter des documents' : 'Add Documents' }}
+                      </h6>
+
+                      <div *ngIf="uploadDocumentsSuccess" class="alert alert-success alert-dismissible fade show">
+                        <i class="bi bi-check-circle me-2"></i>
+                        {{ uploadDocumentsSuccess }}
+                        <button type="button" class="btn-close" (click)="uploadDocumentsSuccess = ''"></button>
+                      </div>
+
+                      <div *ngIf="uploadDocumentsError" class="alert alert-danger alert-dismissible fade show">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        {{ uploadDocumentsError }}
+                        <button type="button" class="btn-close" (click)="uploadDocumentsError = ''"></button>
+                      </div>
+
+                      <div class="mb-3">
+                        <input
+                          type="file"
+                          class="form-control"
+                          multiple
+                          (change)="onDocumentsSelected($event)"
+                          [disabled]="uploadingDocuments"
+                          accept=".pdf,.doc,.docx,.xls,.xlsx" />
+                        <small class="form-text text-muted">
+                          {{ i18n.getCurrentLocale() === 'fr' ? 'Formats acceptés: PDF, Word, Excel. Taille maximale: 5 Mo par fichier' : 'Accepted formats: PDF, Word, Excel. Maximum size: 5 MB per file' }}
+                        </small>
+                      </div>
+
+                      <div *ngIf="documentsToUpload.length > 0" class="mb-3">
+                        <div class="list-group">
+                          <div *ngFor="let file of documentsToUpload; let i = index" class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                              <div>
+                                @let fileIcon = getFileIcon(file.name);
+                                <i class="bi {{ fileIcon.iconClass }} {{ fileIcon.colorClass }} me-2"></i>
+                                {{ file.name }}
+                                <span class="text-muted small ms-2">({{ getFileSize(file.size) }})</span>
+                              </div>
+                              <button
+                                type="button"
+                                class="btn btn-sm btn-outline-danger"
+                                (click)="removeDocumentFromUploadList(i)"
+                                [disabled]="uploadingDocuments">
+                                <i class="bi bi-x-circle"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          class="btn btn-primary mt-3"
+                          (click)="uploadDocuments()"
+                          [disabled]="uploadingDocuments || documentsToUpload.length === 0">
+                          <i class="bi bi-upload me-2"></i>
+                          {{ uploadingDocuments ? (i18n.getCurrentLocale() === 'fr' ? 'Téléversement...' : 'Uploading...') : (i18n.getCurrentLocale() === 'fr' ? 'Téléverser les documents' : 'Upload Documents') }}
+                        </button>
                       </div>
                     </div>
                   </div>

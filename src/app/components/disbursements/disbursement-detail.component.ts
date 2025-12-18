@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DisbursementService } from '../../services/abstract/disbursement-service.abstract';
 import { AuthService } from '../../services/auth.service';
 import { I18nService } from '../../services/i18n.service';
-import { DisbursementDto, DisbursementPermissionsDto, DisbursementStatus } from '../../models/disbursement.model';
+import { DisbursementDto, DisbursementPermissionsDto, DisbursementStatus, DisbursementDocumentDto } from '../../models/disbursement.model';
 import { AuthenticatedNavbarComponent } from '../layout/authenticated-navbar.component';
 import { BackendMessageTranslationService } from '../../services/backend-message-translation.service';
 import { ResubmitDisbursementModalComponent } from './resubmit-disbursement-modal.component';
@@ -45,6 +45,12 @@ export class DisbursementDetailComponent implements OnInit {
   additionalDocuments: File[] = [];
   protected readonly getFileIcon = getFileIcon;
   protected readonly AppConstants = AppConstants;
+
+  uploadingDocuments = false;
+  uploadDocumentsError = '';
+  uploadDocumentsSuccess = '';
+  documentsToUpload: File[] = [];
+  deletingDocumentId: string | null = null;
   
 
   constructor(
@@ -406,5 +412,109 @@ export class DisbursementDetailComponent implements OnInit {
     } else {
       this.router.navigate(['/disbursements']);
     }
+  }
+
+  onDocumentsSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.addDocumentsToUpload(Array.from(input.files));
+      input.value = '';
+    }
+  }
+
+  addDocumentsToUpload(files: File[]): void {
+    this.uploadDocumentsError = '';
+    const maxSize = AppConstants.FileUpload.maxSizeBytes;
+    const allowedTypes = AppConstants.FileUpload.allowedTypes;
+
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        this.uploadDocumentsError = this.i18n.translate('errors.fileTypeNotAllowed').replace('{fileName}', file.name);
+        continue;
+      }
+
+      if (file.size > maxSize) {
+        const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+        this.uploadDocumentsError = this.i18n.translate('errors.fileTooLarge')
+          .replace('{fileName}', file.name)
+          .replace('{size}', sizeMB)
+          .replace('{maxSize}', AppConstants.FileUpload.maxSizeMB.toString());
+        continue;
+      }
+
+      this.documentsToUpload.push(file);
+    }
+  }
+
+  removeDocumentFromUploadList(index: number): void {
+    this.documentsToUpload.splice(index, 1);
+  }
+
+  uploadDocuments(): void {
+    if (!this.disbursement || this.documentsToUpload.length === 0) return;
+
+    this.uploadingDocuments = true;
+    this.uploadDocumentsError = '';
+    this.uploadDocumentsSuccess = '';
+
+    this.disbursementService.addDisbursementDocuments({
+      disbursementId: this.disbursement.id,
+      documents: this.documentsToUpload
+    }).subscribe({
+      next: (response) => {
+        this.uploadDocumentsSuccess = this.messageTranslationService.translateMessage(response.message);
+        this.disbursement = response.disbursement;
+        this.documentsToUpload = [];
+        this.uploadingDocuments = false;
+      },
+      error: (error) => {
+        this.uploadDocumentsError = error.message || 'Error uploading documents';
+        this.uploadingDocuments = false;
+      }
+    });
+  }
+
+  canDeleteDocument(document: DisbursementDocumentDto): boolean {
+    if (this.isInternalUser) return false;
+
+    const currentUser = this.authService.getCurrentUser();
+    return document.createdBy === currentUser?.email;
+  }
+
+  deleteDocument(document: DisbursementDocumentDto): void {
+    if (!this.disbursement || !this.canDeleteDocument(document)) return;
+
+    if (!confirm(this.i18n.getCurrentLocale() === 'fr'
+      ? `Êtes-vous sûr de vouloir supprimer le document "${document.fileName}" ?`
+      : `Are you sure you want to delete the document "${document.fileName}"?`)) {
+      return;
+    }
+
+    this.deletingDocumentId = document.id;
+    this.errorMessage = '';
+    this.successMessage = '';
+
+    this.disbursementService.deleteDisbursementDocument(
+      this.disbursement.id,
+      document.id
+    ).subscribe({
+      next: (response) => {
+        this.successMessage = this.messageTranslationService.translateMessage(response.message);
+        this.loadDisbursementDetail(this.disbursement!.id);
+        this.deletingDocumentId = null;
+      },
+      error: (error) => {
+        this.errorMessage = error.message || 'Error deleting document';
+        this.deletingDocumentId = null;
+      }
+    });
+  }
+
+  getFileSize(bytes: number): string {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
   }
 }

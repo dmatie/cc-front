@@ -488,3 +488,17 @@ export interface DisbursementPermissionsDto {
   canConsult: boolean;
   canSubmit: boolean;
 }
+
+export interface AddDisbursementDocumentsCommand {
+  disbursementId: string;
+  documents: File[];
+}
+
+export interface AddDisbursementDocumentsResponse {
+  message: string;
+  disbursement: DisbursementDto;
+}
+
+export interface DeleteDisbursementDocumentResponse {
+  message: string;
+}

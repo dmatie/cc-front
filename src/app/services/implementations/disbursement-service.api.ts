@@ -22,6 +22,9 @@ import {
   DisbursementTypeDto,
   CurrencyDto,
   DisbursementPermissionsDto,
+  AddDisbursementDocumentsCommand,
+  AddDisbursementDocumentsResponse,
+  DeleteDisbursementDocumentResponse,
 } from '../../models/disbursement.model';
 import { ErrorHandlerService } from '../error-handler.service';
 
@@ -178,8 +181,38 @@ export class DisbursementApiService extends DisbursementService {
     );
   }
 
-    override getMyPermissions(): Observable<DisbursementPermissionsDto> {
+  override getMyPermissions(): Observable<DisbursementPermissionsDto> {
     return this.http.get<DisbursementPermissionsDto>(`${this.baseUrl}/me/permissions`).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+  override addDisbursementDocuments(
+    command: AddDisbursementDocumentsCommand
+  ): Observable<AddDisbursementDocumentsResponse> {
+    const formData = new FormData();
+
+    if (command.documents && command.documents.length > 0) {
+      command.documents.forEach((file) => {
+        formData.append('Documents', file, file.name);
+      });
+    }
+
+    return this.http.post<AddDisbursementDocumentsResponse>(
+      `${this.baseUrl}/${command.disbursementId}/documents`,
+      formData
+    ).pipe(
+      catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
+    );
+  }
+
+  override deleteDisbursementDocument(
+    disbursementId: string,
+    documentId: string
+  ): Observable<DeleteDisbursementDocumentResponse> {
+    return this.http.delete<DeleteDisbursementDocumentResponse>(
+      `${this.baseUrl}/${disbursementId}/documents/${documentId}`
+    ).pipe(
       catchError(this.errorHandler.handleApiErrorRx('DisbursementsService'))
     );
   }
